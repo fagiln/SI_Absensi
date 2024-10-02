@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/home', function () {
+    if (Auth::user()->role == 'admin') {
+
+        return redirect(route('admin.dashboard'));
+    }
+});
+
+
+Route::middleware('guest')->group(function () {
+    Route::get('/', [LoginController::class, 'show'])->name('login');
+
+    Route::post('/', [LoginController::class, 'authenticate'])->name('login.authenticate');
+});
+
+Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
+    Route::get('admin/dashboard', [DashboardController::class, 'show'])->name('admin.dashboard');
+    Route::get('admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 });
