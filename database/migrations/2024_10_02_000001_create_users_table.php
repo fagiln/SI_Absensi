@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('no_hp')->nullable();
             $table->text('avatar')->nullable();
             $table->enum('role', ['admin', 'user'])->default('user');
-            // $table->foreignId('departement_id')->constrained('departement')->onUpdate('cascade');
+            $table->foreignId('departement_id')->constrained('departement')->onUpdate('cascade');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
