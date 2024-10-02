@@ -13,12 +13,18 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->string('nik', 20)->unique();
+            $table->string('username', 20)->unique();
+            $table->string('email', 50)->unique();
+            $table->string('password', 255);
+            $table->string('name', 10);
+            $table->text('jabatan')->nullable();
+            $table->string('no_hp')->nullable();
+            $table->text('avatar')->nullable();
+            $table->enum('role', ['admin', 'user'])->default('user');
+            // $table->foreignId('departement_id')->constrained('departement')->onUpdate('cascade');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
         });
     }
 
