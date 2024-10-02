@@ -35,7 +35,7 @@
         }
 
         .active {
-            background-color: #006769 !important;
+            background-color: #CC0200 !important;
             color: white !important;
         }
     </style>
@@ -46,8 +46,8 @@
 
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{ asset('/assets/img/logo.png') }}" alt="Thrifty Logo" height="60"
-                width="60">
+            <img class="animation__shake" src="{{ asset('/img/logo.png') }}" alt="Thrifty Logo" height="60"
+                >
         </div>
 
         <!-- Navbar -->
@@ -84,9 +84,9 @@
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
             <a href="seller/dashboard" class="brand-link">
-                <img src="{{ asset('/assets/img/logo.png') }}" alt="AdminLTE Logo"
-                    class="brand-image img-circle elevation-3" style="opacity: 0.8" />
-                <span class="brand-text font-weight-bold">Thrifty</span>
+                <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo"
+                    class="brand-image" />
+                <span class="brand-text font-weight-bold">ADMIN</span>
             </a>
 
             <!-- Sidebar -->
@@ -97,7 +97,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item rounded">
-                            <a href="/seller/dashboard" class="nav-link">
+                            <a href="/admin/dashboard" class="nav-link">
                                 <i class="fas fa-home nav-icon"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -106,56 +106,62 @@
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tshirt"></i>
                                 <p>
-                                    Product
+                                    Data Master
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('seller.product.list.index') }}" class="nav-link">
+                                    <a href="admin/karyawan" class="nav-link">
                                         <i class="fas fa-cart-plus nav-icon"></i>
-                                        <p>Product List</p>
+                                        <p>Karyawan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('seller/category-list') }}" class="nav-link">
+                                    <a href="admin/deparmtemen" class="nav-link">
                                         <i class="fas fa-tags nav-icon"></i>
-                                        <p>Category List</p>
+                                        <p>Departemen</p>
                                     </a>
                                 </li>
                             </ul>
+                        </li>
+                        <li class="nav-item rounded">
+                            <a href="admin/monitoring" class="nav-link">
+                                <i class="fas fa-sliders-h nav-icon"></i>
+                                <p>Monitoring</p>
+                            </a>
+                        </li>
+                        <li class="nav-item rounded">
+                            <a href="admin/perizinan" class="nav-link">
+                                <i class="fas fa-sliders-h nav-icon"></i>
+                                <p>Data Izin dan Sakit</p>
+                            </a>
                         </li>
                         <li class="nav-item menu-close menu">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-user-alt"></i>
                                 <p>
-                                    User
+                                    Laporan
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('seller.add.seller.index') }}" class="nav-link">
+                                    <a href="admin/presensi" class="nav-link">
                                         <i class="nav-icon fas fa-user-plus"></i>
-                                        <p>Add Seller</p>
+                                        <p>Presensi</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('seller.user.list.index') }}" class="nav-link">
+                                    <a href="admin/rekap" class="nav-link">
                                         <i class="nav-icon fas fa-users"></i>
-                                        <p>User List</p>
+                                        <p>Rekap Presensi</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item rounded">
-                            <a href="{{ route('seller.slider.list.index') }}" class="nav-link">
-                                <i class="fas fa-sliders-h nav-icon"></i>
-                                <p>Slider</p>
-                            </a>
-                        </li>
-                        <li class="nav-item rounded">
-                            <a href="/seller/logout" class="nav-link bg-danger"
+                            <a href="/admin/logout" class="nav-link bg-danger"
                                 onclick="return confirm('Anda yakin ingin Logout?')">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                 <p>Logout</p>
@@ -233,24 +239,24 @@
     <script src="{{ asset('datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('datatables/bootstrap.datatables.js') }}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
-            // const menuLinks = document.querySelectorAll('.menu');
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    sidebarLinks.forEach(link => link.classList.remove('active'));
-                    this.classList.add('active');
-                });
-                if (link.href === window.location.href) {
-                    link.classList.add('active');
-                    const parentMenu = link.closest('.menu');
-                    if (parentMenu) {
-                        parentMenu.classList.remove('menu-close');
-                        parentMenu.classList.add('menu-open');
-                    }
+        $(document).ready(function() {
+            // Get the current page URL
+            var currentUrl = window.location.href;
+
+            // Loop through each sidebar link
+            $(".nav-sidebar a").each(function() {
+                // Check if the href of the link matches the current URL
+                if (this.href === currentUrl) {
+                    // Add 'active' class to the link and its parent
+                    $(this).addClass("active");
+
+                    // If it's a submenu item, add 'menu-open' class to the parent
+                    $(this).closest(".has-treeview").addClass("menu-open");
                 }
             });
         });
+    </script>
+
     </script>
     @stack('scripts')
 

@@ -25,7 +25,7 @@ Route::get('/home', function () {
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('/', [LoginController::class, 'show'])->name('login.show');
+    Route::get('/', [LoginController::class, 'show'])->name('login');
 
     Route::post('/', [LoginController::class, 'authenticate'])->name('login.authenticate');
 });

@@ -19,8 +19,8 @@
     <div class="d-flex justify-content-center align-items-center min-vh-100">
         <div class=" py-4 px-5  card card-primary  " style="width: 400px">
             <div class="w-100 d-flex justify-content-center">
-                <img src="{{ asset('assets/img/logo.png') }}" alt="" class=""
-                    style="width: 200px; height: 200px;">
+                <img src="{{ asset('img/logo.png') }}" alt="" class=""
+                    style="width: 200px;">
             </div>
             <p class="fs-3 text-center fw-bolder">Selamat Datang</p>
 
