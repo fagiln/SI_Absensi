@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+        .login-container a {
+            display: block;
+            margin-top: 10px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Login</h2>
+    <form action="/login" method="POST">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+        <a href="/forget-password">Forget Password?</a>
+    </form>
+</div>
+
+</body>
+</html>
+
+
+------------------------  Home ---------------------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance App Interface</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f7f7;
+    }
+    .app-container {
+        width: 100%;
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .header h1 {
+        margin: 0;
+        font-size: 24px;
+    }
+    .header p {
+        margin: 5px 0 0;
+        font-size: 18px;
+        color: #555;
+    }
+    .attendance-buttons {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+    .button {
+        padding: 10px 30px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 16px;
+    }
+    .red-button {
+        background-color: #ff4d4d;
+    }
+    .green-button {
+        background-color: #4dff4d;
+    }
+    .summary {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .summary div {
+        text-align: center;
+    }
+    .summary div p {
+        margin: 5px 0;
+        font-size: 16px;
+    }
+    .log {
+        margin-bottom: 20px;
+    }
+    .log-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #ddd;
+    }
+    .log-item:last-child {
+        border-bottom: none;
+    }
+    .log-item div {
+        text-align: center;
+    }
+    .navbar {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 0;
+        background-color: #333;
+        color: white;
+    }
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        padding: 10px;
+    }
+    .navbar a:hover {
+        background-color: #575757;
+    }
+    .footer {
+        text-align: center;
+        padding: 10px 0;
+        background-color: #333;
+        color: white;
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+    }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="#">Home</a>
+    <a href="#">Cuti</a>
+    <a href="#">Riwayat</a>
+    <a href="#">Notifikasi</a>
+    <a href="#">Profil</a>
+</div>
+
+<div class="app-container">
+    <div class="header">
+        <h1>Selamat Pagi,</h1>
+        <p>John Doe, S.Psi</p>
+    </div>
+    <div class="attendance-buttons">
+        <button class="button red-button">Masuk</button>
+        <button class="button green-button">Pulang</button>
+    </div>
+    <div class="summary">
+        <div>
+            <p>Hari ini</p>
+            <p>8 Jam</p>
+        </div>
+        <div>
+            <p>Total Jam Kerja</p>
+            <p>160 Jam</p>
+        </div>
+    </div>
+    <div class="log">
+        <div class="log-item">
+            <div>
+                <p>01 Oktober 2024</p>
+                <p>Masuk & Pulang</p>
+            </div>
+            <div>
+                <p>08:00 - 17:00</p>
+                <p>8 Jam</p>
+            </div>
+        </div>
+        <div class="log-item">
+            <div>
+                <p>30 September 2024</p>
+                <p>Masuk & Pulang</p>
+            </div>
+            <div>
+                <p>08:00 - 17:20</p>
+                <p>8.20 Jam</p>
+            </div>
+        </div>
+        <div class="log-item">
+            <div>
+                <p>29 September 2024</p>
+                <p>Masuk & Pulang</p>
+            </div>
+            <div>
+                <p>08:05 - 17:00</p>
+                <p>8.05 Jam</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    © 2024 Attendance App
+</div>
+
+</body>
+</html>
+
+
+------------------------ Home 2 ------------------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Item di Bawah</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS untuk menempatkan tombol di bagian bawah */
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .button-container {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container page-container">
+    <!-- Konten Utama -->
+    <div class="content">
+        <h1 class="text-center">Selamat Datang</h1>
+        <p class="text-center">Ini adalah contoh halaman dengan tombol di bawah menggunakan Bootstrap.</p>
+    </div>
+
+    <!-- Tombol di bawah -->
+    <div class="button-container">
+        <button type="button" class="btn btn-primary btn-lg">Tombol 1</button>
+        <button type="button" class="btn btn-secondary btn-lg">Tombol 2</button>
+        <button type="button" class="btn btn-success btn-lg">Tombol 3</button>
+    </div>
+</div>
+
+<!-- Bootstrap JS dan jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
