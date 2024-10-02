@@ -3,6 +3,10 @@
 @section('content')
 
 
+<div style="text-align: right; margin-top: 20px;">
+    <a style="color: crimson" href="{{ route('home') }}">Logout</a>
+</div>
+
 <div class="container">
 
         <p class="fs-10">Nama</p>
