@@ -23,10 +23,10 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // Departement::create([
-        //     'kode_departemen' => 'MPA',
-        //     'nama_departemen'=> 'PT. Multi Power Abadi'
-        // ]);
+        Departement::create([
+            'kode_departemen' => 'MPA',
+            'nama_departemen'=> 'PT. Multi Power Abadi'
+        ]);
         
         User::create([
             'nik' => '0000001',

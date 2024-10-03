@@ -46,8 +46,7 @@
 
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{ asset('/img/logo.png') }}" alt="Thrifty Logo" height="60"
-                >
+            <img class="animation__shake" src="{{ asset('/img/logo.png') }}" alt="Thrifty Logo" height="60">
         </div>
 
         <!-- Navbar -->
@@ -84,8 +83,7 @@
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
             <a href="seller/dashboard" class="brand-link">
-                <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo"
-                    class="brand-image" />
+                <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image" />
                 <span class="brand-text font-weight-bold">ADMIN</span>
             </a>
 
@@ -112,7 +110,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="admin/karyawan" class="nav-link">
+                                    <a href="{{ route('admin.index.karyawan') }}" class="nav-link">
                                         <i class="fas fa-cart-plus nav-icon"></i>
                                         <p>Karyawan</p>
                                     </a>
@@ -198,7 +196,7 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <span class="text d-none d-sm-inline-block"><strong>Thrifty </strong>was made by &#10084; </span>
+            <span class="text d-none d-sm-inline-block"><strong>This </strong>was made by &#10084; </span>
             <div class="float-right d-none d-sm-inline-block">
                 <b>Beta Version</b> 1.0.0
             </div>
@@ -239,24 +237,24 @@
     <script src="{{ asset('datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('datatables/bootstrap.datatables.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            // Get the current page URL
-            var currentUrl = window.location.href;
-
-            // Loop through each sidebar link
-            $(".nav-sidebar a").each(function() {
-                // Check if the href of the link matches the current URL
-                if (this.href === currentUrl) {
-                    // Add 'active' class to the link and its parent
-                    $(this).addClass("active");
-
-                    // If it's a submenu item, add 'menu-open' class to the parent
-                    $(this).closest(".has-treeview").addClass("menu-open");
+      document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
+            // const menuLinks = document.querySelectorAll('.menu');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    sidebarLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                });
+                if (link.href === window.location.href) {
+                    link.classList.add('active');
+                    const parentMenu = link.closest('.menu');
+                    if (parentMenu) {
+                        parentMenu.classList.remove('menu-close');
+                        parentMenu.classList.add('menu-open');
+                    }
                 }
             });
         });
-    </script>
-
     </script>
     @stack('scripts')
 
