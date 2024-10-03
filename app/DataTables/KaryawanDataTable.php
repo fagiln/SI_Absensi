@@ -30,9 +30,9 @@ class KaryawanDataTable extends DataTable
                 return view('admin.karyawan.action', ['user' => $user]);
             })
             ->editColumn('created_at', function (User $user) {
-                return Carbon::parse($user->created_at)->format('d F Y H:i');
+                return Carbon::parse($user->created_at)->format('d F Y ');
             })->editColumn('updated_at', function (User $user) {
-                return Carbon::parse($user->updated_at)->format('d F Y H:i');
+                return Carbon::parse($user->updated_at)->format('d F Y ');
             })
             ->rawColumns(['action'])
             ->setRowId('id');
@@ -52,7 +52,7 @@ class KaryawanDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('user-table')
+            ->setTableId('karyawan-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->responsive(true)
@@ -61,7 +61,7 @@ class KaryawanDataTable extends DataTable
                 'autoWidth' => false,  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
             //->dom('Bfrtip')
-            ->orderBy([1, 'asc'])
+            ->orderBy([7, 'asc'])
             ->selectStyleSingle()
             ->buttons([]);
     }
