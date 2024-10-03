@@ -38,5 +38,6 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('/karyawan', [KaryawanController::class, 'index'])->name('index.karyawan');
         Route::post('karyawan/add', [KaryawanController::class, 'store'])->name('karyawan.add');
+        Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.delete');
     });
 });

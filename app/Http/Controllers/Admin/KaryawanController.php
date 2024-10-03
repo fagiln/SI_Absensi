@@ -20,7 +20,7 @@ class KaryawanController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nik' => 'required|unique:users,nik|digits:20|numeric',
+            'nik' => 'required|unique:users,nik|digits_between:6,20|numeric',
             'username' => 'required|unique:users,username|max:10',
             'departement_id' => 'required',
             'password' => 'required|string|min:6',
@@ -28,5 +28,13 @@ class KaryawanController extends Controller
 
         User::create($data);
         return redirect()->back()->with('status', 'Berhasil Menambahkan Karyawan');
+    }
+    public function destroy(string $id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        return response()->json([
+            'message' => 'Data karyawan berhasil dihapus!'
+        ], 200);
     }
 }
