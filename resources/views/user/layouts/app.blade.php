@@ -95,19 +95,19 @@
         {{-- Navbar Bottom --}}
 
         <nav class="navbar-bottom">
-            <a href="#" class="nav-item">
+            <a href="{{ route('home') }}" class="nav-item">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="#" class="nav-item">
-                <i class="far fa-file-alt"></i>
+            <a href="{{ route('cuti') }}" class="nav-item">
+                <i class="far fa-calendar-check"></i>
                 <span>Cuti</span>
             </a>
-            <a href="#" class="nav-item">
-                <i class="far fa-calendar-check"></i>
+            <a href="{{ route('riwayat') }}" class="nav-item">
+                <i class="far fa-file-alt"></i>
                 <span>Riwayat</span>
             </a>
-            <a href="#" class="nav-item">
+            <a href="{{ route('notif') }}" class="nav-item">
                 <i class="far fa-bell"></i>
                 <span>Notif</span>
             </a>
@@ -120,7 +120,5 @@
 
     </div>
 
-    <!-- Tambahkan script JS Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

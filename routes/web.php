@@ -16,6 +16,44 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// {{---------------------- User ------------------------------}}
+
+// -------------------- Home ---------------------------
+
+Route::get('/', function () {
+    return view('/user/home');
+})->name('home');
+
+// -------------------- Profile -------------------------
+
+Route::get('/user/profile', function () {
+    return view('/user/profile');
+})->name('profile');
+
+// -------------------- Notif ---------------------------
+
+Route::get('/user/notif', function () {
+    return view('/user/notif');
+})->name('notif');
+
+// -------------------- Riwayat -------------------------
+
+Route::get('/user/riwayat', function () {
+    return view('/user/riwayat');
+})->name('riwayat');
+
+// -------------------- Cuti ----------------------------
+
+Route::get('/user/cuti', function () {
+    return view('/user/cuti');
+})->name('cuti');
+Route::get('/user/cuti-detail', function () {
+    return view('/user/cuti-detail');
+})->name('cuti-detail');
+
+
+// {{-------------------- Admin -----------------------------}}
+
 // Route::get('/home', function () {
 //     if (Auth::user()->role == 'admin') {
 
@@ -34,14 +72,3 @@ use Illuminate\Support\Facades\Route;
 //     Route::get('admin/dashboard', [DashboardController::class, 'show'])->name('admin.dashboard');
 //     Route::get('admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 // });
-
-
-Route::get('/', function () {
-    return view('Home');
-})->name('home');
-
-// -------------------- Profile ---------------------------
-
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
