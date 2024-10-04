@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('cuti', function () {
+    return view('cuti'); // Sesuaikan dengan nama view yang ingin ditampilkan
+});
+
+Route::get('/absenpulang', function () {
+    return view('absenpulang');
+});
+
+
+route::get('/maps', [WebController::class, 'maps'])->name('maps');
+
