@@ -1,6 +1,14 @@
 @extends('admin.template.app')
 @section('title', 'Departemen')
 @section('content')
+    @if (session('status'))
+        <div class="mt-3">
+            <div id="success-alert" class="alert alert-success d-flex justify-content-between fade show" role="alert">
+                {{ session('status') }}
+
+            </div>
+        </div>
+    @endif
     <a href="" class="btn btn-custom mb-3" data-toggle="modal" data-target="#modalAdd">
         <i class="fas fa-plus fs-2 mr-1"></i>
         Tambah Data</a>
@@ -96,16 +104,6 @@
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
-            $(document).ready(function() {
-                @if ($errors->has('add_nama') || $errors->has('add_kode'))
-                    ;
-                    $('#modalAdd').modal('show');
-                @elseif ($errors->has('edit_nama') || $errors->has('edit_kode'))
-
-                    $('#modalEdit').modal('show');
-                @endif
-            })
-
             $(document).on('click', 'button[data-action="delete"]', function() {
                 var url = $(this).data('url');
                 var tableId = $(this).data('table-id');
@@ -129,6 +127,28 @@
                     });
                 }
             });
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                var alert = document.getElementById('success-alert');
+                if (alert) {
+                    setTimeout(function() {
+                        var bootstrapAlert = new bootstrap.Alert(alert);
+                        bootstrapAlert.close();
+                    }, 3000); // waktu dalam milidetik (5000 ms = 5 detik)
+                }
+            });
+
+            $(document).ready(function() {
+                @if ($errors->has('add_nama') || $errors->has('add_kode'))
+                    ;
+                    $('#modalAdd').modal('show');
+                @elseif ($errors->has('edit_nama') || $errors->has('edit_kode'))
+
+                    $('#modalEdit').modal('show');
+                @endif
+            })
+
+            
 
             $(document).on('click', 'a[data-toggle="modal"]', function() {
                 var departemenId = $(this).data('id'); // Ambil ID dari tombol edit

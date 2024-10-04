@@ -50,7 +50,7 @@ class DepartemenDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('karyawan-table')
+            ->setTableId('departemen-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->responsive(true)
