@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DepartemenController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
@@ -40,6 +41,11 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::post('karyawan/add', [KaryawanController::class, 'store'])->name('karyawan.add');
         Route::get('karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
         Route::put('karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
-        Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.delete');
+        Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.delete');  Route::get('/karyawan', [KaryawanController::class, 'index'])->name('index.karyawan');
+        Route::get('/departemen', [DepartemenController::class, 'index'])->name('index.departemen');
+        Route::post('departemen/add', [DepartemenController::class, 'store'])->name('departemen.add');
+        Route::get('departemen/{id}/edit', [DepartemenController::class, 'edit'])->name('departemen.edit');
+        Route::put('departemen/{id}', [DepartemenController::class, 'update'])->name('departemen.update');
+        Route::delete('/departemen/{id}', [DepartemenController::class, 'destroy'])->name('departemen.delete');
     });
 });

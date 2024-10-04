@@ -117,7 +117,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="admin/deparmtemen" class="nav-link">
+                                    <a href="{{ route('admin.index.departemen') }}" class="nav-link">
                                         <i class="fas fa-building nav-icon"></i>
                                         <p>Departemen</p>
                                     </a>

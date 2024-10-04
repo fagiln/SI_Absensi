@@ -11,6 +11,7 @@
         </div>
     @endif
     <a href="" class="btn btn-custom mb-3" data-toggle="modal" data-target="#modal">
+        <i class="fas fa-plus fs-2 mr-1"></i>
         Tambah Data
     </a>
     <!-- Modal Add -->
@@ -93,7 +94,7 @@
 
                         <div class="form-group">
                             <label for="editNik">NIK</label>
-                            <input type="text" class="form-control" name="edit_nik" id="editNik" value="{{old('edit_nik')}}">
+                            <input type="text" class="form-control" name="edit_nik" id="editNik" value="{{old('edit_nik')}} "  placeholder="Masukkan NIK">
                             @error('edit_nik')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -101,7 +102,7 @@
 
                         <div class="form-group">
                             <label for="editJabatan">Jabatan</label>
-                            <input type="text" class="form-control" name="edit_jabatan" id="editJabatan" value="{{old('edit_jabatan')}}">
+                            <input type="text" class="form-control" name="edit_jabatan" id="editJabatan" value="{{old('edit_jabatan')}}" p placeholder="Masukkan Jabatan">
                             @error('edit_jabatan')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -116,7 +117,7 @@
                         </div> --}}
                         <div class="form-group">
                             <label for="editPassword">Password</label>
-                            <input type="password" class="form-control" name="edit_password" id="editPassword">
+                            <input type="password" class="form-control" name="edit_password" id="editPassword" placeholder="Masukkan Password (kosongkan jika tidak perlu)">
                             @error('edit_password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
