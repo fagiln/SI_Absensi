@@ -1,12 +1,14 @@
 @extends('admin.template.app')
 @section('title', 'Dashboard')
 @section('content')
+
+
    <!-- Main content -->
    <section class="content">
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
-            <div class="col-lg-6 col-12">
+            <div class="col-sm-6 col-12">
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
@@ -23,7 +25,7 @@
             <!-- ./col -->
            
             <!-- ./col -->
-            <div class="col-lg-6 col-12">
+            <div class="col-sm-6 col-12">
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
@@ -39,7 +41,7 @@
             </div>
             <!-- ./col -->
             <!-- ./col -->
-            <div class="col-lg-6 col-12">
+            <div class="col-sm-6 col-12">
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
@@ -55,7 +57,7 @@
             </div>
             <!-- ./col -->
             <!-- ./col -->
-            <div class="col-lg-6 col-12">
+            <div class="col-sm-6 col-12">
                 <!-- small box -->
                 <div class="small-box bg-danger">
                     <div class="inner">

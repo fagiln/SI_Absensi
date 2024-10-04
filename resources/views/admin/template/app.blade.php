@@ -29,6 +29,7 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}">
+    @stack('style')
     <style>
         body {
             margin: 0;
@@ -68,10 +69,10 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('seller/user-list/' . Auth::user()->id . '/edit') }}">
-                        Welcome, Seller {{ Auth::user()->username }} !
-                        <img src="{{ asset('uploads/' . Auth::user()->avatar) }}" alt=""
+                        Welcome, Admin {{ Auth::user()->username }} !
+                        {{-- <img src="{{ asset('uploads/' . Auth::user()->avatar) }}" alt=""
                             class="ml-2 rounded-circle"
-                            style="width: 30px; height: 30px; object-fit: cover; margin-right: 10px;">
+                            style="width: 30px; height: 30px; object-fit: cover; margin-right: 10px;"> --}}
                     </a>
                 </li>
 
@@ -102,7 +103,7 @@
                         </li>
                         <li class="nav-item menu-close menu">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-tshirt"></i>
+                                <i class="nav-icon fas fa-database"></i>
                                 <p>
                                     Data Master
                                     <i class="right fas fa-angle-left"></i>
@@ -111,13 +112,13 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.index.karyawan') }}" class="nav-link">
-                                        <i class="fas fa-cart-plus nav-icon"></i>
+                                        <i class="fas fa-user-tie nav-icon"></i>
                                         <p>Karyawan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="admin/deparmtemen" class="nav-link">
-                                        <i class="fas fa-tags nav-icon"></i>
+                                        <i class="fas fa-building nav-icon"></i>
                                         <p>Departemen</p>
                                     </a>
                                 </li>
@@ -131,13 +132,13 @@
                         </li>
                         <li class="nav-item rounded">
                             <a href="admin/perizinan" class="nav-link">
-                                <i class="fas fa-sliders-h nav-icon"></i>
+                                <i class="fas fa-notes-medical nav-icon"></i>
                                 <p>Data Izin dan Sakit</p>
                             </a>
                         </li>
                         <li class="nav-item menu-close menu">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user-alt"></i>
+                                <i class="nav-icon fas fa-clipboard-list"></i>
                                 <p>
                                     Laporan
                                     <i class="right fas fa-angle-left"></i>
@@ -237,7 +238,7 @@
     <script src="{{ asset('datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('datatables/bootstrap.datatables.js') }}"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
             // const menuLinks = document.querySelectorAll('.menu');
             sidebarLinks.forEach(link => {
