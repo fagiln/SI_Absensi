@@ -8,13 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Departement;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class KaryawanController extends Controller
 {
     public function index(KaryawanDataTable $dataTable)
     {
         $departemen = Departement::all();
-        return $dataTable->render('admin.karyawan.karyawan', compact('departemen'));
+        $user = User::all();
+        return $dataTable->render('admin.karyawan.karyawan', compact('departemen', 'user'));
     }
 
     public function store(Request $request)
@@ -29,6 +31,7 @@ class KaryawanController extends Controller
         User::create($data);
         return redirect()->back()->with('status', 'Berhasil Menambahkan Karyawan');
     }
+
     public function destroy(string $id)
     {
         $user = User::find($id);
@@ -36,5 +39,31 @@ class KaryawanController extends Controller
         return response()->json([
             'message' => 'Data karyawan berhasil dihapus!'
         ], 200);
+    }
+    public function edit($id)
+    {
+        $user = User::find($id); // Ambil data user dari database
+        // $departemen = Departement::all(); // Jika perlu departemen
+        return response()->json($user); // Return data dalam format JSON
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $user = User::find($id);
+        $request->validate([
+            'edit_nik' => 'required|digits_between:6,20|numeric',
+            'edit_jabatan' => 'required|string',
+            'edit_password' => 'nullable|min:6',
+        ]);
+        $data = [
+            'nik' =>   $request->edit_nik,
+            'jabatan' => $request->edit_jabatan,
+        ];
+        if ($request->filled('edit_password')) {
+            $data['password'] = Hash::make($request->edit_password);
+        }
+       
+        $user->update($data);
+        return redirect()->back()->with('status', 'Karyawan Berhasil di Edit');
     }
 }

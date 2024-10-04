@@ -38,6 +38,8 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('/karyawan', [KaryawanController::class, 'index'])->name('index.karyawan');
         Route::post('karyawan/add', [KaryawanController::class, 'store'])->name('karyawan.add');
+        Route::get('karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
+        Route::put('karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
         Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.delete');
     });
 });

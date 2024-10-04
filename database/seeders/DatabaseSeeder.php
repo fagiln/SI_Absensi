@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             'nik' => '0000001',
             'name' => 'Fagil Nuril Akbar',
             'username' => 'fagil',
+            'jabatan' => 'Owner',
             'email' => 'fagil@test.com',
             'role' => 'admin',
             'departement_id' => '1',

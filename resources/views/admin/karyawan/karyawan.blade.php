@@ -13,7 +13,7 @@
     <a href="" class="btn btn-custom mb-3" data-toggle="modal" data-target="#modal">
         Tambah Data
     </a>
-    <!-- Modal -->
+    <!-- Modal Add -->
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -73,17 +73,81 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Edit -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Karyawan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="formEditKaryawan" action="" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="editId">
+
+                        <div class="form-group">
+                            <label for="editNik">NIK</label>
+                            <input type="text" class="form-control" name="edit_nik" id="editNik" value="{{old('edit_nik')}}">
+                            @error('edit_nik')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editJabatan">Jabatan</label>
+                            <input type="text" class="form-control" name="edit_jabatan" id="editJabatan" value="{{old('edit_jabatan')}}">
+                            @error('edit_jabatan')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        {{-- <div class="form-group">
+                            <label for="editDepartemen">Departemen</label>
+                            <select name="departement_id" class="form-control" id="editDepartemen">
+                                <!-- Options dinamis dari backend -->
+
+                            </select>
+                        </div> --}}
+                        <div class="form-group">
+                            <label for="editPassword">Password</label>
+                            <input type="password" class="form-control" name="edit_password" id="editPassword">
+                            @error('edit_password')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-custom">Edit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="table-responsive">
         {{ $dataTable->table() }}
     </div>
+
 
     @push('scripts')
         {{ $dataTable->scripts() }}
         <script>
             $(document).ready(function() {
+
                 // Check if there are validation errors and show modal
-                @if ($errors->any())
+                @if ($errors->has('nik') || $errors->has('username') || $errors->has('departemen') || $errors->has('password'))
                     $('#modal').modal('show');
+                @elseif ($errors->has('edit_nik') || $errors->has('edit_jabatan') || $errors->has('edit_password'))
+                    $('#modalEdit').modal('show');
                 @endif
             });
             document.addEventListener('DOMContentLoaded', function() {
@@ -118,6 +182,21 @@
                         }
                     });
                 }
+            });
+
+            $(document).on('click', 'a[data-toggle="modal"]', function() {
+                var userId = $(this).data('id'); // Ambil ID dari tombol edit
+                var url = '/admin/karyawan/' + userId + '/edit'; // URL untuk ambil data
+                var updateUrl = '/admin/karyawan/' + userId;
+                // Request AJAX untuk mendapatkan data karyawan berdasarkan ID
+                $.get(url, function(data) {
+                    // Isi field modal dengan data yang didapat dari server
+                    $('#editId').val(userId);
+                    $('#editNik').val(data.nik);
+                    $('#editJabatan').val(data.jabatan);
+
+                    $('#formEditKaryawan').attr('action', updateUrl);
+                });
             });
         </script>
     @endpush
