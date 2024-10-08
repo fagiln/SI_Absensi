@@ -111,9 +111,9 @@
                 <i class="far fa-bell"></i>
                 <span>Notif</span>
             </a>
-            <a href="{{ route('profile') }}" class="nav-item">
+            <a href="{{ url('user/profile/{1}')}}" class="nav-item">
                 <i class="far fa-user"></i>
-                <span>Profile</span>
+                <span>Profile  </span>
             </a>
         </nav>
 

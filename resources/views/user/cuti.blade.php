@@ -205,7 +205,7 @@
 
             <!-- Unggah Berkas -->
             <p style="font-weight: bold; margin: 0; padding: 0;">Unggah Berkas</p>
-            <p style="margin: 0; padding: 0; font-size: 14px;">Silahkan unggah berkas dalam bentuk foto</p>
+            <p style="margin: 0; padding: 0; font-size: 14px;">Silahkan unggah berkas dalam bentuk foto atau pdf</p>
 
             <div class="upload-container" style="text-align: center; padding: 10px;">
                 <input type="file" id="upload-image" accept="image/*,application/pdf" style="display: block; margin-bottom: 10px;">
