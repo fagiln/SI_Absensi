@@ -119,44 +119,23 @@
             const modalId = $(this).attr('id');
             $(`#map${modalId.split('_')[1]}`).empty(); // Hapus konten peta saat modal ditutup
         });
+
         $(document).ready(function() {
-            const tableId = '#monitoring-table';
-            let date = $("#filter_date").val();
-
-
-            // Jika DataTable sudah ada, hancurkan dulu
-            if ($.fn.dataTable.isDataTable(tableId)) {
-                $(tableId).DataTable().destroy();
-            }
-
-            // Inisialisasi DataTable
-            const table = $(tableId).DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    url: "{{ url('') }}/admin/monitoring/filter", // URL yang diinginkan
-                    type: "POST", // Tipe permintaan
-                    data: function(d) {
-                        d.filter_date = date;
-                        return d // Mengirim data tambahan
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Token CSRF
-                    }
-                }
-            });
-
-            // Event listener untuk filter
             $('#filter_date').on('change', function() {
-                date = $("#filter_date").val();
-                console.log(date)
-                table.ajax.reload(null, false); // Reload DataTable
-            });
-        });
+                reloadDataTable();
+            })
+        })
+
+        function reloadDataTable() {
+            let date = $('#filter_date').val();
+            let url = "{{ route('admin.monitoring.index') }}";
+
+            window.LaravelDataTables['monitoring-table'].ajax.url(`${url}?work_date=${date}`).load();
+        }
         document.addEventListener('DOMContentLoaded', function() {
             const filterDateInput = document.getElementById('filter_date');
             const today = new Date().toISOString().split('T')[
-            0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
+                0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
             filterDateInput.value = today;
         });
     </script>
