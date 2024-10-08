@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Departement;
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Departement::create([
+        Department::create([
             'kode_departemen' => 'MPA',
             'nama_departemen'=> 'PT. Multi Power Abadi'
         ]);
@@ -35,7 +35,18 @@ class DatabaseSeeder extends Seeder
             'jabatan' => 'Owner',
             'email' => 'fagil@test.com',
             'role' => 'admin',
-            'departement_id' => '1',
+            'department_id' => '1',
+            'password' => Hash::make('123456')
+
+        ]);  
+        User::create([
+            'nik' => '0000002',
+            'name' => 'Shania Yan',
+            'username' => 'shania',
+            'jabatan' => 'CEO',
+            'email' => 'shanial@test.com',
+            'role' => 'user',
+            'department_id' => '2',
             'password' => Hash::make('123456')
 
         ]);

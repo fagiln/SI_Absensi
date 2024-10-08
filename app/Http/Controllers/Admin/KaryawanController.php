@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\KaryawanDataTable;
 use App\DataTables\UserDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Departement;
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +14,7 @@ class KaryawanController extends Controller
 {
     public function index(KaryawanDataTable $dataTable)
     {
-        $departemen = Departement::all();
+        $departemen = Department::all();
         $user = User::all();
         return $dataTable->render('admin.karyawan.karyawan', compact('departemen', 'user'));
     }
@@ -24,7 +24,7 @@ class KaryawanController extends Controller
         $data = $request->validate([
             'nik' => 'required|unique:users,nik|digits_between:6,20|numeric',
             'username' => 'required|unique:users,username|max:10',
-            'departement_id' => 'required',
+            'department_id' => 'required',
             'password' => 'required|string|min:6',
         ], [
             'nik.required' => 'NIK wajib diisi.',
@@ -36,7 +36,7 @@ class KaryawanController extends Controller
             'username.unique' => 'Username ini sudah digunakan.',
             'username.max' => 'Username tidak boleh lebih dari 10 karakter.',
 
-            'departement_id.required' => 'Departemen harus dipilih.',
+            'department_id.required' => 'Departemen harus dipilih.',
 
             'password.required' => 'Password wajib diisi.',
             'password.string' => 'Password harus berupa string.',
@@ -49,7 +49,7 @@ class KaryawanController extends Controller
 
     public function destroy(string $id)
     {
-        $user = User::find($id);
+        $user = User::find(id: $id);
         $user->delete();
         return response()->json([
             'message' => 'Data karyawan berhasil dihapus!'
@@ -58,7 +58,7 @@ class KaryawanController extends Controller
     public function edit($id)
     {
         $user = User::find($id); // Ambil data user dari database
-        // $departemen = Departement::all(); // Jika perlu departemen
+        // $departemen = Department::all(); // Jika perlu departemen
         return response()->json($user); // Return data dalam format JSON
     }
 

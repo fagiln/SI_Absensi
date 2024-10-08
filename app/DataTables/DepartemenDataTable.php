@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Departement;
+use App\Models\Department;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -23,13 +23,13 @@ class DepartemenDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function (Departement $departemen) {
+            ->addColumn('action', function (Department $departemen) {
                 return view('admin.departemen.action', ['departemen' => $departemen]);
             })
-            ->editColumn('created_at', function (Departement $departemen) {
+            ->editColumn('created_at', function (Department $departemen) {
                 return Carbon::parse($departemen->created_at)->format('d F Y');
             })
-            ->editColumn( 'updated_at', function (Departement $departemen) {
+            ->editColumn( 'updated_at', function (Department $departemen) {
                 return Carbon::parse(time: $departemen->updated_at)->format('d F Y');
 
             })
@@ -39,7 +39,7 @@ class DepartemenDataTable extends DataTable
     /**;
      * Get the query source of dataTable.
      */
-    public function query(Departement $model): QueryBuilder
+    public function query(Department $model): QueryBuilder
     {
         return $model->newQuery();
     }

@@ -46,7 +46,7 @@
                         </div>
                         <div class="mt-3 d-flex flex-column">
                             <label for="nik">Departemen</label>
-                            <select class=" form-control" name="departement_id" id="departement_id"
+                            <select class=" form-control" name="department_id" id="department_id"
                                 placeholder="Masukkan Departemen">
                                 <option value="">Pilih Departemen</option>
                                 @foreach ($departemen as $item)
@@ -110,7 +110,7 @@
 
                         {{-- <div class="form-group">
                             <label for="editDepartemen">Departemen</label>
-                            <select name="departement_id" class="form-control" id="editDepartemen">
+                            <select name="department_id" class="form-control" id="editDepartemen">
                                 <!-- Options dinamis dari backend -->
 
                             </select>
@@ -135,7 +135,7 @@
     </div>
 
     <div class="table-responsive">
-        {{ $dataTable->table() }}
+        {!! $dataTable->table(['class' => 'table table-bordered table-striped my-2']) !!}
     </div>
 
 

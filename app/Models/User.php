@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -29,7 +30,7 @@ class User extends Authenticatable
         'no_hp',
         'avatar',
         'role',
-        'departement_id'
+        'department_id'
     ];
 
     /**
@@ -47,4 +48,9 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
+
+    public function departemen()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
 }

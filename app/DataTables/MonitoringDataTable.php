@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\User;
+use App\Models\Kehadiran;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -13,7 +13,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class KaryawanDataTable extends DataTable
+class MonitoringDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,31 +23,28 @@ class KaryawanDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            // ->addColumn('No', function(){
-
-            // })
-            ->addColumn('action', function (User $user) {
-                return view('admin.karyawan.action', ['user' => $user]);
+            ->addColumn('Maps Datang', function (Kehadiran $kehadiran) {
+                return view('admin.monitoring.maps_checkin', ['kehadiran' => $kehadiran]);
+            })->addColumn('Maps Pulang', function (Kehadiran $kehadiran) {
+                return view('admin.monitoring.maps_checkout', ['kehadiran' => $kehadiran]);
             })
-            ->editColumn('created_at', function (User $user) {
-                return Carbon::parse($user->created_at)->format('d F Y ');
-            })->editColumn('updated_at', function (User $user) {
-                return Carbon::parse($user->updated_at)->format('d F Y ');
+            ->editColumn('NIK', function (Kehadiran $kehadiran) {
+                return $kehadiran->user->nik;
+            })->editColumn('Nama Karyawan', function (Kehadiran $kehadiran) {
+                return $kehadiran->user->name;
             })
-            ->editColumn('department_id', function (User $user) {
-                
-                return $user->departemen->nama_departemen;
-            })
-            ->rawColumns(['action'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(User $model): QueryBuilder
+    public function query(Kehadiran $model): QueryBuilder
     {
-        return $model->newQuery();
+        $filterDate = request('filter_date', Carbon::today()->toDateString());
+
+        // Query data kehadiran berdasarkan filter tanggal
+        return $model->where('work_date', $filterDate);
     }
 
     /**
@@ -56,7 +53,7 @@ class KaryawanDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('karyawan-table')
+            ->setTableId('monitoring-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->responsive(true)
@@ -64,8 +61,6 @@ class KaryawanDataTable extends DataTable
                 'responsive' => true,
                 'autoWidth' => false,  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
-            //->dom('Bfrtip')
-            ->orderBy([7, 'asc'])
             ->selectStyleSingle()
             ->buttons([]);
     }
@@ -76,22 +71,24 @@ class KaryawanDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
-            Column::make('nik'),
-            Column::make('username'),
-            Column::make('name'),
-            Column::make('email'),
-            Column::make('jabatan'),
-            Column::make('department_id')->title('Departemen'),
-            Column::make('no_hp'),
-            Column::make('avatar'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-            Column::computed('action')
+            Column::computed('Maps Datang')
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
                 ->addClass('text-center'),
+            Column::computed('Maps Pulang')
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
+            Column::make('NIK'),
+            Column::make('Nama Karyawan'),
+            Column::make('check_in_time')->title('Jam Datang'),
+            Column::make('check_out_time')->title('Jam Pulang'),
+            Column::make('check_in_photo')->title('Foto Datang'),
+            Column::make('check_out_photo')->title('Foto Pulang'),
+            Column::make('status')
+
         ];
     }
 
@@ -100,6 +97,6 @@ class KaryawanDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Karyawan_' . date('YmdHis');
+        return 'Monitoring_' . date('YmdHis');
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\DepartemenDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Departement;
+use App\Models\Department;
 use Illuminate\Http\Request;
 
 class DepartemenController extends Controller
@@ -19,7 +19,7 @@ class DepartemenController extends Controller
     {
         $request->validate([
             'add_nama' => 'required|max:50',
-            'add_kode' => 'required|unique:departement,kode_departemen|max:10'
+            'add_kode' => 'required|unique:department,kode_departemen|max:10'
 
         ], [
             'add_nama.required' => 'Nama Departemen tidak boleh kosong',
@@ -34,18 +34,18 @@ class DepartemenController extends Controller
             'kode_departemen' => $request->add_kode,
 
         ];
-        Departement::create($data);
+        Department::create($data);
         return redirect()->back()->with('status', 'Data berhasil di tambah');
     }
 
     public function edit(string $id)
     {
-        $departemen = Departement::find($id);
+        $departemen = Department::find($id);
         return response()->json($departemen);
     }
     public function update(Request $request, string $id)
     {
-        $departemen = Departement::find($id);
+        $departemen = Department::find($id);
         $request->validate([
             'edit_nama' => 'required|max:50',
             'edit_kode' => 'required|max:10'
@@ -67,7 +67,7 @@ class DepartemenController extends Controller
 
     public function destroy(string $id)
     {
-        $departemen = Departement::find($id);
+        $departemen = Department::find($id);
         $departemen->delete();
         return response()->json([
             'message' => 'Data karyawan berhasil dihapus!'

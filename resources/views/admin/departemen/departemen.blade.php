@@ -13,9 +13,8 @@
         <i class="fas fa-plus fs-2 mr-1"></i>
         Tambah Data</a>
     <div class="table-responsive">
-        {{ $dataTable->table() }}
+        {!! $dataTable->table(['class' => 'table table-bordered table-striped my-2']) !!}
     </div>
-
     {{-- Modal Tambah --}}
     <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">

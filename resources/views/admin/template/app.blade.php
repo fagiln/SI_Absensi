@@ -29,6 +29,7 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}">
+    <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
     @stack('style')
     <style>
         body {
@@ -125,8 +126,8 @@
                             </ul>
                         </li>
                         <li class="nav-item rounded">
-                            <a href="admin/monitoring" class="nav-link">
-                                <i class="fas fa-sliders-h nav-icon"></i>
+                            <a href="{{ route('admin.monitoring.index') }}" class="nav-link">
+                                <i class="fas fa-desktop nav-icon"></i>
                                 <p>Monitoring</p>
                             </a>
                         </li>
@@ -204,6 +205,8 @@
         </footer>
     </div>
     <!-- ./wrapper -->
+    {{-- leaflet --}}
+    <script src="{{ asset('leaflet/leaflet.js') }}"></script>
     <!-- jQuery -->
     <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -217,7 +220,7 @@
     <!-- ChartJS -->
     <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
     <!-- Sparkline -->
-    <script src="{{ asset('adminlte/plugins/sparklines/sparkline.js') }}"></script>
+    {{-- <script src="{{ asset('adminlte/plugins/sparklines/sparkline.js') }}"></script> --}}
     <!-- JQVMap -->
     <script src="{{ asset('adminlte/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
