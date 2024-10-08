@@ -2,16 +2,15 @@
 @section('content')
 @section('title', 'Monitoring')
 
-<form action="{{ route('admin.monitoring.index') }}" method="GET" class="mb-3">
+<form action="" method="" class="mb-3">
     <div class="row">
         <div class="col-md-4">
 
             <div class="form-group">
                 <label for="filter_date">Filter berdasarkan Tanggal:</label>
                 <div class="d-flex">
-                    <input type="date" id="filter_date" name="filter_date" class="form-control"
-                        value="{{ request('filter_date', \Carbon\Carbon::today()->toDateString()) }}">
-                    <button type="submit" class="btn btn-custom ml-3">Filter</button>
+                    <input type="date" id="filter_date" name="filter_date" class="form-control filter" value="">
+
 
                 </div>
             </div>
@@ -93,7 +92,7 @@
 
             // Tambahkan marker di lokasi
             L.marker([latitude, longitude]).addTo(map)
-                .bindPopup(`Lokasi Anda: ${button.data('name')}`)
+                .bindPopup(`Lokasi: ${button.data('name')}`)
                 .openPopup();
         });
         $('[id^="modalMapsOut_"]').on('shown.bs.modal', function(event) {
@@ -113,12 +112,52 @@
 
             // Tambahkan marker di lokasi
             L.marker([latitude, longitude]).addTo(map)
-                .bindPopup(`Lokasi Anda: ${button.data('latitude')}`)
+                .bindPopup(`Lokasi: ${button.data('latitude')}`)
                 .openPopup();
         });
         $('[id^="modalMapsOut_"]').on('hidden.bs.modal', function() {
             const modalId = $(this).attr('id');
             $(`#map${modalId.split('_')[1]}`).empty(); // Hapus konten peta saat modal ditutup
+        });
+        $(document).ready(function() {
+            const tableId = '#monitoring-table';
+            let date = $("#filter_date").val();
+
+
+            // Jika DataTable sudah ada, hancurkan dulu
+            if ($.fn.dataTable.isDataTable(tableId)) {
+                $(tableId).DataTable().destroy();
+            }
+
+            // Inisialisasi DataTable
+            const table = $(tableId).DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ url('') }}/admin/monitoring/filter", // URL yang diinginkan
+                    type: "POST", // Tipe permintaan
+                    data: function(d) {
+                        d.filter_date = date;
+                        return d // Mengirim data tambahan
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Token CSRF
+                    }
+                }
+            });
+
+            // Event listener untuk filter
+            $('#filter_date').on('change', function() {
+                date = $("#filter_date").val();
+                console.log(date)
+                table.ajax.reload(null, false); // Reload DataTable
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterDateInput = document.getElementById('filter_date');
+            const today = new Date().toISOString().split('T')[
+            0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
+            filterDateInput.value = today;
         });
     </script>
 @endpush

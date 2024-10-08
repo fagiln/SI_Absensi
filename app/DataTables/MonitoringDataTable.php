@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Models\Kehadiran;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -25,7 +24,7 @@ class MonitoringDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('Maps Datang', function (Kehadiran $kehadiran) {
                 return view('admin.monitoring.maps_checkin', ['kehadiran' => $kehadiran]);
-            })->addColumn('Maps Pulang', function (Kehadiran $kehadiran) {
+            })     ->addColumn('Maps Pulang', function (Kehadiran $kehadiran) {
                 return view('admin.monitoring.maps_checkout', ['kehadiran' => $kehadiran]);
             })
             ->editColumn('NIK', function (Kehadiran $kehadiran) {
@@ -41,10 +40,7 @@ class MonitoringDataTable extends DataTable
      */
     public function query(Kehadiran $model): QueryBuilder
     {
-        $filterDate = request('filter_date', Carbon::today()->toDateString());
-
-        // Query data kehadiran berdasarkan filter tanggal
-        return $model->where('work_date', $filterDate);
+        return $model->newQuery();
     }
 
     /**
@@ -64,7 +60,7 @@ class MonitoringDataTable extends DataTable
             ->selectStyleSingle()
             ->buttons([]);
     }
-
+    
     /**
      * Get the dataTable columns definition.
      */

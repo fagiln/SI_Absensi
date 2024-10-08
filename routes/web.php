@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::delete('/departemen/{id}', [DepartemenController::class, 'destroy'])->name('departemen.delete');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
+        Route::post('monitoring/filter', [MonitoringController::class, 'filter'])->name('monitoring.filter');
         
     });
 });
