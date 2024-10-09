@@ -57,9 +57,9 @@ Route::get('/', [HomeController::class, 'show'])->name('home');
 // -------------------- Profile -------------------------
 
 Route::get('/user/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
-Route::post('/user/profile/update_foto', [ProfileController::class, 'update_foto'])->name('profile.update_foto');
-Route::post('/user/profile/update_data', [ProfileController::class, 'update_dataprofile'])->name('profile.update_dataprofile');
-Route::post('/user/profile/update_userpass', [ProfileController::class, 'update_userpass'])->name('profile.update_userpass');
+Route::post('/user/profile/update_foto/{id}', [ProfileController::class, 'update_foto'])->name('profile.update_foto');
+Route::post('/user/profile/update_data/{id}', [ProfileController::class, 'update_dataprofile'])->name('profile.update_dataprofile');
+Route::post('/user/profile/update_pass/{id}', [ProfileController::class, 'update_pass'])->name('profile.update_pass');
 
 // -------------------- Notif ---------------------------
 
