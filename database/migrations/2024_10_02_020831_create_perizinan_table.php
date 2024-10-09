@@ -16,9 +16,13 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->text('reason');
-            $table->enum('status', ['pending', 'diterima', 'ditolak'])->default('pending');
-            $table->timestamps();
+            $table->enum('reason', allowed: ['sakit', 'izin']);
+            $table->text('keterangan');
+            $table->string('bukti_path');
+            $table->enum('status', allowed: ['pending', 'diterima', 'ditolak'])->default('pending');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp(column: 'updated_at')->nullable()->useCurrentOnUpdate();
+
         });
     }
 

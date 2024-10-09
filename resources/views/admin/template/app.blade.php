@@ -133,7 +133,7 @@
                             </a>
                         </li>
                         <li class="nav-item rounded">
-                            <a href="admin/perizinan" class="nav-link">
+                            <a href="{{route('admin.perizinan.index')}}" class="nav-link">
                                 <i class="fas fa-notes-medical nav-icon"></i>
                                 <p>Data Izin dan Sakit</p>
                             </a>

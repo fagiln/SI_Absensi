@@ -23,10 +23,13 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Department::create([
-            'kode_departemen' => 'MPA',
-            'nama_departemen'=> 'PT. Multi Power Abadi'
-        ]);
+        // Department::create([
+        //     'kode_departemen' => 'MPA',
+        //     'nama_departemen'=> 'PT. Multi Power Abadi'
+        // ]);Department::create([
+        //     'kode_departemen' => 'RJT',
+        //     'nama_departemen'=> 'Rajata Wedding Organizer Islami'
+        // ]);
         
         User::create([
             'nik' => '0000001',
@@ -39,16 +42,16 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('123456')
 
         ]);  
-        User::create([
-            'nik' => '0000002',
-            'name' => 'Shania Yan',
-            'username' => 'shania',
-            'jabatan' => 'CEO',
-            'email' => 'shanial@test.com',
-            'role' => 'user',
-            'department_id' => '2',
-            'password' => Hash::make('123456')
+        // User::create([
+        //     'nik' => '0000002',
+        //     'name' => 'Shania Yan',
+        //     'username' => 'shania',
+        //     'jabatan' => 'CEO',
+        //     'email' => 'shanial@test.com',
+        //     'role' => 'user',
+        //     'department_id' => '2',
+        //     'password' => Hash::make('123456')
 
-        ]);
+        // ]);
     }
 }

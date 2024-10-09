@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartemenController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\MonitoringController;
+use App\Http\Controllers\Admin\PerizinanController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -51,7 +52,8 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::delete('/departemen/{id}', [DepartemenController::class, 'destroy'])->name('departemen.delete');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
-        Route::post('monitoring/filter', [MonitoringController::class, 'filter'])->name('monitoring.filter');
-        
+
+        Route::get('perizinan', [PerizinanController::class, 'index'])->name('perizinan.index');
+        Route::put('perizinan/status/{id}', [PerizinanController::class, 'update'])->name('perizinan.status');
     });
 });

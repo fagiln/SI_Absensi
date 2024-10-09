@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->foreignId('department_id')->nullable()->constrained('department')->onUpdate('cascade');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
+            $table->timestamp(column: 'updated_at')->nullable()->useCurrentOnUpdate();
         });
     }
 
