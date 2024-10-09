@@ -26,6 +26,8 @@ class KaryawanDataTable extends DataTable
             // ->addColumn('No', function(){
 
             // })
+            ->addIndexColumn()
+
             ->addColumn('action', function (User $user) {
                 return view('admin.karyawan.action', ['user' => $user]);
             })
@@ -76,7 +78,13 @@ class KaryawanDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
+            Column::computed('DT_RowIndex')
+            ->title('No.') // Ubah judul kolom menjadi "No."
+            ->searchable(false)
+            ->orderable(false)
+            ->width(30)
+            ->addClass('text-center')
+            ->searchable(false),
             Column::make('nik'),
             Column::make('username'),
             Column::make('name'),

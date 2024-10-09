@@ -23,6 +23,8 @@ class DepartemenDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+        ->addIndexColumn()
+
             ->addColumn('action', function (Department $departemen) {
                 return view('admin.departemen.action', ['departemen' => $departemen]);
             })
@@ -70,7 +72,13 @@ class DepartemenDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-
+            Column::computed('DT_RowIndex')
+            ->title('No.') // Ubah judul kolom menjadi "No."
+            ->searchable(false)
+            ->orderable(false)
+            ->width(30)
+            ->addClass('text-center')
+            ->searchable(false),
             Column::make('nama_departemen'),
             Column::make('kode_departemen'),
             Column::make('created_at'),

@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Kehadiran;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -23,6 +24,7 @@ class MonitoringDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->addColumn('Maps Datang', function (Kehadiran $kehadiran) {
                 return view('admin.monitoring.maps_checkin', ['kehadiran' => $kehadiran]);
             })
@@ -41,7 +43,16 @@ class MonitoringDataTable extends DataTable
             ->filterColumn('user_name', function ($query, $keyword) {
                 $query->whereRaw('LOWER(users.name) LIKE ?', ["%{$keyword}%"]);
             })
-            ->setRowId('id');
+            ->editColumn('check_in_time', function (Kehadiran $kehadiran) {
+                return Carbon::parse($kehadiran->check_in_time)->format('H:i');
+            })->editColumn('check_out_time', function (Kehadiran $kehadiran) {
+                return Carbon::parse($kehadiran->check_out_time)->format('H:i');
+            })
+            ->editColumn('check_in_photo', function (Kehadiran $kehadiran) {
+                return '<img src="' . asset('img/' . $kehadiran->check_in_photo) . '"width="90px">';
+            })
+            ->setRowId('id')
+            ->rawColumns(['check_in_photo']);
     }
 
 
@@ -87,6 +98,13 @@ class MonitoringDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::computed('DT_RowIndex')
+                ->title('No.') // Ubah judul kolom menjadi "No."
+                ->searchable(false)
+                ->orderable(false)
+                ->width(30)
+                ->addClass('text-center')
+                ->searchable(false),
             Column::computed('Maps Datang')
                 ->exportable(false)
                 ->printable(false)
