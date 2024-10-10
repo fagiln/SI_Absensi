@@ -9,20 +9,20 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 
-
+use Illuminate\Support\Facades\Auth;
 // use Illuminate\Http\RedirectResponse;
-// use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    public function show(string $id){
-        $user = User::with('departement')->find($id);
-
-        // return response()->json($user);
+    
+    public function show() {
+        // Ambil user yang sedang login
+        $user = Auth::user()->load('departemen');
+    
         return view('user.profile', compact('user'));
     }
-
-    public function update_foto(Request $request, $id){
+        
+    public function update_foto(Request $request){
         
         // Validasi file
         $request->validate([
@@ -30,7 +30,7 @@ class ProfileController extends Controller
         ]);
 
         // Temukan user berdasarkan ID
-        $user = User::find($id);
+        $user = Auth::user();
 
         if (!$user) {
             return response()->json(['success' => false, 'message' => 'User not found'], 404);
@@ -63,10 +63,10 @@ class ProfileController extends Controller
         return response()->json(['success' => false, 'message' => 'No file uploaded'], 400);
     }
 
-    public function update_dataprofile(Request $request, $id){
+    public function update_dataprofile(Request $request){
 
     // Temukan user yang ingin diupdate
-    $user = User::find($id); // Ganti find() dengan findOrFail() untuk menangani kasus tidak ditemukan
+    $user = Auth::user(); // Ganti find() dengan findOrFail() untuk menangani kasus tidak ditemukan
 
     // Validasi data (hanya untuk field yang diperlukan)
     $request->validate([
@@ -83,13 +83,13 @@ class ProfileController extends Controller
             'min:4', // Minimal 4 karakter
             'max:20', // Maksimal 20 karakter
             'alpha_num', // Hanya boleh huruf dan angka
-            'unique:users,username,' . $id // Pastikan untuk mengabaikan username yang sama saat update
+            'unique:users,username,' // Pastikan untuk mengabaikan username yang sama saat update
         ],
         'email' => [
             'nullable',
             'email', // Format email yang valid
             'max:255', // Maksimal 255 karakter
-            'unique:users,email,' . $id // Pastikan untuk mengabaikan email yang sama saat update
+            'unique:users,email,'// Pastikan untuk mengabaikan email yang sama saat update
         ],
         'no_hp' => [
             'nullable',
@@ -129,7 +129,7 @@ class ProfileController extends Controller
 
     }
 
-    public function update_pass(Request $request, $id)
+    public function update_pass(Request $request)
     {
         // Validasi input
         $request->validate([
@@ -141,7 +141,7 @@ class ProfileController extends Controller
         ]);
 
         // Mengambil user berdasarkan ID
-        $user = User::find($id);
+        $user = Auth::user();
         
         // Memeriksa apakah user ditemukan
         if (!$user) {

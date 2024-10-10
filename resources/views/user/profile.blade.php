@@ -1,6 +1,5 @@
 @extends('user.layouts.app')
 
-
 @section('content')
 <head>
         <!-- Include jQuery -->
@@ -43,7 +42,8 @@
 {{-- logout --}}
 
     <div style="text-align: right;">
-        <a style="color: crimson" href="{{ route('home') }}">Logout</a>
+        <i class="fas fa-sign-out-alt" style="color: crimson;"></i>
+        <a style="color: crimson; text-decoration: none" href="{{ route('logout') }}">Logout</a>
     </div>
 
 <div style="margin-top: 20px"></div>
@@ -97,7 +97,7 @@
     <form id="update_dataprofile" action="{{ route('profile.update_dataprofile', $user->id) }}" method="POST" >
     @csrf
         
-        <p style="font-size: 15px; font-weight: bold;">Silahkan isi kembali, jika terdapat kesalahan dalam penulisan</p>
+        <p style="font-size: 15px; font-weight: bold;">Silahkan lengkapi profile atau isi kembali jika terdapat kesalahan penulisan</p>
 
         <p class="fs-10">Nama</p>
         @error('name')
@@ -131,7 +131,7 @@
         <div class="input-group mb-3">
             <input class="form-control" 
             {{-- placeholder="{{ $user->nik }}"  --}}
-            value="{{ $user->departement->nama_departemen }}"
+            value="{{ $user->departemen->nama_departemen }}"
             aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" readonly>
         </div>
 
