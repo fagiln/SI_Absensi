@@ -52,7 +52,7 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::delete('/departemen/{id}', [DepartemenController::class, 'destroy'])->name('departemen.delete');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
-        Route::get('karyawan-cuti', [MonitoringController::class, 'getKaryawanCuti'])->name('karyawan.cuti');
+        Route::get('karyawan-cuti', [MonitoringController::class, 'karyawanCuti'])->name('karyawan.cuti');
 
 
         Route::get('perizinan', [PerizinanController::class, 'index'])->name('perizinan.index');

@@ -4,18 +4,20 @@
 
 <form action="" method="" class="mb-3">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col">
 
             <div class="form-group">
-                <label for="filter_date">Filter berdasarkan Tanggal:</label>
-                <div class="d-flex">
-                    <input type="date" id="filter_date" name="filter_date" class="form-control filter" value="">
 
-                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalKaryawanCuti">
-                        Karyawan Cuti
+                <label for="filter_date">Filter berdasarkan Tanggal:</label>
+                <div class="d-md-flex justify-content-md-between justify-content-sm-center align-items-sm-center">
+                    <input type="date" id="filter_date" name="filter_date" class="form-control filter col-md-4" value="">
+
+                    <button type="button" class="btn btn-warning mt-3" data-toggle="modal" data-target="#modalKaryawanCuti">
+                        Lihat Karyawan Cuti Hari Ini
                     </button>
                 </div>
             </div>
+
         </div>
     </div>
 </form>
@@ -162,13 +164,19 @@
                 0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
             filterDateInput.value = today;
         });
-
         $(document).ready(function() {
             $('#modalKaryawanCuti').on('show.bs.modal', function() {
-                // Panggil endpoint untuk mendapatkan data karyawan yang sedang cuti
+                // Ambil nilai filter_date dari input
+                let filterDate = $('#filter_date').val();
+                console.log('Filter Date:', filterDate);
+
+                // Panggil endpoint untuk mendapatkan data karyawan yang sedang cuti, dengan filter_date sebagai parameter
                 $.ajax({
                     url: "{{ route('admin.karyawan.cuti') }}",
                     type: 'GET',
+                    data: {
+                        filter_date: filterDate
+                    },
                     success: function(response) {
                         const listKaryawanCuti = $('#listKaryawanCuti');
                         listKaryawanCuti.empty();
@@ -176,17 +184,19 @@
                         if (response.length > 0) {
                             response.forEach(item => {
                                 const listItem =
-                                    `<li>${item.user.name} (NIK: ${item.user.nik}) -  ${item.keterangan} hingga ${item.end_date}</li>`;
+                                    `<li>${item.user.name} (NIK: ${item.user.nik}) -  ${item.start_date} hingga ${item.end_date} : ${item.reason}</li>`;
                                 listKaryawanCuti.append(listItem);
                             });
                         } else {
                             listKaryawanCuti.append(
-                                '<li>Tidak ada karyawan yang sedang cuti.</li>');
+                                '<li>Tidak ada karyawan yang sedang cuti pada tanggal ini.</li>'
+                            );
                         }
                     },
                     error: function() {
                         $('#listKaryawanCuti').html(
-                            '<li>Gagal memuat data karyawan cuti.</li>');
+                            '<li>Gagal memuat data karyawan cuti.</li>'
+                        );
                     }
                 });
             });

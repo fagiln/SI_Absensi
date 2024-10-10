@@ -23,7 +23,7 @@ return new class extends Migration
             $table->decimal('check_in_longitude', 10, 7)->nullable();
             $table->decimal('check_out_latitude', 10, 7)->nullable();
             $table->decimal('check_out_longitude', 10, 7)->nullable();
-            $table->enum('status', ['hadir', 'izin', 'sakit', 'telat'])->default('hadir');
+            $table->enum('status', ['hadir', 'telat'])->default('hadir');
             $table->timestamps();
         });
     }

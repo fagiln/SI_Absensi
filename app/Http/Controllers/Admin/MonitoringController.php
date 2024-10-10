@@ -21,14 +21,17 @@ class MonitoringController extends Controller
         $dataTable = new MonitoringDataTable(request()->get('work_date'));
         return $dataTable->render('admin.monitoring.monitoring', compact('kehadirans'));
     }
-    public function getKaryawanCuti()
+    public function karyawanCuti(Request $request)
     {
-        $today = Carbon::today();
-        $karyawanCuti = Perizinan::with('user')
-            ->where('status', 'diterima')
-            ->whereDate('start_date', '>=', $today)
-            ->whereDate('end_date', '<=', $today)
+        $filterDate = $request->input('filter_date');
+
+        $karyawanCuti = Perizinan::where('status', 'diterima')
+            ->whereIn('reason', ['izin', 'sakit'])
+            ->whereDate('start_date', '<=', $filterDate)
+            ->whereDate('end_date', '>=', $filterDate)
+            ->with('user')
             ->get();
+
         return response()->json($karyawanCuti);
     }
 }

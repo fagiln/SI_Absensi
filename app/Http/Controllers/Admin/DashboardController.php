@@ -18,8 +18,8 @@ class DashboardController extends Controller
         // Mengambil data karyawan yang izinnya diterima dan berlaku untuk hari ini
         $karyawanIzin = Perizinan::where('status', 'diterima')
             ->where('reason', 'izin')
-            ->whereDate('start_date', '>=', $today)
-            ->whereDate('end_date', '<=', $today)
+            ->whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
             ->get();
 
         // Mengambil data karyawan yang hadir hari ini
@@ -35,8 +35,8 @@ class DashboardController extends Controller
         // Mengambil data karyawan yang sakit dan izinnya diterima untuk hari ini
         $karyawanSakit = Perizinan::where('status', 'diterima')
             ->where('reason', 'sakit')
-            ->whereDate('start_date', '>=', $today)
-            ->whereDate('end_date', '<=', $today)
+            ->whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
             ->get();
 
         // Hitung jumlah masing-masing kategori
