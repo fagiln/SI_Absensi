@@ -11,13 +11,37 @@
                 <div class="d-flex">
                     <input type="date" id="filter_date" name="filter_date" class="form-control filter" value="">
 
-
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modalKaryawanCuti">
+                        Karyawan Cuti
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </form>
 
+<div class="modal fade" id="modalKaryawanCuti" tabindex="-1" aria-labelledby="modalKaryawanCutiLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalKaryawanCutiLabel">Daftar Karyawan Cuti</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Tempat untuk menampilkan daftar karyawan yang sedang cuti -->
+                <ul id="listKaryawanCuti">
+                    <!-- Daftar karyawan cuti akan ditambahkan di sini melalui JavaScript -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="table-responsive">
     {{-- Tampilkan hanya data yang difilter di tabel --}}
     {!! $dataTable->table(['class' => 'table table-bordered table-striped my-2']) !!}
@@ -137,6 +161,35 @@
             const today = new Date().toISOString().split('T')[
                 0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
             filterDateInput.value = today;
+        });
+
+        $(document).ready(function() {
+            $('#modalKaryawanCuti').on('show.bs.modal', function() {
+                // Panggil endpoint untuk mendapatkan data karyawan yang sedang cuti
+                $.ajax({
+                    url: "{{ route('admin.karyawan.cuti') }}",
+                    type: 'GET',
+                    success: function(response) {
+                        const listKaryawanCuti = $('#listKaryawanCuti');
+                        listKaryawanCuti.empty();
+
+                        if (response.length > 0) {
+                            response.forEach(item => {
+                                const listItem =
+                                    `<li>${item.user.name} (NIK: ${item.user.nik}) -  ${item.keterangan} hingga ${item.end_date}</li>`;
+                                listKaryawanCuti.append(listItem);
+                            });
+                        } else {
+                            listKaryawanCuti.append(
+                                '<li>Tidak ada karyawan yang sedang cuti.</li>');
+                        }
+                    },
+                    error: function() {
+                        $('#listKaryawanCuti').html(
+                            '<li>Gagal memuat data karyawan cuti.</li>');
+                    }
+                });
+            });
         });
     </script>
 @endpush

@@ -51,8 +51,17 @@ class MonitoringDataTable extends DataTable
             ->editColumn('check_in_photo', function (Kehadiran $kehadiran) {
                 return '<img src="' . asset('img/' . $kehadiran->check_in_photo) . '"width="90px">';
             })
+            ->editColumn('status', function (Kehadiran $kehadiran) {
+                if ($kehadiran->status == 'hadir') {
+                    return '<span class="badge badge-success">Hadir</span>';
+
+                }
+                elseif($kehadiran->status=='telat'){
+                    return '<span class="badge badge-danger">Telat</span>';
+                }
+            })
             ->setRowId('id')
-            ->rawColumns(['check_in_photo']);
+            ->rawColumns(['check_in_photo','status']);
     }
 
 
@@ -87,7 +96,7 @@ class MonitoringDataTable extends DataTable
                 'autoWidth' => false,  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
             //->dom('Bfrtip')
-            ->orderBy([7, 'asc'])
+            ->orderBy([5, 'desc'])
             ->selectStyleSingle()
             ->buttons([]);
     }

@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}">
     <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
+    <link rel="shortcut icon" href="{{asset('img/logo.png')}}" type="image/x-icon">
     @stack('style')
     <style>
         body {

@@ -42,9 +42,11 @@ class KaryawanController extends Controller
             'password.string' => 'Password harus berupa string.',
             'password.min' => 'Password harus minimal 6 karakter.',
         ]);
-
+        if ($request->filled('edit_password')) {
+            $data['password'] = Hash::make($request->edit_password);
+        }
         User::create($data);
-        return redirect()->back()->with('status', 'Berhasil Menambahkan Karyawan');
+        return redirect()->back()->with(' status', 'Berhasil Menambahkan Karyawan');
     }
 
     public function destroy(string $id)

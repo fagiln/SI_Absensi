@@ -22,7 +22,7 @@ class PerizinanSeeder extends Seeder
         foreach ($users as $user) {
             Perizinan::create([
                 'user_id' => $user->id,
-                'start_date' => Carbon::now()->subDays(rand(1, 10))->toDateString(),
+                'start_date' => Carbon::now()->toDateString(),
                 'end_date' => Carbon::now()->toDateString(),
                 'reason' => 'sakit',
                 'keterangan' => 'Mengajukan izin karena sakit.',
@@ -34,7 +34,7 @@ class PerizinanSeeder extends Seeder
 
             Perizinan::create([
                 'user_id' => $user->id,
-                'start_date' => Carbon::now()->subDays(rand(11, 20))->toDateString(),
+                'start_date' => Carbon::now()->toDateString(),
                 'end_date' => Carbon::now()->subDays(rand(5, 10))->toDateString(),
                 'reason' => 'izin',
                 'keterangan' => 'Mengajukan izin karena urusan keluarga.',

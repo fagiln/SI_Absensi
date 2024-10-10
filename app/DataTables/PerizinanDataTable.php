@@ -55,15 +55,23 @@ class PerizinanDataTable extends DataTable
      */
     public function query(Perizinan $model): QueryBuilder
     {
-        $filterDate = request('created_at',);
-
+        $filterDate = request('created_at', \Carbon\Carbon::today()->toDateString());
+        $startDate = request('start_date');
+        $filterStatus = request('status');
         return $model->newQuery()
 
             ->join('users', 'users.id', '=', 'perizinan.user_id') // Join dengan tabel users
             ->select('perizinan.*', 'users.nik as user_nik', 'users.name as user_name', 'users.jabatan as user_jabatan')
             ->when($filterDate, function ($query, $filterDate) {
                 return $query->whereDate('perizinan.created_at', $filterDate);
-            });
+            })
+            ->when($startDate, function ($query, $startDate) {
+                return $query->whereDate('perizinan.start_date', $startDate);
+            })
+            ->when($filterStatus, function ($query, $filterStatus) {
+                return $query->where('perizinan.status', $filterStatus);
+            })
+        ;
     }
 
     /**

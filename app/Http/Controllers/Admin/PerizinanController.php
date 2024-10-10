@@ -12,7 +12,6 @@ class PerizinanController extends Controller
     public function index(PerizinanDataTable $dataTable)
     {
         $perizinan = Perizinan::all();
-        $dataTable = new PerizinanDataTable(request()->get('created_at'));
 
         return $dataTable->render('admin.perizinan.perizinan', compact('perizinan'));
     }

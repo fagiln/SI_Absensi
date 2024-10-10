@@ -11,21 +11,48 @@
 @endif
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
 
         <div class="form-group">
-            <label for="filter_date">Filter awal cuti :</label>
+            <label for="filter_date">Filter tanggal pembuatan :</label>
             <div class="d-flex">
                 <input type="date" id="filter_date" name="filter_date" class="form-control filter" value="">
             </div>
         </div>
     </div>
-    
+    <div class="col-md-3">
+
+        <div class="form-group">
+            <label for="filter_start_date">Filter awal cuti :</label>
+            <div class="d-flex">
+                <input type="date" id="filter_start_date" name="filter_start_date" class="form-control filter"
+                    value="">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+
+        <div class="form-group">
+            <label for="filter_status">Filter status :</label>
+            <div class="d-flex">
+                <select name="filter_status" id="filter_status" class="form-control">
+                    <option value="">Pilih Status</option>
+                    <option value="ditolak">Ditolak</option>
+                    <option value="pending">Pending</option>
+                    <option value="diterima">Diterima</option>
+
+                </select>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="table-responsive">
+    <div class="table-wrapper">
 
-    {!! $dataTable->table(['class' => 'table table-bordered table-striped my-2']) !!}
+        {!! $dataTable->table(['class' => 'table table-bordered table-striped my-2']) !!}
+    </div>
 </div>
 
 @foreach ($perizinan as $item)
@@ -85,7 +112,6 @@
 @push('scripts')
     {!! $dataTable->scripts() !!}
     <script>
-   
         document.addEventListener('DOMContentLoaded', function() {
             var alert = document.getElementById('success-alert');
             if (alert) {
@@ -101,12 +127,28 @@
                 reloadDataTable();
             })
         })
+        $(document).ready(function() {
+            $('#filter_start_date').on('change', function() {
+                console.log('test');
+                reloadDataTable();
+            })
+        })
+        $(document).ready(function() {
+            $('#filter_status').on('change', function() {
+                reloadDataTable();
+            })
+        })
 
         function reloadDataTable() {
             let date = $('#filter_date').val();
+            let start_date = $('#filter_start_date').val();
+            let status = $('#filter_status').val();
             let url = "{{ route('admin.perizinan.index') }}";
+            console.log(status);
 
-            window.LaravelDataTables['perizinan-table'].ajax.url(`${url}?created_at=${date}`).load();
+            window.LaravelDataTables['perizinan-table'].ajax.url(
+                    `${url}?created_at=${date}&start_date=${start_date}&status=${status}`)
+                .load();
         }
         document.addEventListener('DOMContentLoaded', function() {
             const filterDateInput = document.getElementById('filter_date');
