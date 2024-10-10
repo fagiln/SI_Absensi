@@ -40,6 +40,7 @@
             text-align: center;
             color: #8eaac3;
             font-size: 14px;
+            text-decoration: none
         }
 
         .navbar-bottom a i {
@@ -97,27 +98,28 @@
         {{-- Navbar Bottom --}}
 
         <nav class="navbar-bottom">
-            <a href="{{ route('home') }}" class="nav-item">
+            <a href="{{ route('home') }}" class="nav-item {{ Route::is('home') ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
-            <a href="{{ route('cuti') }}" class="nav-item">
+            <a href="{{ route('cuti') }}" class="nav-item {{ Route::is('cuti') ? 'active' : '' }}">
                 <i class="far fa-calendar-check"></i>
                 <span>Cuti</span>
             </a>
-            <a href="{{ route('riwayat') }}" class="nav-item">
+            <a href="{{ route('riwayat') }}" class="nav-item {{ Route::is('riwayat') ? 'active' : '' }}">
                 <i class="far fa-file-alt"></i>
                 <span>Riwayat</span>
             </a>
-            <a href="{{ route('notif') }}" class="nav-item">
+            <a href="{{ route('notif') }}" class="nav-item {{ Route::is('notif') ? 'active' : '' }}">
                 <i class="far fa-bell"></i>
                 <span>Notif</span>
             </a>
-            <a href="{{ url('user/profile/{id}')}}" class="nav-item">
+            <a href="{{ route('profile.show') }}" class="nav-item {{ Route::is('profile.show') ? 'active' : '' }}">
                 <i class="far fa-user"></i>
-                <span>Profile  </span>
+                <span>Profile</span>
             </a>
         </nav>
+        
 
 
     </div>

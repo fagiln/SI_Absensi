@@ -159,6 +159,8 @@
                 <p class="inline" style="font-weight: bold">Pilih Cuti</p>
                 <p class="inline" style="color: crimson">*</p>
             </div>
+
+            {{-- Pilih cuti ganti dropbottom --}}
             <form>
                 <!-- Pilihan Izin -->
                 <div class="radio-container">
@@ -174,6 +176,7 @@
             </form>
 
             <div style="margin-top: 20px;"></div>
+            {{-- ganti --}}
 
             <!-- Periode Cuti -->
             <div class="inline">

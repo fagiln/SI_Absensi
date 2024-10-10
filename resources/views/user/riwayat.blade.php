@@ -1,195 +1,122 @@
 @extends('user.layouts.app')
 
-<!DOCTYPE html>
-<html lang="en">
+@section('content')
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat</title>
     <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.css') }}">
     <style>
         /* Custom CSS untuk notifikasi */
         .container {
-            max-width: 100%;
-            padding-left: 10px;
-            padding-right: 10px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            margin: 0 auto;
         }
 
-        .box {
-            max-width: 250px;
-            margin-left: 10px;
-            margin-right: 15px;
-            margin-top: 20px;
-            padding: 8px;
-            border: 2px solid rgb(204, 37, 37); /* Garis tepi dengan warna merah */
-            border-radius: 8px; /* Membuat sudut tepi membulat */
-            background-color: #f9f9f9;
-        }
-
-        .date-container {
-            display: flex;
-            align-items: center;
-            font-size: 18px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            max-width: 350px;
-            background-color: #f9f9f9;
-        }
-
-        .date {
-            margin-right: 10px;
-        }
-
-        .icon {
-            cursor: pointer;
-            font-size: 20px;
-        }
-
-        .icon:hover {
-            color: #007bff;
-        }
-        
-        /* Sembunyikan input date secara default */
-        #date-picker {
-            display: none;
-        }
-
-        /* border */
+        /* Custom dropdown */
         .custom-dropdown {
             margin-left: 10px;
-            border: 2px solid rgb(204, 37, 37); /* Warna pinggir merah */
+            border: 2px solid crimson; /* Warna pinggir merah */
             background-color: white; /* Warna tengah putih */
             color: black; /* Warna teks hitam */
-            padding: 8px; /* Padding untuk tampilan yang lebih baik */
-            border-radius: 10px; /* Sudut melengkung (opsional) */
-            width: 100px; /* Lebar dropdown */
+            padding: 8px;
+            border-radius: 10px;
+            width: 100px;
         }
 
-        /* data tabel */
+        /* Data tabel css*/
         table {
             width: 100%;
             border-radius: 10px;
             border-collapse: collapse;
             margin-top: 20px;
+            margin-bottom: 20px; /* Tambah margin bawah untuk tabel */
         }
 
         th, td {
             border: 1px solid #ccc;
             padding: 10px;
             text-align: left;
-            
         }
 
         th {
             background-color: #f2f2f2;
-            
         }
 
         tr:nth-child(even) {
             background-color: #f9f9f9;
-            
         }
 
         tr:hover {
             background-color: #f1f1f1;
-            
         }
     </style>
 </head>
-<body>
+<body style="padding: 15px">
 <div class="container">
-    <div class="box">
-        <div class="date">
-            <span style="font-size: 12px;">Periode :</span>
-            <span id="start-date" style="font-size: 12px">1 Sep 2024</span> - 
-            <span id="end-date" style="font-size: 12px">30 Sep 2024</span>
-            <i class="fas fa-calendar-alt icon" style="size: 12px; margin-left: 5px; color: rgb(204, 37, 37)" onclick="showDatePicker()"></i>
+
+    <!-- Form Filter Kehadiran -->
+    <form method="GET">
+        <label for="daterange">Periode:</label>
+        <!-- Memperbaiki dua kali input yang sama -->
+        <div class="row">
+            <div class="col-md-4">
+                <input type="date" id="start_date" name="start_date" value="2024-09-01" />
+            </div>
+            
+            <div class="col-md-4">
+                <input type="date" id="end_date" name="end_date" value="2024-09-30" />
+            </div>
         </div>
-    </div>
-    <div style="padding-top: 10px"></div>
-        <select class="custom-dropdown">
-            <option value="1">izin</option>
-            <option value="2">sakit</option>
+
+        <div style="margin-top: 20px"></div>
+
+        <label for="filter">Filter Kehadiran:</label>
+        <select id="filter" name="filter" class="custom-dropdown">
+            <option value="semua">Semua</option>
+            <option value="sakit">Sakit</option>
+            <option value="izin">Izin</option>
+            <option value="hadir">Hadir</option>
         </select>
-        <div style="padding-top: 20px"></div>
-        <h2>Tabel Kehadiran Karyawan</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Masuk</th>
-                        <th>Pulang</th>
-                        <th>Jam Kerja</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>17 Sep 2024</td>
-                        <td>08:00</td>
-                        <td>17:00</td>
-                        <td>8 Jam</td>
-                        <td>Hadir</td>
-                    </tr>
-                    <tr>
-                        <td>17 Sep 2024</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>izin</td>
-                    </tr>
-                    <tr>
-                        <td>17 Sep 2024</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>izin</td>
-                    </tr>
-                    <tr>
-                        <td>17 Sep 2024</td>
-                        <td>08:00</td>
-                        <td>17:00</td>
-                        <td>8 Jam</td>
-                        <td>hadir</td>
-                    </tr>
-                </tbody>
-            </table>
         
+    </form>
+
+    <!-- Tabel Kehadiran Karyawan -->
+    <div class="table-responsive mt-4">
+        <h2>Tabel Kehadiran Karyawan</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Masuk</th>
+                    <th>Pulang</th>
+                    <th>Jam Kerja</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($kehadiran->isEmpty())
+                    <tr>
+                        <td colspan="5">Tidak ada data kehadiran ditemukan.</td>
+                    </tr>
+                @else
+                    @foreach($kehadiran as $data)
+                        <tr>
+                            <td>{{ \Carbon\Carbon::parse($data->check_in_time)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->check_in_time)->format('H:i') ?? '-' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->check_out_time)->format('H:i') ?? '-' }}</td>
+                            <td>{{ $data->jam_kerja ?? '-' }} Jam</td>
+                            <td>{{ ucfirst($data->status) }}</td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div>
+    
 </div>
 
-<!-- Input type date untuk memilih tanggal -->
-<input type="date" id="date-picker" onchange="updateDate()">
-
-<!-- Bootstrap JS dan jQuery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{{ asset('asset/js/bootstrap.bundle.js') }}" ></script>
-<script>
-    // Data untuk bulan dalam ejaan pendek
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-    // Menampilkan date picker saat icon ditekan
-    function showDatePicker() {
-        document.getElementById('date-picker').click(); // Memicu klik pada input date
-    }
-
-    // Fungsi untuk memperbarui tanggal setelah dipilih
-    function updateDate() {
-        const datePicker = document.getElementById('date-picker');
-        const selectedDate = new Date(datePicker.value);
-
-        // Mendapatkan bulan, tanggal, dan tahun dari tanggal yang dipilih
-        const day = selectedDate.getDate();
-        const month = selectedDate.getMonth();
-        const year = selectedDate.getFullYear();
-
-        // Menampilkan tanggal awal (1st of selected month)
-        document.getElementById('start-date').innerText = `1 ${months[month]} ${year}`;
-
-        // Mendapatkan hari terakhir bulan yang dipilih
-        const endDay = new Date(year, month + 1, 0).getDate();
-        document.getElementById('end-date').innerText = `${endDay} ${months[month]} ${year}`;
-    }
-</script>
 </body>
-</html>
+@endsection
