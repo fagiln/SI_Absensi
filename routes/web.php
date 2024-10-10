@@ -3,6 +3,7 @@
 
 // Admin Controller
 use App\Http\Controllers\Admin\DashboardController;
+<<<<<<< HEAD
 
 // User Controller
 use App\Http\Controllers\User\ProfileController;
@@ -12,6 +13,12 @@ use App\Http\Controllers\User\CutiController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\LayoutController;
 
+=======
+use App\Http\Controllers\Admin\DepartemenController;
+use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Admin\MonitoringController;
+use App\Http\Controllers\Admin\PerizinanController;
+>>>>>>> 804975fb0ab1aa569b76d46efe175b35a403ebdc
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +50,7 @@ use Illuminate\Support\Facades\Route;
 //     Route::post('/', [LoginController::class, 'authenticate'])->name('login.authenticate');
 // });
 
+<<<<<<< HEAD
 // Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
 //     Route::get('admin/dashboard', [DashboardController::class, 'show'])->name('admin.dashboard');
 //     Route::get('admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
@@ -77,3 +85,28 @@ Route::get('/user/cuti-detail', [CutiController::class, 'showdetail'])->name('cu
 // -------------------- Layouts ----------------------------
 
 // Route::get('/user/profile', [LayoutController::class, 'index'])->name('profile');
+=======
+Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
+    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+
+        Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+        Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+        Route::get('/karyawan', [KaryawanController::class, 'index'])->name('index.karyawan');
+        Route::post('karyawan/add', [KaryawanController::class, 'store'])->name('karyawan.add');
+        Route::get('karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit');
+        Route::put('karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update');
+        Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.delete');
+        Route::get('/karyawan', [KaryawanController::class, 'index'])->name('index.karyawan');
+        Route::get('/departemen', [DepartemenController::class, 'index'])->name('index.departemen');
+        Route::post('departemen/add', [DepartemenController::class, 'store'])->name('departemen.add');
+        Route::get('departemen/{id}/edit', [DepartemenController::class, 'edit'])->name('departemen.edit');
+        Route::put('departemen/{id}', [DepartemenController::class, 'update'])->name('departemen.update');
+        Route::delete('/departemen/{id}', [DepartemenController::class, 'destroy'])->name('departemen.delete');
+
+        Route::get('monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
+
+        Route::get('perizinan', [PerizinanController::class, 'index'])->name('perizinan.index');
+        Route::put('perizinan/status/{id}', [PerizinanController::class, 'update'])->name('perizinan.status');
+    });
+});
+>>>>>>> 804975fb0ab1aa569b76d46efe175b35a403ebdc

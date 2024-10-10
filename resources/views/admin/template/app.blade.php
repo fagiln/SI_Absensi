@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin | @yield('title')</title>
     <link rel="shortcut icon" href="{{ asset('assets/img/logo.png') }}" type="image/x-icon">
     <!-- Google Font: Source Sans Pro -->
@@ -29,6 +30,8 @@
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}">
+    <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
+    @stack('style')
     <style>
         body {
             margin: 0;
@@ -46,8 +49,7 @@
 
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="{{ asset('/img/logo.png') }}" alt="Thrifty Logo" height="60"
-                >
+            <img class="animation__shake" src="{{ asset('/img/logo.png') }}" alt="Thrifty Logo" height="60">
         </div>
 
         <!-- Navbar -->
@@ -69,10 +71,10 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('seller/user-list/' . Auth::user()->id . '/edit') }}">
-                        Welcome, Seller {{ Auth::user()->username }} !
-                        <img src="{{ asset('uploads/' . Auth::user()->avatar) }}" alt=""
+                        Welcome, Admin {{ Auth::user()->username }} !
+                        {{-- <img src="{{ asset('uploads/' . Auth::user()->avatar) }}" alt=""
                             class="ml-2 rounded-circle"
-                            style="width: 30px; height: 30px; object-fit: cover; margin-right: 10px;">
+                            style="width: 30px; height: 30px; object-fit: cover; margin-right: 10px;"> --}}
                     </a>
                 </li>
 
@@ -84,8 +86,7 @@
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
             <a href="seller/dashboard" class="brand-link">
-                <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo"
-                    class="brand-image" />
+                <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image" />
                 <span class="brand-text font-weight-bold">ADMIN</span>
             </a>
 
@@ -104,7 +105,7 @@
                         </li>
                         <li class="nav-item menu-close menu">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-tshirt"></i>
+                                <i class="nav-icon fas fa-database"></i>
                                 <p>
                                     Data Master
                                     <i class="right fas fa-angle-left"></i>
@@ -112,34 +113,34 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="admin/karyawan" class="nav-link">
-                                        <i class="fas fa-cart-plus nav-icon"></i>
+                                    <a href="{{ route('admin.index.karyawan') }}" class="nav-link">
+                                        <i class="fas fa-user-tie nav-icon"></i>
                                         <p>Karyawan</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="admin/deparmtemen" class="nav-link">
-                                        <i class="fas fa-tags nav-icon"></i>
+                                    <a href="{{ route('admin.index.departemen') }}" class="nav-link">
+                                        <i class="fas fa-building nav-icon"></i>
                                         <p>Departemen</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li class="nav-item rounded">
-                            <a href="admin/monitoring" class="nav-link">
-                                <i class="fas fa-sliders-h nav-icon"></i>
+                            <a href="{{ route('admin.monitoring.index') }}" class="nav-link">
+                                <i class="fas fa-desktop nav-icon"></i>
                                 <p>Monitoring</p>
                             </a>
                         </li>
                         <li class="nav-item rounded">
-                            <a href="admin/perizinan" class="nav-link">
-                                <i class="fas fa-sliders-h nav-icon"></i>
+                            <a href="{{route('admin.perizinan.index')}}" class="nav-link">
+                                <i class="fas fa-notes-medical nav-icon"></i>
                                 <p>Data Izin dan Sakit</p>
                             </a>
                         </li>
                         <li class="nav-item menu-close menu">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-user-alt"></i>
+                                <i class="nav-icon fas fa-clipboard-list"></i>
                                 <p>
                                     Laporan
                                     <i class="right fas fa-angle-left"></i>
@@ -198,13 +199,15 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <span class="text d-none d-sm-inline-block"><strong>Thrifty </strong>was made by &#10084; </span>
+            <span class="text d-none d-sm-inline-block"><strong>This </strong>was made by &#10084; </span>
             <div class="float-right d-none d-sm-inline-block">
                 <b>Beta Version</b> 1.0.0
             </div>
         </footer>
     </div>
     <!-- ./wrapper -->
+    {{-- leaflet --}}
+    <script src="{{ asset('leaflet/leaflet.js') }}"></script>
     <!-- jQuery -->
     <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -218,7 +221,7 @@
     <!-- ChartJS -->
     <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
     <!-- Sparkline -->
-    <script src="{{ asset('adminlte/plugins/sparklines/sparkline.js') }}"></script>
+    {{-- <script src="{{ asset('adminlte/plugins/sparklines/sparkline.js') }}"></script> --}}
     <!-- JQVMap -->
     <script src="{{ asset('adminlte/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
     <script src="{{ asset('adminlte/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
@@ -239,24 +242,24 @@
     <script src="{{ asset('datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('datatables/bootstrap.datatables.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            // Get the current page URL
-            var currentUrl = window.location.href;
-
-            // Loop through each sidebar link
-            $(".nav-sidebar a").each(function() {
-                // Check if the href of the link matches the current URL
-                if (this.href === currentUrl) {
-                    // Add 'active' class to the link and its parent
-                    $(this).addClass("active");
-
-                    // If it's a submenu item, add 'menu-open' class to the parent
-                    $(this).closest(".has-treeview").addClass("menu-open");
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
+            // const menuLinks = document.querySelectorAll('.menu');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    sidebarLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                });
+                if (link.href === window.location.href) {
+                    link.classList.add('active');
+                    const parentMenu = link.closest('.menu');
+                    if (parentMenu) {
+                        parentMenu.classList.remove('menu-close');
+                        parentMenu.classList.add('menu-open');
+                    }
                 }
             });
         });
-    </script>
-
     </script>
     @stack('scripts')
 
