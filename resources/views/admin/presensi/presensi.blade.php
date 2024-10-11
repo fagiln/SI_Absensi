@@ -15,7 +15,7 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="year">Tahun:</label>
+                    <label for="year" class="mt-3 mt-md-0">Tahun:</label>
                     <select name="year" id="year" class="form-control">
                         @foreach (range(now()->year - 5, now()->year) as $y)
                             <option value="{{ $y }}">{{ $y }}</option>
@@ -23,7 +23,7 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="user_id">Nama Karyawan:</label>
+                    <label for="user_id" class="mt-3 mt-md-0">Nama Karyawan:</label>
                     <select name="user_id" id="user_id" class="form-control">
                         <option value="">Pilih Karyawan</option>
                         @foreach ($karyawan as $item)

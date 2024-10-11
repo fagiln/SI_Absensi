@@ -155,7 +155,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="admin/rekap" class="nav-link">
+                                    <a href="{{route('admin.rekap-presensi.index')}}" class="nav-link">
                                         <i class="nav-icon fas fa-users"></i>
                                         <p>Rekap Presensi</p>
                                     </a>
