@@ -87,8 +87,12 @@ class PerizinanDataTable extends DataTable
             ->responsive(true)
             ->parameters([
                 'responsive' => true,
-                'autoWidth' => false,  // Untuk memastikan lebar kolom diatur secara otomatis
+                'autoWidth' => false,
+                'language' => [
+                    'emptyTable' => 'Belum ada yang membuat perizinan hari ini'
+                ],  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
+
             //->dom('Bfrtip')
             ->orderBy([10, 'dsc'])
             ->selectStyleSingle()

@@ -1,6 +1,6 @@
 @extends('admin.template.app')
 @section('content')
-@section('title', 'Data Izin atau Sakit')
+@section('title', 'Perizinan Karyawan')
 @if (session('status'))
     <div class="my-3">
         <div id="success-alert" class="alert alert-success d-flex justify-content-between fade show" role="alert">

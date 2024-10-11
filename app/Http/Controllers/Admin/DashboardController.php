@@ -56,4 +56,31 @@ class DashboardController extends Controller
             'karyawanSakitCount'
         ));
     }
+
+    public function karyawanIzin(Request $request)
+    {
+        $filterDate =  Carbon::today()->toDateString();
+
+        $karyawanIzin = Perizinan::where('status', 'diterima')
+            ->where('reason', 'izin')
+            ->whereDate('start_date', '<=', $filterDate)
+            ->whereDate('end_date', '>=', $filterDate)
+            ->with('user')
+            ->get();
+
+        return response()->json($karyawanIzin);
+    }
+    public function karyawanSakit(Request $request)
+    {
+        $filterDate =  Carbon::today()->toDateString();
+
+        $karyawanSakit = Perizinan::where('status', 'diterima')
+            ->where('reason',  'sakit')
+            ->whereDate('start_date', '<=', $filterDate)
+            ->whereDate('end_date', '>=', $filterDate)
+            ->with('user')
+            ->get();
+
+        return response()->json($karyawanSakit);
+    }
 }

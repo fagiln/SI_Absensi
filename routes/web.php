@@ -38,6 +38,8 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+        Route::get('karyawan-izin', [DashboardController::class, 'karyawanIzin'])->name('karyawan.izin');
+        Route::get('karyawan-sakit', [DashboardController::class, 'karyawanSakit'])->name('karyawan.sakit');
         Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('/karyawan', [KaryawanController::class, 'index'])->name('index.karyawan');
         Route::post('karyawan/add', [KaryawanController::class, 'store'])->name('karyawan.add');
