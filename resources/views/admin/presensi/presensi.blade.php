@@ -33,8 +33,8 @@
                 </div>
             </div>
 
-            <div class="mt-3">
-                <button type="submit" id="exportButton" class="btn btn-success"><i class="fas fa-download"></i> Cetak ke Excel</button>
+            <div class="mt-3 d-flex justify-content-between justify-content-md-start  ">
+                <button type="submit" id="exportButton" class="btn btn-success mr-md-3"><i class="fas fa-download"></i> Cetak ke Excel</button>
                 <a href="#" id="printButton" class="btn btn-secondary"><i class="fas fa-print"></i>           Print Laporan</a>
             </div>
         </form>
