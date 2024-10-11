@@ -46,7 +46,7 @@ class KaryawanController extends Controller
             $data['password'] = Hash::make($request->edit_password);
         }
         User::create($data);
-        return redirect()->back()->with(' status', 'Berhasil Menambahkan Karyawan');
+        return redirect()->back()->with('status', 'Berhasil Menambahkan Karyawan');
     }
 
     public function destroy(string $id)

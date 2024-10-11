@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DepartemenController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PerizinanController;
+use App\Http\Controllers\Admin\PresensiController;
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -59,5 +60,9 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
 
         Route::get('perizinan', [PerizinanController::class, 'index'])->name('perizinan.index');
         Route::put('perizinan/status/{id}', [PerizinanController::class, 'update'])->name('perizinan.status');
+
+        Route::get('presensi', [PresensiController::class, 'index'])->name('presensi.index');
+        Route::get('presensi/export', [PresensiController::class, 'export'])->name('presensi.export');
+        Route::get('presensi/print', [PresensiController::class, 'print'])->name('presensi.print');
     });
 });

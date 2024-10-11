@@ -149,7 +149,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="admin/presensi" class="nav-link">
+                                    <a href="{{route('admin.presensi.index')}}" class="nav-link">
                                         <i class="nav-icon fas fa-user-plus"></i>
                                         <p>Presensi</p>
                                     </a>
