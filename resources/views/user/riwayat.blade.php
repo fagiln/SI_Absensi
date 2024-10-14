@@ -2,6 +2,7 @@
 
 @section('content')
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Riwayat</title>
     <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.css') }}">
     <style>
@@ -11,6 +12,7 @@
             padding: 20px;
             border-radius: 10px;
             max-width: 600px;
+            min-height: 600px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             margin: 0 auto;
         }
@@ -52,33 +54,37 @@
         tr:hover {
             background-color: #f1f1f1;
         }
+
+        .pagination {
+            justify-content: center; /* Menjajarkan pagination ke tengah */
+        }
     </style>
 </head>
 <body style="padding: 15px">
 <div class="container">
 
     <!-- Form Filter Kehadiran -->
-    <form method="GET">
+    <form id="filterForm" method="GET" action="{{ route('riwayat') }}">
         <label for="daterange">Periode:</label>
-        <!-- Memperbaiki dua kali input yang sama -->
-        <div class="row">
+          <div class="row">  
             <div class="col-md-4">
-                <input type="date" id="start_date" name="start_date" value="2024-09-01" />
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" id="start_date" value="{{ request()->start_date }}" required>
             </div>
-            
-            <div class="col-md-4">
-                <input type="date" id="end_date" name="end_date" value="2024-09-30" />
+            <div class="col-md-4 mt-2 mt-md-0">
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" id="end_date" value="{{ request()->end_date }}" required>
             </div>
-        </div>
-
+          </div>
         <div style="margin-top: 20px"></div>
 
         <label for="filter">Filter Kehadiran:</label>
-        <select id="filter" name="filter" class="custom-dropdown">
-            <option value="semua">Semua</option>
-            <option value="sakit">Sakit</option>
-            <option value="izin">Izin</option>
-            <option value="hadir">Hadir</option>
+        <select id="filter" name="filter" class="custom-dropdown" onchange="this.form.submit()">
+            <option value="semua" {{ request('filter') == 'semua' ? 'selected' : '' }}>Semua</option>
+            <option value="hadir" {{ request('filter') == 'hadir' ? 'selected' : '' }}>Hadir</option>
+            <option value="telat" {{ request('filter') == 'telat' ? 'selected' : '' }}>Telat</option>
+            <option value="sakit" {{ request('filter') == 'sakit' ? 'selected' : '' }}>Sakit</option>
+            <option value="izin" {{ request('filter') == 'izin' ? 'selected' : '' }}>Izin</option>
         </select>
         
     </form>
@@ -97,26 +103,82 @@
                 </tr>
             </thead>
             <tbody>
-                @if($kehadiran->isEmpty())
+                @if(empty($riwayatPaginated) || $riwayatPaginated->isEmpty())
                     <tr>
-                        <td colspan="5">Tidak ada data kehadiran ditemukan.</td>
+                        <td colspan="5">Tidak ada data kehadiran dan perizinan yang ditemukan.</td>
                     </tr>
                 @else
-                    @foreach($kehadiran as $data)
+                    @foreach($riwayatPaginated as $data)
                         <tr>
-                            <td>{{ \Carbon\Carbon::parse($data->check_in_time)->format('d-m-Y') }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data->check_in_time)->format('H:i') ?? '-' }}</td>
-                            <td>{{ \Carbon\Carbon::parse($data->check_out_time)->format('H:i') ?? '-' }}</td>
-                            <td>{{ $data->jam_kerja ?? '-' }} Jam</td>
-                            <td>{{ ucfirst($data->status) }}</td>
+                            <td>{{ $data['tanggal'] }}</td>
+                            <td>{{ $data['masuk'] }}</td>
+                            <td>{{ $data['pulang'] }}</td>
+                            <td>{{ $data['jam_kerja'] }}</td>
+                            <td>{{ $data['status'] }}</td>
                         </tr>
                     @endforeach
                 @endif
             </tbody>
         </table>
+        
     </div>
-    
+
+    <!-- Pagination -->
+    <div class="pagination mt-3">
+        @if ($riwayatPaginated->currentPage() > 1)
+            <a href="{{ $riwayatPaginated->previousPageUrl() }}" class="text"><< Prev</a>
+        @endif
+
+        <span style="margin-left: 5px; margin-right: 5px">Halaman {{ $riwayatPaginated->currentPage() }} dari {{ $riwayatPaginated->lastPage() }}</span>
+
+        @if ($riwayatPaginated->hasMorePages())
+            <a href="{{ $riwayatPaginated->nextPageUrl() }}" class="text">Next >></a>
+        @endif
+    </div>
+
 </div>
+<div style="margin-bottom: 70px"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const startDateInput = document.getElementById("start_date");
+        const endDateInput = document.getElementById("end_date");
+        const filterForm = document.getElementById("filterForm");
+
+        // Event listener untuk end_date
+        endDateInput.addEventListener("change", function() {
+            if (endDateInput.value) {
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
+
+                // Jika end_date lebih kecil dari start_date, reset end_date
+                if (new Date(endDate) < new Date(startDate)) {
+                    endDateInput.value = ""; // Reset end_date
+                    alert("End date tidak dapat lebih kecil dari start date.");
+                } else {
+                    // Reload halaman dengan query string yang diperbarui
+                    const url = new URL(filterForm.action);
+                    url.searchParams.set("start_date", startDate);
+                    url.searchParams.set("end_date", endDate);
+                    url.searchParams.set("filter", document.getElementById("filter").value); // Menyimpan filter
+                    window.location.href = url;
+                }
+            }
+        });
+
+        startDateInput.addEventListener("change", function() {
+            const startDate = new Date(startDateInput.value);
+            endDateInput.min = startDateInput.value; // Set min date untuk end_date
+
+            // Reset end_date jika lebih kecil dari start_date
+            if (endDateInput.value && new Date(endDateInput.value) < startDate) {
+                endDateInput.value = ""; // Reset end_date
+                alert("End date tidak dapat lebih kecil dari start date.");
+            }
+        });
+    });
+</script>
+
 
 </body>
 @endsection

@@ -69,7 +69,8 @@
         
                     <!-- Ikon Plus -->
                     <div style="position: absolute; bottom: 5px; right: 5px; background-color: #ffffff; border-radius: 50%;">
-                        <img src="{{ asset('img/icon_tambah.png') }}" alt="Change Photo" style="width: 20px; height: 20px;">
+                        {{-- <img src="{{ asset('img/icon_tambah.png') }}" alt="Change Photo" style="width: 20px; height: 20px;"> --}}
+                        <i class="fas fa-camera" alt="Change Photo" style="width: 20px; height: 20px;"></i>
                     </div>
                 </div>
         
