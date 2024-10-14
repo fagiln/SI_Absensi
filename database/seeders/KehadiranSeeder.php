@@ -23,7 +23,7 @@ class KehadiranSeeder extends Seeder
 
             // Buat data kehadiran untuk setiap user
             Kehadiran::create([
-                'user_id' => $user->id,
+                'user_id' => '2',
                 'work_date' => Carbon::now()->toDateString(),
                 'check_in_time' => $checkInTime->toDateTimeString(),
                 'check_out_time' => Carbon::now()->toDateTimeString(),

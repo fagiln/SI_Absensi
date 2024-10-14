@@ -22,6 +22,8 @@ class PerizinanDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        Carbon::setLocale('id');
+
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function (Perizinan $perizinan) {
@@ -39,7 +41,7 @@ class PerizinanDataTable extends DataTable
                 $query->whereRaw('LOWER(users.nik) LIKE ?', ["%{$keyword}%"]);
             })
             ->editColumn('created_at', function (Perizinan $perizinan) {
-                return Carbon::parse($perizinan->created_at)->format('d F Y');
+                return Carbon::parse($perizinan->created_at)->translatedFormat('d F Y');
             })
             ->filterColumn('user_name', function ($query, $keyword) {
                 $query->whereRaw('LOWER(users.name) LIKE ?', ["%{$keyword}%"]);

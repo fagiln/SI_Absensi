@@ -15,6 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class KaryawanDataTable extends DataTable
 {
+    
     /**
      * Build the DataTable class.
      *
@@ -22,6 +23,7 @@ class KaryawanDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        Carbon::setLocale('id');
         return (new EloquentDataTable($query))
             // ->addColumn('No', function(){
 
@@ -32,9 +34,9 @@ class KaryawanDataTable extends DataTable
                 return view('admin.karyawan.action', ['user' => $user]);
             })
             ->editColumn('created_at', function (User $user) {
-                return Carbon::parse($user->created_at)->format('d F Y ');
+                return Carbon::parse($user->created_at)->translatedFormat('d F Y ');
             })->editColumn('updated_at', function (User $user) {
-                return Carbon::parse($user->updated_at)->format('d F Y ');
+                return Carbon::parse($user->updated_at)->translatedFormat('d F Y ');
             })
             ->editColumn('department_id', function (User $user) {
                 

@@ -37,7 +37,7 @@ class RekapPresensiController extends Controller
         $filename =  "rekap_laporan_presensi_{$month}-{$year}.xlsx";
 
         // Ekspor ke Excel dengan data yang sesuai
-        return Excel::download(new PresensiExport($presensi), $filename);
+        return Excel::download(new PresensiExport( $presensi, karyawan: $month, $year), $filename);    
     }
 
 

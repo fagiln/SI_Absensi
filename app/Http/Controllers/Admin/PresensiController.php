@@ -37,8 +37,7 @@ class PresensiController extends Controller
         $filename = $karyawan ? "{$karyawan->name}_{$month}-{$year}_laporan_presensi.xlsx" : 'laporan_presensi.xlsx';
 
         // Ekspor ke Excel dengan data yang sesuai
-        return Excel::download(new PresensiExport($presensi), $filename);
-    }
+        return Excel::download(new PresensiExport( $presensi, $karyawan, $month, $year), $filename);    }
 
 
     public function print(Request $request)
