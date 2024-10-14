@@ -1,7 +1,6 @@
 @extends('user.layouts.app')
 
-<!DOCTYPE html>
-<html lang="en">
+@section('content')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,21 +23,51 @@
             margin-right: 2px;
         }
 
-        /* Radio button styling */
-        .radio-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
+        /* button select */
+        .custom-dropdown, .date-input {
+            max-width: 100%;
+            width: 100%;
+            border: 2px solid crimson;
+            padding: 8px;
+            border-radius: 4px;
+            appearance: none;
+            position: relative;
+            background-color: white;
         }
 
-        .radio-container input[type="radio"] {
-            margin-right: 10px;
-            accent-color: red;
+        .custom-dropdown-container {
+            position: relative;
         }
 
-        .radio-container label {
+        .custom-dropdown-container .fa-angle-up,
+        .custom-dropdown-container .fa-angle-down {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .custom-dropdown-container .fa-angle-up {
+            display: none;
+        }
+
+        .custom-dropdown.open ~ .fa-angle-up {
+            display: block;
+        }
+
+        .custom-dropdown.open ~ .fa-angle-down {
+            display: none;
+        }
+
+        .date-input {
+            display: block;
+            width: 100%;
+            padding: 8px;
             font-size: 16px;
-            cursor: pointer;
+            border: 2px solid crimson; /* Sama dengan border pada dropdown */
+            border-radius: 4px;
+            background-color: white;
         }
 
         /* Form inputs and date period */
@@ -131,7 +160,7 @@
             background-color: #f1f1f1;
         }
 
-        /* Responsive Design */
+        /* Keterangan gambar */
         @media (max-width: 600px) {
             .form-inline {
                 flex-direction: column;
@@ -150,222 +179,240 @@
 <body>
 <div style="padding-top: 10px">
     <div class="container">
+
         <div style="padding: 20px; margin-top: 15px; border: 2px solid crimson; border-radius: 10px">
-            <p style="margin: 0; padding: 0; margin-top: 10px; font-size: 18px; font-weight: bold;">Formulir Pengajuan Cuti</p>
-            <p style="margin: 0; padding: 0; font-size: 14px;">Ajukan Cuti</p>
+        
+            <form method="POST" action="{{ route('cuti.create') }}" enctype="multipart/form-data">
+            @csrf
 
-            <div style="margin-top: 20px"></div>
-            <div class="inline">
-                <p class="inline" style="font-weight: bold">Pilih Cuti</p>
-                <p class="inline" style="color: crimson">*</p>
-            </div>
+                <p style="margin: 0; padding: 0; margin-top: 10px; font-size: 18px; font-weight: bold;">Formulir Pengajuan Cuti</p>
+                <p style="margin: 0; padding: 0; font-size: 14px;">Ajukan Cuti</p>
 
-            {{-- Pilih cuti ganti dropbottom --}}
-            <form>
-                <!-- Pilihan Izin -->
-                <div class="radio-container">
-                    <input type="radio" id="izin" name="status" value="izin">
-                    <label for="izin">Izin</label>
+                <div style="margin-top: 20px"></div>
+                <!-- Pilih Cuti -->
+                <div class="inline">
+                    <p class="inline" style="font-weight: bold">Pilih Cuti</p>
+                    <p class="inline" style="color: crimson">*</p>
                 </div>
 
-                <!-- Pilihan Sakit -->
-                <div class="radio-container">
-                    <input type="radio" id="sakit" name="status" value="sakit">
-                    <label for="sakit">Sakit</label>
+                <div class="custom-dropdown-container">
+                    <select id="filter_izin" name="filter_izin" class="custom-dropdown">
+                        <option value="pilihcuti" {{ request('filter_izin') == 'pilihcuti' ? 'selected' : '' }}>Pilih Cuti</option>
+                        <option value="sakit" {{ request('filter_izin') == 'sakit' ? 'selected' : '' }}>Sakit</option>
+                        <option value="izin" {{ request('filter_izin') == 'izin' ? 'selected' : '' }}>Izin</option>
+                    </select>
+                    <i class="fas fa-angle-down"></i>
+                    <i class="fas fa-angle-up"></i>
                 </div>
-            </form>
 
-            <div style="margin-top: 20px;"></div>
-            {{-- ganti --}}
+                <div style="margin-top: 20px;"></div>
 
-            <!-- Periode Cuti -->
-            <div class="inline">
-                <p class="inline" style="font-weight: bold">Periode Cuti</p>
-                <p class="inline" style="color: crimson">*</p>
-            </div>
-
-            <form>
-                <div class="form-inline">
-                    <!-- Tanggal Sekarang -->
-                    <input type="date" id="tanggal-sekarang">
-
-                    <!-- Tanggal Besok -->
-                    <input type="date" id="tanggal-besok">
+                <!-- Periode Cuti -->
+                <div class="inline">
+                    <p class="inline" style="font-weight: bold">Periode Cuti</p>
+                    <p class="inline" style="color: crimson">*</p>
                 </div>
-            </form>
 
-            <div style="margin-top: 20px;"></div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <label for="start_date">Pilih Tanggal Awal Cuti :</label>
+                        <input type="date" name="start_date" id="start_date" class="date-input"
+                        {{-- value="{{ request()->start_date }}" --}} >
+                    </div>
+                    <div class="col-md-5 mt-2 mt-md-0">
+                        <label for="end_date">Pilih Tanggal Akhir Cuti :</label>
+                        <input type="date" name="end_date" id="end_date" class="date-input"
+                        {{-- value="{{ request()->end_date }}" --}} >
+                    </div>
+                </div>
 
-            <!-- Alasan Cuti -->
-            <div class="inline">
-                <p class="inline" style="font-weight: bold">Alasan Cuti</p>
-                <p class="inline" style="color: crimson">*</p>
-            </div>
+                <div style="margin-top: 20px;"></div>
 
-            <textarea placeholder="Tuliskan alasan cuti kalian" style="width: 100%; height: 150px; padding: 10px; border: 2px solid crimson; border-radius: 8px; box-sizing: border-box;"></textarea>
+                <!-- Alasan Cuti -->
+                <div class="inline">
+                    <p class="inline" style="font-weight: bold">Alasan Cuti</p>
+                    <p class="inline" style="color: crimson">*</p>
+                </div>
 
-            <div style="margin-top: 20px;"></div>
+                <textarea name="alasan" placeholder="Tolong jelaskan alasan cuti anda" style="width: 100%; height: 150px; padding: 10px; border: 2px solid crimson; border-radius: 8px; box-sizing: border-box;"></textarea>
 
-            <!-- Unggah Berkas -->
-            <p style="font-weight: bold; margin: 0; padding: 0;">Unggah Berkas</p>
-            <p style="margin: 0; padding: 0; font-size: 14px;">Silahkan unggah berkas dalam bentuk foto atau pdf</p>
+                <div style="margin-top: 20px;"></div>
 
-            <div class="upload-container" style="text-align: center; padding: 10px;">
-                <input type="file" id="upload-image" accept="image/*,application/pdf" style="display: block; margin-bottom: 10px;">
+                <!-- Unggah Berkas -->
+                <p style="font-weight: bold; margin: 0; padding: 0;">Unggah Berkas</p>
+                <p style="margin: 0; padding: 0; font-size: 14px;">Silahkan unggah berkas dalam bentuk foto atau pdf</p>
+
+                <div class="upload-container" style="text-align: center; padding: 10px;">
+                    <input name="file" type="file" id="upload-image" accept="image/*,application/pdf" style="display: block; margin-bottom: 10px;">
+                    
+                    <div class="image-preview" id="imagePreview" style="border: 1px solid #ddd; width: 300px; height: 300px; display: flex; justify-content: center; align-items: center;">
+                        <p>No file chosen</p>
+                    </div>
+                </div>
                 
-                <div class="image-preview" id="imagePreview" style="border: 1px solid #ddd; width: 300px; height: 300px; display: flex; justify-content: center; align-items: center;">
-                    <p>No file chosen</p>
+                <!-- Modal untuk tampilan gambar besar -->
+                <div id="imageModal" class="modal">
+                    <span class="close">&times;</span>
+                    <img class="modal-content" id="modalImage">
+                    <div id="caption"></div>
+                </div>                                
+
+                <div style="margin-top: 20px;"></div>
+                <div class="inline" style="display: flex; justify-content: space-between;">
+                    <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button>
+                    <button type="submit" style="height: 35px; width: 100px; color: white; background-color: crimson; border-radius: 6px;">Ajukan</button>
                 </div>
-            </div>
-            
-            <!-- Modal untuk tampilan gambar besar -->
-            <div id="imageModal" class="modal">
-                <span class="close">&times;</span>
-                <img class="modal-content" id="modalImage">
-                <div id="caption"></div>
-            </div>                                
+            </from>   
 
-            <div style="margin-top: 20px;"></div>
-            <div class="inline" style="display: flex; justify-content: space-between;">
-                <button type="button" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button>
-                <button type="button" style="height: 35px; width: 100px; color: white; background-color: crimson; border-radius: 6px;">Ajukan</button>
-            </div>
-            
         </div>
 
-        <div>
-            <p style="font-weight: bold; margin-top: 20px;">Status</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tanggal Pengajuan</th>
-                        <th>Jenis Cuti</th>
-                        <th>Periode</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>10/11/2024</td>
-                        <td>izin</td>
-                        <td>10/11/2024 sd 11/11/2024</td>
-                        <td style="color: crimson">Ditolak</td>
-                        <td>
-                            <a href="{{ route('cuti-detail') }}" class="nav-item">
-                                <i class="fas fa-edit" style="color: dodgerblue"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>10/11/2024</td>
-                        <td>izin</td>
-                        <td>10/11/2024 sd 11/11/2024</td>
-                        <td style="color: orange">Menunggu</td>
-                        <td><i class="fas fa-edit" style="color: dodgerblue"></i></td>
-                    </tr>
-                    <tr>
-                        <td>10/11/2024</td>
-                        <td>izin</td>
-                        <td>10/11/2024 sd 11/11/2024</td>
-                        <td style="color: green">Disetujui</td>
-                        <td><i class="fas fa-edit" style="color: dodgerblue"></i></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+
+    </div>
+    {{-- Bagian Tabel --}}
+    <div>
+        <p style="font-weight: bold; margin-top: 20px;">Status</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanggal Pengajuan</th>
+                    <th>Jenis Cuti</th>
+                    <th>Periode</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>10/11/2024</td>
+                    <td>izin</td>
+                    <td>10/11/2024 sd 11/11/2024</td>
+                    <td style="color: crimson">Ditolak</td>
+                    <td>
+                        <a href="{{ route('cuti-detail') }}" class="nav-item">
+                            <i class="fas fa-edit" style="color: dodgerblue"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>10/11/2024</td>
+                    <td>izin</td>
+                    <td>10/11/2024 sd 11/11/2024</td>
+                    <td style="color: orange">Menunggu</td>
+                    <td><i class="fas fa-edit" style="color: dodgerblue"></i></td>
+                </tr>
+                <tr>
+                    <td>10/11/2024</td>
+                    <td>izin</td>
+                    <td>10/11/2024 sd 11/11/2024</td>
+                    <td style="color: green">Disetujui</td>
+                    <td><i class="fas fa-edit" style="color: dodgerblue"></i></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+<div style="margin-bottom: 70px"></div>
+{{-- untuk pilih cuti --}}
 <script>
-    // Mengatur tanggal sekarang dan tanggal besok pada form input
-    document.addEventListener("DOMContentLoaded", function() {
-        const tanggalSekarang = document.getElementById("tanggal-sekarang");
-        const tanggalBesok = document.getElementById("tanggal-besok");
+     document.addEventListener('DOMContentLoaded', function () {
+        const cutiDropdown = document.getElementById('filter_izin');
+        const defaultOption = cutiDropdown.querySelector('option[value="pilihcuti"]');
 
-        const today = new Date();
-        const tomorrow = new Date();
-        tomorrow.setDate(today.getDate() + 1);
-
-        // Format tanggal ke YYYY-MM-DD agar cocok dengan input type="date"
-        const formatTanggal = (date) => {
-            const year = date.getFullYear();
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const day = date.getDate().toString().padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        };
-
-        // Mengatur nilai tanggal pada input form
-        tanggalSekarang.value = formatTanggal(today);
-        tanggalBesok.value = formatTanggal(tomorrow);
-
-        // Jika tanggal sekarang diubah, sesuaikan tanggal besok
-        tanggalSekarang.addEventListener("change", function() {
-            const selectedDate = new Date(tanggalSekarang.value);
-            const nextDay = new Date(selectedDate);
-            nextDay.setDate(selectedDate.getDate() + 1);
-            tanggalBesok.value = formatTanggal(nextDay);
+        cutiDropdown.addEventListener('change', function () {
+            if (cutiDropdown.value !== 'pilihcuti') {
+                // Disable the 'Pilih Cuti' option after user selects 'Sakit' or 'Izin'
+                defaultOption.disabled = true;
+            }
         });
     });
 </script>
+{{-- untuk periode tanggal --}}
 <script>
-// Elemen-elemen yang digunakan
-const uploadImage = document.getElementById("upload-image");
-const imagePreview = document.getElementById("imagePreview");
-const modal = document.getElementById("imageModal");
-const modalImage = document.getElementById("modalImage");
-const closeBtn = document.getElementsByClassName("close")[0];
+     document.addEventListener('DOMContentLoaded', function () {
+        const startDateInput = document.getElementById('start_date');
+        const endDateInput = document.getElementById('end_date');
 
-function handleFileUpload() {
-    const file = uploadImage.files[0];  // Ambil file yang dipilih
+        // Fungsi untuk mendapatkan tanggal hari ini dalam format yyyy-mm-dd
+        function getTodayDate() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Bulan mulai dari 0, jadi ditambah 1
+            const year = today.getFullYear();
+            return `${year}-${month}-${day}`;
+        }
 
-    if (file) {
-        const reader = new FileReader();
+        // Set minimum tanggal start_date menjadi hari ini
+        startDateInput.min = getTodayDate();
 
-        reader.onload = function(e) {
-            imagePreview.innerHTML = '';  // Kosongkan preview sebelumnya
+        // Event listener untuk start_date
+        startDateInput.addEventListener('change', function () {
+            const startDateValue = startDateInput.value;
 
-            if (file.type.startsWith('image/')) {
-                // Jika file adalah gambar
-                const imgElement = document.createElement("img");
-                imgElement.src = e.target.result;  // Tampilkan gambar yang dipilih
-                imgElement.style.maxWidth = "100%";  // Buat gambar responsif
-                imgElement.style.maxHeight = "100%"; // Buat agar gambar tidak melebihi area pratinjau
+            // Set minimum tanggal akhir (end_date) sesuai dengan start_date yang dipilih
+            endDateInput.min = startDateValue;
+        });
+    });
+</script>
+{{-- Bagian Upload Berkas --}}
+<script>
+    // Elemen-elemen yang digunakan
+    const uploadImage = document.getElementById("upload-image");
+    const imagePreview = document.getElementById("imagePreview");
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const closeBtn = document.getElementsByClassName("close")[0];
 
-                // Tambahkan event listener untuk memperbesar gambar
-                imgElement.addEventListener("click", function() {
-                    modal.style.display = "block";
-                    modalImage.src = e.target.result;  // Tampilkan gambar besar dalam modal
-                });
+    function handleFileUpload() {
+        const file = uploadImage.files[0];  // Ambil file yang dipilih
 
-                imagePreview.appendChild(imgElement);  // Tampilkan pratinjau gambar
-            } else if (file.type === 'application/pdf') {
-                // Jika file adalah PDF
-                const pdfText = document.createElement("p");
-                pdfText.textContent = 'File PDF telah dipilih';
-                imagePreview.appendChild(pdfText);  // Tampilkan teks PDF
-            }
-        };
+        if (file) {
+            const reader = new FileReader();
 
-        reader.readAsDataURL(file);  // Baca file untuk menampilkan pratinjau
-    } else {
-        imagePreview.innerHTML = '<p>No file chosen</p>';  // Jika tidak ada file, tampilkan teks default
+            reader.onload = function(e) {
+                imagePreview.innerHTML = '';  // Kosongkan preview sebelumnya
+
+                if (file.type.startsWith('image/')) {
+                    // Jika file adalah gambar
+                    const imgElement = document.createElement("img");
+                    imgElement.src = e.target.result;  // Tampilkan gambar yang dipilih
+                    imgElement.style.maxWidth = "100%";  // Buat gambar responsif
+                    imgElement.style.maxHeight = "100%"; // Buat agar gambar tidak melebihi area pratinjau
+
+                    // Tambahkan event listener untuk memperbesar gambar
+                    imgElement.addEventListener("click", function() {
+                        modal.style.display = "block";
+                        modalImage.src = e.target.result;  // Tampilkan gambar besar dalam modal
+                    });
+
+                    imagePreview.appendChild(imgElement);  // Tampilkan pratinjau gambar
+                } else if (file.type === 'application/pdf') {
+                    // Jika file adalah PDF
+                    const pdfText = document.createElement("p");
+                    pdfText.textContent = 'File PDF telah dipilih';
+                    imagePreview.appendChild(pdfText);  // Tampilkan teks PDF
+                }
+            };
+
+            reader.readAsDataURL(file);  // Baca file untuk menampilkan pratinjau
+        } else {
+            imagePreview.innerHTML = '<p>No file chosen</p>';  // Jika tidak ada file, tampilkan teks default
+        }
     }
-}
 
-// Event listener untuk input file
-uploadImage.addEventListener("change", handleFileUpload);
+    // Event listener untuk input file
+    uploadImage.addEventListener("change", handleFileUpload);
 
-// Event listener untuk tombol close pada modal
-closeBtn.onclick = function() {
-    modal.style.display = "none";
-};
-
-// Event listener untuk menutup modal jika area luar gambar di-klik
-window.onclick = function(event) {
-    if (event.target == modal) {
+    // Event listener untuk tombol close pada modal
+    closeBtn.onclick = function() {
         modal.style.display = "none";
-    }
-};
+    };
+
+    // Event listener untuk menutup modal jika area luar gambar di-klik
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
 </script>
 </body>
-</html>
+@endsection

@@ -13,8 +13,10 @@
     
      <!-- Font Awesome CDN -->
      <link rel="stylesheet" href="{{ asset('asset/fontawesome/css/all.min.css') }}">
-
-    {{-- <style>
+     {{-- <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}"> --}}
+    
+    
+     {{-- <style>
         body {
             background-color: #f8f9fa;
         }
@@ -124,5 +126,11 @@
 
     </div>
 
+    {{-- <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('datatables/datatables.bundle.js') }}"></script>
+    @stack('') --}}
+
 </body>
+
+
 </html>

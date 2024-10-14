@@ -108,6 +108,9 @@ Route::middleware(['auth', 'verified', 'user.role:user'])->group(function () {
     // -------------------- Cuti ----------------------------
 
     Route::get('/user/cuti', [CutiController::class, 'show'])->name('cuti');
+    Route::post('/user/cuti/create_cuti', [CutiController::class, 'create_cuti'])->name('cuti.create');
+
+
     Route::get('/user/cuti-detail', [CutiController::class, 'showdetail'])->name('cuti-detail');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');

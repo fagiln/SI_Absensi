@@ -1,7 +1,6 @@
 @extends('user.layouts.app')
 
-<!DOCTYPE html>
-<html lang="en">
+@section('content')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,15 +68,15 @@
         <table>
             <thead>
                 <tr>
-                    <th>Tanggal Cuti</th>
-                    <th>Periode Cuti</th>
+                    <th>Jenis Cuti</th>
+                    <th>Detail Cuti</th>
                     <th>Alasan Ditolak</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>10/11/2024</td>
-                    <td>10/11/2024 sd 12/11/2024</td>
+                    <td>izin</td>
+                    <td>Acara kawinan</td>
                     <td>Kerja dulu ada job nih</td>
                 </tr>
             </tbody>
@@ -88,4 +87,4 @@
         
     </div>
 </body>
-</html>
+@endsection
