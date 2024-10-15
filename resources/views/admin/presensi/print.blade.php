@@ -74,6 +74,7 @@
         <table class="table table-bordered text-center">
             <thead class="thead-dark">
                 <tr>
+                    <th>No</th>
                     <th>Tanggal Kerja</th>
                     <th>NIK</th>
                     <th>Jam Datang</th>
@@ -85,13 +86,18 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $no = 1;
+                @endphp
                 @foreach ($presensi as $item)
                     @php
                         $checkInTime = \Carbon\Carbon::parse($item->check_in_time);
                         $checkOutTime = \Carbon\Carbon::parse($item->check_out_time);
                         $workDuration = $checkOutTime->diffInHours($checkInTime);
+
                     @endphp
                     <tr>
+                        <td>{{ $no++ }}</td>
                         <td>{{ $item->work_date }}</td>
                         <td>{{ $item->user->nik }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->check_in_time)->translatedFormat('H:i') }}</td>
