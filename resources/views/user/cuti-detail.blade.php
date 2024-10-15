@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuti</title>
+    <title>Detail Cuti</title>
     <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.css') }}">
 
     <style>
