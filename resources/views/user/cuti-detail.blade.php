@@ -52,18 +52,28 @@
         <div style="margin-top: 20px"></div>
         <div style="margin: 0; padding: 0;">
             <div style="display: flex; margin-bottom: 5px;">
-                <p style="font-size: 15px; font-weight: bold; margin: 0;">Tanggal Pengajuan</p>
-                <p style="font-style: italic; margin: 0; margin-left: 5px;">10/20/2024</p>
+                <p style="font-size: 15px; font-weight: bold; margin: 0;">Tanggal Pengajuan :</p>
+                <p style="font-style: italic; margin: 0; margin-left: 5px;">{{ $cuti->created_at->format('d/m/Y') }}</p>
             </div>
             <div style="display: flex; margin-bottom: 5px;">
-                <p style="font-size: 15px; font-weight: bold; margin: 0;">Periode Pengajuan</p>
-                <p style="font-style: italic; margin: 0; margin-left: 5px;">10/11/2024 sd 11/12/2024</p>
+                <p style="font-size: 15px; font-weight: bold; margin: 0;">Periode Pengajuan :</p>
+                <p style="font-style: italic; margin: 0; margin-left: 5px;">
+                    {{ \Carbon\Carbon::parse($cuti->start_date)->format('d/m/Y') }} s.d {{ \Carbon\Carbon::parse($cuti->end_date)->format('d/m/Y') }}
+                </p>
             </div>
             <div style="display: flex; margin-bottom: 20px;">
-                <p style="font-size: 15px; font-weight: bold; margin: 0;">Status Pengajuan</p>
-                <p style="font-style: italic; margin: 0; margin-left: 5px; color: crimson;">Ditolak</p>
+                <p style="font-size: 15px; font-weight: bold; margin: 0;">Status Pengajuan :</p>
+                <p style="font-style: italic; margin: 0; margin-left: 5px; 
+                    @if($cuti->status == 'ditolak') color: crimson;
+                    @elseif($cuti->status == 'pending') color: orange; 
+                    @elseif($cuti->status == 'diterima') color: green; @endif">
+                    @if($cuti->status == 'ditolak') Ditolak 
+                    @elseif($cuti->status == 'pending') Menunggu 
+                    @elseif($cuti->status == 'diterima') Disetujui 
+                    @endif
+                </p>
             </div>
-        </div>              
+        </div>        
         <div style="margin-top: 20px"></div>
         <table>
             <thead>
@@ -75,9 +85,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>izin</td>
-                    <td>Acara kawinan</td>
-                    <td>Kerja dulu ada job nih</td>
+                    <td>{{ $cuti->reason }}</td>
+                    <td>{{ $cuti->keterangan }}</td>
+                    <td>{{ $cuti->keterangan_ditolak }}</td>
                 </tr>
             </tbody>
         </table>

@@ -20,9 +20,9 @@ return new class extends Migration
             $table->text('keterangan');
             $table->string('bukti_path');
             $table->enum('status', allowed: ['pending', 'diterima', 'ditolak'])->default('pending');
+            $table->text('keterangan_ditolak')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp(column: 'updated_at')->nullable()->useCurrentOnUpdate();
-
         });
     }
 

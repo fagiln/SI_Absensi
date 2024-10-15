@@ -196,14 +196,21 @@
                 </div>
 
                 <div class="custom-dropdown-container">
-                    <select id="filter_izin" name="filter_izin" class="custom-dropdown">
+                    <select id="filter_izin" name="filter_izin" class="custom-dropdown" onchange="toggleIcon()">
                         <option value="pilihcuti" {{ request('filter_izin') == 'pilihcuti' ? 'selected' : '' }}>Pilih Cuti</option>
                         <option value="sakit" {{ request('filter_izin') == 'sakit' ? 'selected' : '' }}>Sakit</option>
                         <option value="izin" {{ request('filter_izin') == 'izin' ? 'selected' : '' }}>Izin</option>
                     </select>
-                    <i class="fas fa-angle-down"></i>
-                    <i class="fas fa-angle-up"></i>
+                
+                    <div>
+                        <i class="fas fa-angle-down" id="icon-down"></i>
+                        <i class="fas fa-angle-up" id="icon-up" style="display: none;"></i>
+                    </div>
                 </div>
+                <!-- Pesan error -->
+                @if($errors->has('filter_izin'))
+                    <span class="text-danger">{{ $errors->first('filter_izin') }}</span>
+                @endif
 
                 <div style="margin-top: 20px;"></div>
 
@@ -218,11 +225,17 @@
                         <label for="start_date">Pilih Tanggal Awal Cuti :</label>
                         <input type="date" name="start_date" id="start_date" class="date-input"
                         {{-- value="{{ request()->start_date }}" --}} >
+                        @if($errors->has('start_date'))
+                            <span class="text-danger">{{ $errors->first('start_date') }}</span>
+                        @endif
                     </div>
                     <div class="col-md-5 mt-2 mt-md-0">
                         <label for="end_date">Pilih Tanggal Akhir Cuti :</label>
                         <input type="date" name="end_date" id="end_date" class="date-input"
                         {{-- value="{{ request()->end_date }}" --}} >
+                        @if($errors->has('end_date'))
+                            <span class="text-danger">{{ $errors->first('end_date') }}</span>
+                        @endif
                     </div>
                 </div>
 
@@ -235,13 +248,20 @@
                 </div>
 
                 <textarea name="alasan" placeholder="Tolong jelaskan alasan cuti anda" style="width: 100%; height: 150px; padding: 10px; border: 2px solid crimson; border-radius: 8px; box-sizing: border-box;"></textarea>
+                @if($errors->has('alasan'))
+                    <span class="text-danger">{{ $errors->first('alasan') }}</span>
+                @endif
 
                 <div style="margin-top: 20px;"></div>
 
                 <!-- Unggah Berkas -->
                 <p style="font-weight: bold; margin: 0; padding: 0;">Unggah Berkas</p>
                 <p style="margin: 0; padding: 0; font-size: 14px;">Silahkan unggah berkas dalam bentuk foto atau pdf</p>
-
+                
+                @if($errors->has('file'))
+                        <span class="text-danger">{{ $errors->first('file') }}</span>
+                @endif
+                
                 <div class="upload-container" style="text-align: center; padding: 10px;">
                     <input name="file" type="file" id="upload-image" accept="image/*,application/pdf" style="display: block; margin-bottom: 10px;">
                     
@@ -266,10 +286,11 @@
 
         </div>
 
-
     </div>
+   
     {{-- Bagian Tabel --}}
-    <div>
+
+    <div class="table-responsive mt-4">
         <p style="font-weight: bold; margin-top: 20px;">Status</p>
         <table>
             <thead>
@@ -282,31 +303,48 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($pengajuanCuti as $cuti)
                 <tr>
-                    <td>10/11/2024</td>
-                    <td>izin</td>
-                    <td>10/11/2024 sd 11/11/2024</td>
-                    <td style="color: crimson">Ditolak</td>
+                    <!-- Tanggal Pengajuan -->
+                    <td>{{ \Carbon\Carbon::parse($cuti->created_at)->format('d/m/Y') }}</td>
+                    
+                    <!-- Jenis Cuti -->
+                    <td>{{ $cuti->reason }}</td>
+                    
+                    <!-- Periode Cuti -->
+                    <td>{{ \Carbon\Carbon::parse($cuti->start_date)->format('d/m/Y') }} s/d {{ \Carbon\Carbon::parse($cuti->end_date)->format('d/m/Y') }}</td>
+                    
+                    <!-- Status Cuti dengan warna sesuai status -->
                     <td>
-                        <a href="{{ route('cuti-detail') }}" class="nav-item">
+                        <span style="background-color: 
+                            @if ($cuti->status == 'ditolak') 
+                                crimson 
+                            @elseif ($cuti->status == 'pending') 
+                                orange 
+                            @elseif ($cuti->status == 'diterima') 
+                                green 
+                            @else 
+                                transparent; 
+                            @endif;
+                            color: white; 
+                            padding: 3px 6px;  {{-- Menambahkan padding di sekitar teks --}}
+                            border-radius: 5px;">  {{-- Menambahkan sudut melengkung --}}
+                            
+                            @if($cuti->status == 'ditolak') Ditolak 
+                            @elseif($cuti->status == 'pending') Menunggu 
+                            @elseif($cuti->status == 'diterima') Disetujui 
+                            @endif
+                        </span>
+                    </td>                    
+    
+                    <!-- Icon untuk melihat detail cuti -->
+                    <td>
+                        <a href="{{ route('cuti-detail', ['id' => $cuti->id]) }}" class="nav-item">
                             <i class="fas fa-edit" style="color: dodgerblue"></i>
                         </a>
                     </td>
                 </tr>
-                <tr>
-                    <td>10/11/2024</td>
-                    <td>izin</td>
-                    <td>10/11/2024 sd 11/11/2024</td>
-                    <td style="color: orange">Menunggu</td>
-                    <td><i class="fas fa-edit" style="color: dodgerblue"></i></td>
-                </tr>
-                <tr>
-                    <td>10/11/2024</td>
-                    <td>izin</td>
-                    <td>10/11/2024 sd 11/11/2024</td>
-                    <td style="color: green">Disetujui</td>
-                    <td><i class="fas fa-edit" style="color: dodgerblue"></i></td>
-                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -314,14 +352,33 @@
 <div style="margin-bottom: 70px"></div>
 {{-- untuk pilih cuti --}}
 <script>
-     document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const cutiDropdown = document.getElementById('filter_izin');
         const defaultOption = cutiDropdown.querySelector('option[value="pilihcuti"]');
+        const iconDown = document.getElementById('icon-down');
+        const iconUp = document.getElementById('icon-up');
 
+        // Event saat dropdown dibuka (focus)
+        cutiDropdown.addEventListener('focus', function () {
+            iconDown.style.display = 'none';
+            iconUp.style.display = 'block';
+        });
+
+        // Event saat dropdown ditutup (blur)
+        cutiDropdown.addEventListener('blur', function () {
+            iconDown.style.display = 'block';
+            iconUp.style.display = 'none';
+        });
+
+        // Event saat pilihan dibuat (change)
         cutiDropdown.addEventListener('change', function () {
             if (cutiDropdown.value !== 'pilihcuti') {
                 // Disable the 'Pilih Cuti' option after user selects 'Sakit' or 'Izin'
                 defaultOption.disabled = true;
+
+                // Toggle icon visibility after selection
+                iconDown.style.display = 'block';
+                iconUp.style.display = 'none';
             }
         });
     });
@@ -414,5 +471,6 @@
         }
     };
 </script>
+{{-- Bagian Tabel --}}
 </body>
 @endsection
