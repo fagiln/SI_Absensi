@@ -17,6 +17,7 @@ class Perizinan extends Model
         'end_date',
         'reason',
         'keterangan',
+        'keterangan_ditolak',
         'bukti_path',
         'status',
         'creted_at'

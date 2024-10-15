@@ -71,7 +71,7 @@
         </table>
 
 
-        <table class="table table-bordered">
+        <table class="table table-bordered text-center">
             <thead class="thead-dark">
                 <tr>
                     <th>Tanggal Kerja</th>
@@ -106,18 +106,22 @@
         </table>
 
         <!-- Tambahkan bagian tanda tangan di sini -->
-        <div class="signature-container mt-5">
+        <div class="container-fluid d-flex justify-content-end mt-5">
+
+            <p>Surabaya, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+        </div>
+        <div class="signature-container ">
             <div class="text-center">
-                <p>Mengetahui,</p>
+                <p>Mario Mariyadi</p>
                 <br><br><br>
                 <p>(...............................)</p>
-                <p>Manager</p>
+                <p class="font-italic">Direktur</p>
             </div>
             <div class="text-center">
-                <p>{{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
+                <p>Iqbal</p>
                 <br><br><br>
                 <p>(...............................)</p>
-                <p>Admin</p>
+                <p class="font-italic">Admin</p>
             </div>
         </div>
     </div>
