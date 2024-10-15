@@ -31,13 +31,13 @@ class RekapPresensiController extends Controller
             ->get();
 
         // Ambil nama karyawan berdasarkan user_id
-        // $karyawan = User::where('role', 'user')->get();
+        $karyawan = User::all();
 
         // Format nama file
         $filename =  "rekap_laporan_presensi_{$month}-{$year}.xlsx";
 
         // Ekspor ke Excel dengan data yang sesuai
-        return Excel::download(new PresensiExport( $presensi, karyawan: $month, $year), $filename);    
+        return Excel::download(new PresensiExport($presensi, $karyawan, $month, $year), $filename);
     }
 
 

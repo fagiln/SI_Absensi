@@ -68,20 +68,24 @@ class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTi
     {
         return "Rekap Presensi {$this->month}-{$this->year}";
     }
-
     public function registerEvents(): array
     {
         Carbon::setLocale('id');
 
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                $rowCount = $this->presensi->count() + 10;
+                $dataTableStartRow = 1; // Tabel akan dimulai dari baris 10
 
+                // Berikan jarak 2 baris sebelum tabel
+                $event->sheet->insertNewRowBefore($dataTableStartRow, 8);
+
+                // Menulis judul laporan presensi di baris 1
                 $event->sheet->mergeCells('A1:F1');
                 $event->sheet->setCellValue('A1', 'Laporan Presensi Karyawan');
                 $event->sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
                 $event->sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
+                // Menulis data diri karyawan mulai dari baris 2 sampai 7
                 $event->sheet->mergeCells('A2:F2');
                 $event->sheet->setCellValue('A2', 'Bulan: ' . Carbon::create()->month($this->month)->translatedFormat('F') . ' ' . $this->year);
                 $event->sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
@@ -101,14 +105,17 @@ class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTi
                 $event->sheet->mergeCells('A7:F7');
                 $event->sheet->setCellValue('A7', 'No. Hp: ' . $this->karyawan->no_hp);
 
-                $event->sheet->getStyle('A1:F' . ($rowCount + 8))->getFont()->setName('Times New Roman');
+                // Menambahkan jarak 2 baris kosong sebelum tabel data dimulai (baris 9 dan 10 kosong)
 
-                // Menambahkan tempat tanda tangan
+                // Menambahkan tempat tanda tangan setelah tabel
+                $rowCount = $this->presensi->count() + $dataTableStartRow + 8; // Menambah 1 untuk baris header
                 $event->sheet->setCellValue('A' . ($rowCount + 2), 'Surabaya, ' . Carbon::now()->translatedFormat('d F Y'));
                 $event->sheet->setCellValue('A' . ($rowCount + 6), '(____________________)');
                 $event->sheet->setCellValue('A' . ($rowCount + 7), 'Mario Mariyadi');
                 $event->sheet->setCellValue('A' . ($rowCount + 8), 'Direktur');
-            },
+
+                $event->sheet->getStyle('A1:F' . ($rowCount + 8))->getFont()->setName('Times New Roman');
+             },
         ];
     }
 }
