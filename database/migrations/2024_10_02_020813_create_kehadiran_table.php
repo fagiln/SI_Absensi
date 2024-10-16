@@ -14,12 +14,17 @@ return new class extends Migration
         Schema::create('kehadiran', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->date('date');
-            $table->time('check_in')->nullable();
-            $table->time('check_out')->nullable();
-            $table->enum('status', ['hadir', 'izin', 'sakit', 'telat'])->default('hadir');
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
+            $table->date('work_date');
+            $table->timestamp('check_in_time')->nullable();
+            $table->timestamp('check_out_time')->nullable();
+            $table->string('check_in_photo')->nullable();
+            $table->string('check_out_photo')->nullable();
+            $table->decimal('check_in_latitude', 10, 7)->nullable();
+            $table->decimal('check_in_longitude', 10, 7)->nullable();
+            $table->decimal('check_out_latitude', 10, 7)->nullable();
+            $table->decimal('check_out_longitude', 10, 7)->nullable();
+            $table->enum('status', ['hadir', 'telat'])->default('hadir');
+            $table->timestamps();
         });
     }
 

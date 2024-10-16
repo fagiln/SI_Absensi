@@ -179,7 +179,7 @@ a {
 }
 
 a:hover {
-  color: #0056b3;
+  color: #CC0200;
   text-decoration: none;
 }
 
@@ -3591,7 +3591,7 @@ fieldset:disabled a.btn {
 }
 
 .btn-link:hover {
-  color: #0056b3;
+  color: #CC0200;
   text-decoration: none;
 }
 
@@ -5679,7 +5679,7 @@ input[type="button"].btn-block {
 
 .page-link:hover {
   z-index: 2;
-  color: #0056b3;
+  color: #CC0200;
   text-decoration: none;
   background-color: #e9ecef;
   border-color: #dee2e6;
@@ -11408,7 +11408,7 @@ button.bg-dark:focus {
 
 a.text-primary:hover,
 a.text-primary:focus {
-  color: #0056b3 !important;
+  color: #CC0200 !important;
 }
 
 .text-secondary {
@@ -23380,7 +23380,7 @@ body.text-sm .input-group-text {
 
 .custom-switch.custom-switch-off-primary .custom-control-input~.custom-control-label::before {
   background-color: #CC0200;
-  border-color: #004a99;
+  border-color: #CC0200;
 }
 
 .custom-switch.custom-switch-off-primary .custom-control-input:focus~.custom-control-label::before {
@@ -23393,7 +23393,7 @@ body.text-sm .input-group-text {
 
 .custom-switch.custom-switch-on-primary .custom-control-input:checked~.custom-control-label::before {
   background-color: #CC0200;
-  border-color: #004a99;
+  border-color: #CC0200;
 }
 
 .custom-switch.custom-switch-on-primary .custom-control-input:checked:focus~.custom-control-label::before {
@@ -23744,7 +23744,7 @@ body.text-sm .input-group-text {
 
 .custom-switch.custom-switch-off-blue .custom-control-input~.custom-control-label::before {
   background-color: #CC0200;
-  border-color: #004a99;
+  border-color: #CC0200;
 }
 
 .custom-switch.custom-switch-off-blue .custom-control-input:focus~.custom-control-label::before {
@@ -23757,7 +23757,7 @@ body.text-sm .input-group-text {
 
 .custom-switch.custom-switch-on-blue .custom-control-input:checked~.custom-control-label::before {
   background-color: #CC0200;
-  border-color: #004a99;
+  border-color: #CC0200;
 }
 
 .custom-switch.custom-switch-on-blue .custom-control-input:checked:focus~.custom-control-label::before {
@@ -50404,7 +50404,7 @@ a.text-muted:hover {
 .accent-primary .btn-link:hover,
 .accent-primary a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.badge):not(.btn):hover,
 .accent-primary .nav-tabs .nav-link:hover {
-  color: #0056b3;
+  color: #CC0200;
 }
 
 .accent-primary .dropdown-item:active,
@@ -50415,7 +50415,7 @@ a.text-muted:hover {
 
 .accent-primary .custom-control-input:checked~.custom-control-label::before {
   background-color: #CC0200;
-  border-color: #004a99;
+  border-color: #CC0200;
 }
 
 .accent-primary .custom-control-input:checked~.custom-control-label::after {
@@ -51426,7 +51426,7 @@ a.text-muted:hover {
 .accent-blue .btn-link:hover,
 .accent-blue a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):not(.page-link):not(.badge):not(.btn):hover,
 .accent-blue .nav-tabs .nav-link:hover {
-  color: #0056b3;
+  color: #CC0200;
 }
 
 .accent-blue .dropdown-item:active,
@@ -51437,7 +51437,7 @@ a.text-muted:hover {
 
 .accent-blue .custom-control-input:checked~.custom-control-label::before {
   background-color: #CC0200;
-  border-color: #004a99;
+  border-color: #CC0200;
 }
 
 .accent-blue .custom-control-input:checked~.custom-control-label::after {
