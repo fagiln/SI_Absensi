@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::get('presensi', [PresensiController::class, 'index'])->name('presensi.index');
         Route::get('presensi/export', [PresensiController::class, 'export'])->name('presensi.export');
         Route::get('presensi/print', [PresensiController::class, 'print'])->name('presensi.print');
+        Route::get('presensi/search', [PresensiController::class, 'search'])->name('presensi.search');
 
         Route::get('rekap-presensi', [RekapPresensiController::class, 'index'])->name('rekap-presensi.index');
         Route::get('rekap-presensi/export', [RekapPresensiController::class, 'export'])->name('rekap-presensi.export');

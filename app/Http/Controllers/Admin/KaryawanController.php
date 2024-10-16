@@ -92,4 +92,5 @@ class KaryawanController extends Controller
         $user->update($data);
         return redirect()->back()->with('status', 'Karyawan Berhasil di Edit');
     }
+
 }
