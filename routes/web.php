@@ -61,6 +61,7 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
 
         Route::get('perizinan', [PerizinanController::class, 'index'])->name('perizinan.index');
         Route::put('perizinan/status/{id}', [PerizinanController::class, 'update'])->name('perizinan.status');
+        Route::get('perizinan/edit/{id}', [PerizinanController::class, 'edit'])->name('perizinan.edit');
 
         Route::get('presensi', [PresensiController::class, 'index'])->name('presensi.index');
         Route::get('presensi/export', [PresensiController::class, 'export'])->name('presensi.export');
@@ -69,6 +70,5 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::get('rekap-presensi', [RekapPresensiController::class, 'index'])->name('rekap-presensi.index');
         Route::get('rekap-presensi/export', [RekapPresensiController::class, 'export'])->name('rekap-presensi.export');
         Route::get('rekap-presensi/print', [RekapPresensiController::class, 'print'])->name('rekap-presensi.print');
-
     });
 });

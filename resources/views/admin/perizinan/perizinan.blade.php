@@ -74,29 +74,34 @@
                         <div class="form-group">
                             <label>Status Persetujuan:</label>
                             <div>
-                                <label for="pending">
-                                    <input type="radio" id="pending" name="status" value="pending"
-                                        {{ $item->status == 'pending' ? 'checked' : '' }}>
+                                <label for="pending_{{ $item->id }}">
+                                    <input type="radio" id="pending_{{ $item->id }}" name="status"
+                                        value="pending" {{ $item->status == 'pending' ? 'checked' : '' }}
+                                        onclick="toggleReason({{ $item->id }})">
                                     Pending
                                 </label>
                             </div>
                             <div>
-                                <label for="diterima">
-                                    <input type="radio" id="diterima" name="status" value="diterima"
-                                        {{ $item->status == 'diterima' ? 'checked' : '' }}>
+                                <label for="diterima_{{ $item->id }}">
+                                    <input type="radio" id="diterima_{{ $item->id }}" name="status"
+                                        value="diterima" {{ $item->status == 'diterima' ? 'checked' : '' }}
+                                        onclick="toggleReason({{ $item->id }})">
                                     Diterima
                                 </label>
                             </div>
                             <div>
-                                <label for="ditolak">
-                                    <input type="radio" id="ditolak" name="status" value="ditolak"
-                                        {{ $item->status == 'ditolak' ? 'checked' : '' }}>
+                                <label for="ditolak_{{ $item->id }}">
+                                    <input type="radio" id="ditolak_{{ $item->id }}" name="status"
+                                        value="ditolak" {{ $item->status == 'ditolak' ? 'checked' : '' }}
+                                        onclick="toggleReason({{ $item->id }})">
                                     Ditolak
                                 </label>
                             </div>
                         </div>
-
-
+                        <div class="form-group" id="reason-container-{{ $item->id }}" style="display: none">
+                            <label for="reason_{{ $item->id }}">Alasan ditolak</label>
+                            <input type="text" id="reason_{{ $item->id }}" name="reason" class="form-control">
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -155,6 +160,35 @@
             const today = new Date().toISOString().split('T')[
                 0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
             filterDateInput.value = today;
+        });
+
+
+        function toggleReason(id) {
+            const reasonContainer = document.getElementById(`reason-container-${id}`);
+            const isRejected = document.getElementById(`ditolak_${id}`).checked;
+            reasonContainer.style.display = isRejected ? 'block' : 'none';
+        }
+
+        // Pastikan form menampilkan alasan jika status awalnya "ditolak"
+        document.addEventListener('DOMContentLoaded', function() {
+            @foreach ($perizinan as $item)
+                toggleReason({{ $item->id }});
+            @endforeach
+        });
+
+        $(document).on('click', 'a[data-toggle="modal"]', function() {
+            var perizinanId = $(this).data('id'); // Ambil ID dari tombol edit
+            var url = '/admin/perizinan/edit/' + perizinanId; // URL untuk ambil data
+            // var updateUrl = '/admin/karyawan/' + userId;
+            // Request AJAX untuk mendapatkan data karyawan berdasarkan ID
+            console.log(perizinanId);
+            $.get(url, function(data) {
+                // Isi field modal dengan data yang didapat dari server
+                $('#reason_' + perizinanId).val(data.keterangan_ditolak);
+
+
+                // $('#formEditKaryawan').attr('action', updateUrl);
+            });
         });
     </script>
 @endpush

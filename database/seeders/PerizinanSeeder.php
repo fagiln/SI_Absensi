@@ -19,19 +19,30 @@ class PerizinanSeeder extends Seeder
         $users = User::all();
 
         // Loop melalui setiap user dan buat beberapa data perizinan untuk masing-masing
+        // Perizinan::create([
+        //     'user_id' => '2',
+        //     'start_date' => '2024-10-16',
+        //     'end_date' => '2024-10-20',
+        //     'reason' => 'izin',
+        //     'keterangan' => 'Mengajukan izin karena sakit.',
+        //     'bukti_path' => 'path/to/bukti.jpg', // Sesuaikan path ini dengan lokasi bukti yang disimpan
+        //     // 'status' => 'pending',
+        //     'created_at' => '2024-10-16',
+
+        // ]);
+        foreach ($users as $user) {
+
             Perizinan::create([
-                'user_id' => '2',
-                'start_date' =>'2024-10-11',
+                'user_id' => $user->id,
+                'start_date' => '2024-10-16',
                 'end_date' => '2024-10-20',
                 'reason' => 'izin',
                 'keterangan' => 'Mengajukan izin karena sakit.',
                 'bukti_path' => 'path/to/bukti.jpg', // Sesuaikan path ini dengan lokasi bukti yang disimpan
                 // 'status' => 'pending',
-                'created_at' => '2024-10-11',
+                'created_at' => '2024-10-16',
 
             ]);
-
-        
         }
     }
-
+}

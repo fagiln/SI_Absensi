@@ -96,7 +96,7 @@ class PerizinanDataTable extends DataTable
             ])
 
             //->dom('Bfrtip')
-            ->orderBy([10, 'dsc'])
+            ->orderBy([11, 'dsc'])
             ->selectStyleSingle()
             ->buttons([]);
     }
@@ -123,6 +123,7 @@ class PerizinanDataTable extends DataTable
             Column::make('keterangan'),
             Column::make('bukti_path')->title('Bukti'),
             Column::make('status'),
+            Column::make('keterangan_ditolak'),
             Column::make('created_at')->title('Dibuat pada'),
 
             Column::computed('action')
