@@ -89,6 +89,9 @@ Route::middleware(['auth', 'verified', 'user.role:user'])->group(function () {
     // -------------------- Home ---------------------------
 
     Route::get('/user/home', [HomeController::class, 'show'])->name('home');
+    Route::get('user/absen_masuk', function (){
+        return view('user/home/absen_masuk');
+    })->name('absen_masuk');
 
     // -------------------- Profile -------------------------
 

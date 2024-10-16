@@ -3,8 +3,7 @@
 @section('content')
 <head>
     <title>Home Page</title>
-
-    <style>
+<style>
 
         .container {
             background-color: #ffff;
@@ -184,16 +183,16 @@
             color: #888;
         }
         .date {
-      font-size: 18px;
-      font-weight: bold;
-    }
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-    .time {
-      font-size: 16px;
-      color: #888;
-    }
+        .time {
+            font-size: 16px;
+            color: #888;
+        }
 
-    </style>
+</style>
 </head>
 <body>
     <div class="container">
@@ -210,14 +209,39 @@
 
         <!-- Action Buttons -->
         <div class="button-container">
-            <button class="btn btn-masuk">
+            <button class="btn btn-masuk" onclick="window.location='{{ route('absen_masuk') }}'">
                 <span class="fas fa-camera" style="margin-right: 10px"></span> 
                 MASUK
             </button>
-            <button class="btn btn-pulang">
-                <span class="fas fa-camera" style="margin-right: 10px"></span> PULANG
+            <button class="btn btn-pulang" data-bs-toggle="modal" data-bs-target="#absenModal">
+                <span class="fas fa-camera" style="margin-right: 10px"></span> 
+                PULANG
             </button>
         </div>
+
+        <!-- Bootstrap Modal pop-up konfimasi -->
+        <div class="d-flex justify-content-center">
+            <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" style="justify-content: center">
+                    <div class="modal-content" style="width: 60%">
+                        <div class="modal-body text-center">
+                            <!-- Gambar emoji absen berhasil -->
+                            <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Absen Berhasil" width="150" height="100"> 
+
+                            <!-- Judul modal -->
+                            <h4 class="mt-3">Alhamdulillah Absen Berhasil!!</h4>
+
+                            <!-- Pesan -->
+                            <p class="text-muted">Selamat pagi best, semangat ya kerjanya!</p>
+
+                            <!-- Tombol untuk menutup modal -->
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <br>
         <div class="work-time-card">
             <div class="info">
@@ -288,7 +312,6 @@
             <div class="time">08:00 - 17:00</div>
         </div>
     </div>
-
 </body>
 </html>
 @endsection

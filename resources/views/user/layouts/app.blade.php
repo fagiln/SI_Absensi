@@ -10,20 +10,11 @@
 
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.css') }}">
-    
+     
      <!-- Font Awesome CDN -->
      <link rel="stylesheet" href="{{ asset('asset/fontawesome/css/all.min.css') }}">
      {{-- <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}"> --}}
     
-    
-     {{-- <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .card {
-            margin-top: 50px;
-        }
-    </style> --}}
     <style>
         .navbar-bottom {
             background-color: #fff;
@@ -53,10 +44,6 @@
         .navbar-bottom a.active {
             color: #ff002b;
         }
-
-        /* .navbar-bottom a:hover {
-            color: #8d8d8d;
-        } */
 
         .nav-item i {
             margin-bottom: 5px; /* Menambahkan jarak antara ikon dan teks */
@@ -125,12 +112,6 @@
 
 
     </div>
-
-    {{-- <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('datatables/datatables.bundle.js') }}"></script>
-    @stack('') --}}
-
+<script src="{{ asset('asset/js/bootstrap.bundle.min.js') }}"></script>
 </body>
-
-
 </html>

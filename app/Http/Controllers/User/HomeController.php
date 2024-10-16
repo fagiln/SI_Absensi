@@ -18,22 +18,24 @@ class HomeController extends Controller
 
         $user = Auth::user();
 
-        $currentTime = Carbon::now()->format('H'); // Ambil jam dalam format 24 jam
         // dd(Carbon::now());
+        // Fitur ganti sapaan 
+        $currentTime = Carbon::now()->format('H'); // Ambil jam dalam format 24 jam
         // Tentukan pesan berdasarkan waktu
-        if ($currentTime >= 5 && $currentTime <= 11) {
+        if ($currentTime >= 5 && $currentTime < 11) {
             
             $greeting = 'Pagi';
-        } elseif ($currentTime > 11 && $currentTime <= 15) {
+        } elseif ($currentTime >= 11 && $currentTime < 15) {
             
             $greeting = 'Siang';
-        } elseif ($currentTime > 15 && $currentTime < 18) {
+        } elseif ($currentTime >= 15 && $currentTime <= 17) {
             
             $greeting = 'Sore';
         } else {
             $greeting = 'Malam';
         }
+        
 
-        return view('user.home', compact('user', 'greeting'));
+        return view('user.home.home', compact('user', 'greeting'));
     }
 }
