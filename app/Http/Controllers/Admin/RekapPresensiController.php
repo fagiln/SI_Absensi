@@ -22,20 +22,15 @@ class RekapPresensiController extends Controller
     {
         $month = $request->input('month');
         $year = $request->input('year');
-
-        // Ambil data presensi berdasarkan user_id dan bulan serta tahun
         $presensi = Kehadiran::whereMonth('work_date', $month)
             ->whereYear('work_date', $year)
             ->whereHas('user', function ($query) {
                 $query->where('role', 'user');
             })
             ->get();
-        $karyawan = User::all();
-        // Format nama file
-        $filename = "rekap_laporan_presensi_{$month}-{$year}.xlsx";
-
-        // Ekspor ke Excel dengan data yang sesuai
-        return Excel::download(new RekapKehadiranExport($presensi, $month, $year, $karyawan), $filename);
+        $karyawan = User::where('role', 'user')->get(); // Ambil semua data karyawan
+    
+        return Excel::download(new RekapKehadiranExport($presensi, $month, $year, $karyawan)," Rekap_Presensi_{$month}_{$year}.xlsx");
     }
 
 

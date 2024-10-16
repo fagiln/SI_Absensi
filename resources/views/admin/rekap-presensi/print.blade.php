@@ -40,84 +40,96 @@
     </div>
 
     <!-- Tabel untuk tanggal 1-15 -->
-    <table class="table table-bordered text-center">
-        <thead>
-            <tr>
-                <th rowspan="2">No</th>
-                <th rowspan="2">NIK</th>
-                <th rowspan="2">Nama</th>
-                <th colspan="15">Tanggal</th>
-            </tr>
-            <tr>
-                @for ($day = 1; $day <= 15; $day++)
-                    <th>{{ \Carbon\Carbon::create($year, $month, $day)->translatedFormat('l') }}, {{ $day }}</th>
-                @endfor
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($presensiGrouped as $userPresensi)
-                @php
-                    $user = $userPresensi->first()->user; // Ambil data user dari presensi pertama
-                @endphp
-                <tr>
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $user->nik }}</td>
-                    <td>{{ $user->name }}</td>
-                    @for ($day = 1; $day <= 15; $day++)
-                        @php
-                            $presensiOnDay = $userPresensi->firstWhere('work_date', \Carbon\Carbon::create($year, $month, $day)->toDateString());
-                        @endphp
-                        <td>
-                            @if ($presensiOnDay)
-                                {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
-                                {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }}
-                            @endif
-                        </td>
-                    @endfor
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
 
-    <!-- Tabel untuk tanggal 16 hingga akhir bulan -->
-    <table class="table table-bordered text-center">
-        <thead>
+    @php
+    \Carbon\Carbon::setLocale('id');
+    $daysInMonth = \Carbon\Carbon::create($year, $month)->daysInMonth;
+    $no = 1; // Memulai penomoran dari 1
+    // Ambil semua data pengguna
+    $allUsers = \App\Models\User::where('role', 'user')->get();
+@endphp
+
+<!-- Tabel untuk tanggal 1-15 -->
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th rowspan="2">No</th>
+            <th rowspan="2">NIK</th>
+            <th rowspan="2">Nama</th>
+            <th colspan="15">Tanggal</th>
+        </tr>
+        <tr>
+            @for ($day = 1; $day <= 15; $day++)
+                <th>{{ \Carbon\Carbon::create($year, $month, $day)->translatedFormat('l') }}, {{ $day }}</th>
+            @endfor
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($allUsers as $user)
+            @php
+                // Filter presensi hanya untuk user ini
+                $userPresensi = $presensi->where('user_id', $user->id);
+            @endphp
             <tr>
-                <th rowspan="2">No</th>
-                <th rowspan="2">NIK</th>
-                <th rowspan="2">Nama</th>
-                <th colspan="{{ $daysInMonth - 15 }}">Tanggal</th>
-            </tr>
-            <tr>
-                @for ($day = 16; $day <= $daysInMonth; $day++)
-                    <th>{{ \Carbon\Carbon::create($year, $month, $day)->translatedFormat('l') }}, {{ $day }}</th>
+                <td>{{ $no++ }}</td>
+                <td>{{ $user->nik }}</td>
+                <td>{{ $user->name }}</td>
+                @for ($day = 1; $day <= 15; $day++)
+                    @php
+                        $presensiOnDay = $userPresensi->firstWhere('work_date', \Carbon\Carbon::create($year, $month, $day)->toDateString());
+                    @endphp
+                    <td>
+                        @if ($presensiOnDay)
+                            {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
+                            {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }}
+                        @endif
+                    </td>
                 @endfor
             </tr>
-        </thead>
-        <tbody>
-            @foreach ($presensiGrouped as $userPresensi)
-                @php
-                    $user = $userPresensi->first()->user; // Ambil data user dari presensi pertama
-                @endphp
-                <tr>
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $user->nik }}</td>
-                    <td>{{ $user->name }}</td>
-                    @for ($day = 16; $day <= $daysInMonth; $day++)
-                        @php
-                            $presensiOnDay = $userPresensi->firstWhere('work_date', \Carbon\Carbon::create($year, $month, $day)->toDateString());
-                        @endphp
-                        <td>
-                            @if ($presensiOnDay)
-                                {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
-                                {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }}
-                            @endif
-                        </td>
-                    @endfor
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        @endforeach
+    </tbody>
+</table>
+
+<!-- Tabel untuk tanggal 16 hingga akhir bulan -->
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th rowspan="2">No</th>
+            <th rowspan="2">NIK</th>
+            <th rowspan="2">Nama</th>
+            <th colspan="{{ $daysInMonth - 15 }}">Tanggal</th>
+        </tr>
+        <tr>
+            @for ($day = 16; $day <= $daysInMonth; $day++)
+                <th>{{ \Carbon\Carbon::create($year, $month, $day)->translatedFormat('l') }}, {{ $day }}</th>
+            @endfor
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($allUsers as $user)
+            @php
+                $userPresensi = $presensi->where('user_id', $user->id);
+            @endphp
+            <tr>
+                <td>{{ $no++ }}</td>
+                <td>{{ $user->nik }}</td>
+                <td>{{ $user->name }}</td>
+                @for ($day = 16; $day <= $daysInMonth; $day++)
+                    @php
+                        $presensiOnDay = $userPresensi->firstWhere('work_date', \Carbon\Carbon::create($year, $month, $day)->toDateString());
+                    @endphp
+                    <td>
+                        @if ($presensiOnDay)
+                            {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
+                            {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }}
+                        @endif
+                    </td>
+                @endfor
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
 
     <div class="container-fluid d-flex justify-content-end mt-5">
         <p>Surabaya, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}</p>
