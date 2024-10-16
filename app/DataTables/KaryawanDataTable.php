@@ -51,8 +51,7 @@ class KaryawanDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->newQuery();
-    }
+        return $model->newQuery()->where('role', '!=', 'admin');    }
 
     /**
      * Optional method if you want to use the html builder.
