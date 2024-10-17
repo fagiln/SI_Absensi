@@ -214,7 +214,7 @@
 
         // Send AJAX request
         $.ajax({
-        url: '{{ url("user/profile/update_foto/" . $user->id) }}', // Ganti dengan ID pengguna
+        url: '{{ url("user/profile/update_foto/") }}', // Ganti dengan ID pengguna
         type: 'POST',
         data: formData,
         contentType: false,

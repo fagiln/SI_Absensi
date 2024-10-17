@@ -48,7 +48,7 @@ class ProfileController extends Controller
         // Simpan foto baru
         if ($request->hasFile('photo')) {
             // Menghasilkan nama file unik
-            $imageName = time() . '.' . $request->photo->extension();
+            $imageName = $user->id . $user->username . '.' . $request->photo->extension();
 
             // Simpan file baru di storage
             $request->photo->storeAs('public/photos', $imageName);
