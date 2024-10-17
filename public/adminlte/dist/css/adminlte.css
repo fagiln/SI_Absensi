@@ -55961,11 +55961,11 @@ body.dark-mode .main-sidebar .brand-link {
 body.dark-mode .sidebar a {
   color: #c2c7d0;
 }
-
+/* 
 body.dark-mode .nav-sidebar>.nav-item>.nav-link:hover {
   background-color: #343a40;
   color: #ffffff;
-}
+} */
 
 /* Dark Mode styles for the Navbar */
 body.dark-mode .main-header.navbar {
