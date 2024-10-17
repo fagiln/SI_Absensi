@@ -23,36 +23,38 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Department::create([
-            'kode_departemen' => 'MPA',
-            'nama_departemen' => 'PT. Multi Power Abadi'
-        ]);
-        Department::create([
-            'kode_departemen' => 'RJT',
-            'nama_departemen' => 'Rajata Wedding Organizer Islami'
-        ]);
+        // Department::create([
+        //     'kode_departemen' => 'MPA',
+        //     'nama_departemen' => 'PT. Multi Power Abadi'
+        // ]);
+        // Department::create([
+        //     'kode_departemen' => 'RJT',
+        //     'nama_departemen' => 'Rajata Wedding Organizer Islami'
+        // ]);
 
-        User::create([
-            'nik' => '0000001',
-            'name' => 'Fagil Nuril Akbar',
-            'username' => 'fagil',
-            'jabatan' => 'Owner',
-            'email' => 'fagil@test.com',
-            'role' => 'admin',
-            'department_id' => '1',
-            'password' => Hash::make('123456')
+        // User::create([
+        //     'nik' => '0000001',
+        //     'name' => 'Fagil Nuril Akbar',
+        //     'username' => 'fagil',
+        //     'jabatan' => 'Owner',
+        //     'email' => 'fagil@test.com',
+        //     'role' => 'admin',
+        //     'department_id' => '1',
+        //     'password' => Hash::make('123456')
 
-        ]);
-        User::create([
-            'nik' => '0000008',
-            'name' => 'Xiao Bai',
-            'username' => 'bai',
-            'jabatan' => 'CEO',
-            'email' => 'bai@test.com',
-            'role' => 'user',
-            'department_id' => '2',
-            'password' => Hash::make('123456')
+        // ]);
+        // User::create([
+        //     'nik' => '0000008',
+        //     'name' => 'Xiao Bai',
+        //     'username' => 'bai',
+        //     'jabatan' => 'CEO',
+        //     'email' => 'bai@test.com',
+        //     'role' => 'user',
+        //     'department_id' => '2',
+        //     'password' => Hash::make('123456')
 
-        ]);
+        // ]);
+
+        User::factory()->count(50)->create();
     }
 }

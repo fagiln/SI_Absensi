@@ -30,19 +30,19 @@ class PerizinanSeeder extends Seeder
         //     'created_at' => '2024-10-16',
 
         // ]);
-        foreach ($users as $user) {
+        // foreach ($users as $user) {
 
             Perizinan::create([
-                'user_id' => $user->id,
+                'user_id' => 4,
                 'start_date' => '2024-10-16',
                 'end_date' => '2024-10-20',
                 'reason' => 'izin',
                 'keterangan' => 'Mengajukan izin karena sakit.',
-                'bukti_path' => 'path/to/bukti.jpg', // Sesuaikan path ini dengan lokasi bukti yang disimpan
+                // 'bukti_path' => '', // Sesuaikan path ini dengan lokasi bukti yang disimpan
                 // 'status' => 'pending',
                 'created_at' => '2024-10-16',
 
             ]);
-        }
+        // }
     }
 }

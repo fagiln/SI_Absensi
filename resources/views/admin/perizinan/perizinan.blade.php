@@ -111,6 +111,26 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="modalView_{{ $item->id }}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bukti Izin {{ $item->id }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img id="buktiImage" src="{{ asset('perizinan/img_' . $item->reason . '_' . $item->id . '.png') }}"
+                        alt="Bukti Izin" class="img-fluid ">
+                    <iframe id="buktiPdf" class="" style="width:100%; height:400px;"
+                        src="{{ asset('perizinan/pdf_' . $item->reason . '_' . $item->id . '.pdf') }}"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 @endforeach
 
 
@@ -190,6 +210,22 @@
                 // $('#formEditKaryawan').attr('action', updateUrl);
             });
         });
+        // $(document).on('click', '#btn_view_modal', function() {
+        //     const fileUrl = 'public/perizinan/pdf_izin_3.pdf';
+        //     const fileType = 'pdf';
+        //     var perizinanId = $(this).data('id');
+
+        //     if (fileType === 'pdf') {
+        //         $('#buktiImage').addClass('d-none');
+        //         $('#buktiPdf').removeClass('d-none').attr('src', fileUrl);
+        //     } else {
+        //         $('#buktiPdf').addClass('d-none');
+        //         $('#buktiImage').removeClass('d-none').attr('src', fileUrl);
+        //     }
+
+        //     $('#modalView_' + perizinanId).modal('show');
+
+        // });
     </script>
 @endpush
 @endsection

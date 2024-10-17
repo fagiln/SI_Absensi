@@ -28,6 +28,10 @@ class PerizinanDataTable extends DataTable
             ->addIndexColumn()
             ->addColumn('action', function (Perizinan $perizinan) {
                 return view('admin.perizinan.action', ['perizinan' => $perizinan]);
+            })->addColumn('bukti_path', function (Perizinan $perizinan) {
+          
+                    return view('admin.perizinan.view_bukti', ['perizinan' => $perizinan]);
+    
             })
             ->editColumn('status', function (Perizinan $perizinan) {
                 if ($perizinan->status == 'diterima') {
