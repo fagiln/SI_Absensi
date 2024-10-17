@@ -15,8 +15,16 @@
             max-width:600px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
+
+        .button-container {
+        display: flex;
+        justify-content: flex-start; /* Mengatur posisi tombol ke kiri */
+        margin-top: 10px; /* Tambahkan margin atas untuk pemisahan dari foto */
+        }
+        
         .absen-button {
             background-color: red;
+            margin-right: 10px; /* Jarak antar tombol */
             color: white;
             border: none;
             padding: 10px 20px;
@@ -55,15 +63,24 @@
 </head>
 <body>
     <div class="container text-center">
+        <!-- Form Absen -->
+<form id="absen-form" action="{{ route('absen_masuk.store') }}" method="POST" style="display: none;">
+    @csrf
+    <input type="hidden" name="photo-data" id="photo-data">
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+    {{-- <button type="button" id="confirm-absen">Konfirmasi</button> --}}
+</form>
         <div class="row">
             <div class="col-md-12">
                 <!-- Kamera untuk mengambil foto -->
                 <video id="camera" autoplay playsinline></video>
-                <button class="absen-button mt-3" id="take-photo">Absen Masuk</button>
-                
                 <!-- Tempat untuk menampilkan foto yang diambil -->
                 <canvas id="photo-canvas" class="d-none"></canvas>
                 <img id="photo" class="d-none mt-3" alt="Hasil Foto" style="width: 100%;">
+
+                <button class="absen-button mt-3" id="take-photo">Absen Masuk</button>
+                <button class="absen-button mt-3 d-none" id="cancel-photo">Absen Ulang</button>
 
                 <!-- Lokasi Pengguna -->
                 <div class="mt-4">
@@ -78,15 +95,41 @@
         </div>
         <div style="margin-bottom: 30px"></div>
     </div>
-    <div style="margin-bottom: 70px"></div>
+<div style="margin-bottom: 70px"></div>
+
+    <!-- Bootstrap Modal pop-up konfimasi -->
+    <div class="d-flex justify-content-center">
+        <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="justify-content: center">
+                <div class="modal-content" style="width: 60%">
+                    <div class="modal-body text-center">
+                        <!-- Gambar emoji absen berhasil -->
+                        <img src="{{ asset('img/Emoji_berhasil.svg') }}" alt="Absen Berhasil" width="150" height="100"> 
+
+                        <!-- Judul modal -->
+                        <h4 class="mt-2">Alhamdulillah Absen Berhasil!!</h4>
+                        <h5 class="mt-2">Jazakumullah Khoir</h5>
+
+                        <!-- Pesan -->
+                        <p class="text-muted">Selamat pagi, semangat ya kerjanya geis!</p>
+
+                        <!-- Tombol untuk menutup modal -->
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-{{-- kamera --}}
 <script>
-    // File: camera.js
     const video = document.getElementById('camera');
     const canvas = document.getElementById('photo-canvas');
     const photo = document.getElementById('photo');
     const takePhotoButton = document.getElementById('take-photo');
+    const cancelPhotoButton = document.getElementById('cancel-photo');
+    const absenForm = document.getElementById('absen-form');
+    let latitude, longitude;
 
     // Fungsi untuk mengaktifkan kamera
     function enableCamera() {
@@ -94,6 +137,9 @@
             .then(stream => {
                 video.srcObject = stream;
                 video.classList.remove('d-none');
+
+                // Membalik tampilan video jika menggunakan kamera depan
+                video.style.transform = 'scaleX(-1)';
             })
             .catch(err => {
                 console.error('Kesalahan mengakses kamera: ', err);
@@ -105,77 +151,124 @@
         const context = canvas.getContext('2d');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
+
+        // Membalikkan gambar jika menggunakan kamera depan
+        context.save(); // Simpan state canvas
+        context.translate(canvas.width, 0); // Geser posisi gambar
+        context.scale(-1, 1); // Balikkan gambar horizontal
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        context.restore(); // Kembalikan state canvas
 
         const dataUrl = canvas.toDataURL('image/png');
         photo.src = dataUrl;
-        photo.classList.remove('d-none');
-        video.classList.add('d-none');
-        canvas.classList.add('d-none');
+        photo.classList.remove('d-none'); // Tampilkan foto
+        video.classList.add('d-none'); // Sembunyikan video
+        canvas.classList.add('d-none'); // Sembunyikan canvas
 
-        alert("Absen berhasil!");
+        // Set data foto ke dalam form untuk dikirim ke server
+        document.getElementById('photo-data').value = dataUrl;
 
-        // Tanyakan apakah ingin mengambil foto lagi
-        const takeAnotherPhoto = confirm("Apakah Anda ingin mengambil foto lagi?");
-        if (takeAnotherPhoto) {
+        // Sembunyikan tombol absen
+        takePhotoButton.classList.add('d-none'); 
+
+        // Membuat kontainer untuk tombol
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container'); // Tambahkan class untuk styling
+
+        // Tambahkan kontainer tombol setelah foto
+        photo.parentNode.insertBefore(buttonContainer, photo.nextSibling); // Menyisipkan di bawah foto
+
+        // Tombol konfirmasi
+        const confirmButton = document.createElement('button');
+        confirmButton.id = 'confirm-absen';
+        confirmButton.classList.add('absen-button', 'mr-2', 'mt-3'); // Tambahkan margin kanan untuk jarak
+        confirmButton.textContent = 'Konfirmasi';
+        buttonContainer.appendChild(confirmButton); // Tambahkan tombol konfirmasi ke dalam kontainer
+
+        // Tombol ambil ulang foto
+        const retakePhotoButton = document.createElement('button');
+        retakePhotoButton.id = 'retake-photo';
+        retakePhotoButton.classList.add('absen-button', 'mt-3');
+        retakePhotoButton.textContent = 'Ambil Ulang';
+        buttonContainer.appendChild(retakePhotoButton); // Tambahkan tombol ambil ulang ke dalam kontainer
+
+        // Event listener untuk konfirmasi foto
+        confirmButton.addEventListener('click', confirmAbsen);
+
+        // Event listener untuk mengambil foto ulang
+        retakePhotoButton.addEventListener('click', function() {
             // Tampilkan kembali kamera dan sembunyikan hasil foto
             video.classList.remove('d-none');
-            photo.classList.add('d-none');
-        } else {
-            alert("Terima kasih, Anda telah selesai.");
-        }
+            photo.classList.add('d-none'); // Sembunyikan foto
+            takePhotoButton.classList.remove('d-none'); // Tampilkan tombol absen
+            takePhotoButton.textContent = 'Absen'; // Kembalikan tombol menjadi "Absen"
+            buttonContainer.remove(); // Hapus kontainer tombol
+        });
+        
+        confirmAbsen();
     }
 
-    // Event listener
+    // Fungsi untuk konfirmasi absen dan kirim data
+    function confirmAbsen() {
+        // Tampilkan modal konfirmasi
+        const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'));
+        confirmationModal.show();
+        
+        setTimeout(function() {
+                // Set lokasi pengguna ke dalam form
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+
+                // Kirim form absen ke server
+                document.getElementById('absen-form').submit();
+                
+                // Redirect ke halaman utama
+                // window.location.href = '/home'; // Ganti dengan URL halaman utama
+
+        }, 1800);
+    }
+
+    // Event listener untuk mengambil foto
     takePhotoButton.addEventListener('click', takePhoto);
+
+    // Event listener untuk tombol batal
+    cancelPhotoButton.addEventListener('click', function() {
+        // Tampilkan kembali kamera dan sembunyikan hasil foto
+        video.classList.remove('d-none');
+        photo.classList.add('d-none');
+        canvas.classList.add('d-none'); // Sembunyikan canvas
+        cancelPhotoButton.classList.add('d-none'); // Sembunyikan tombol batal
+        takePhotoButton.classList.remove('d-none'); // Tampilkan tombol absen
+        takePhotoButton.textContent = 'Absen'; // Kembalikan tombol menjadi "Absen"
+    });
 
     // Jalankan kamera saat halaman dimuat
     window.addEventListener('load', enableCamera);
 
-</script>
-{{-- lokasi --}}
-<script>
-    const userLocation = document.getElementById('user-location');
-    const alamatSpesifik = document.getElementById('alamat-spesifik');
-    let latitude, longitude;
+    // Jalankan pengambilan lokasi saat halaman dimuat
+    window.addEventListener('load', getLocation);
 
-    // Fungsi untuk mendapatkan lokasi pengguna
-    // Fungsi untuk mendapatkan lokasi pengguna
+    // Lokasi pengguna
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 function(position) {
                     latitude = position.coords.latitude;
                     longitude = position.coords.longitude;
-                    // userLocation.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
 
                     tampilkanPeta(latitude, longitude);
                     reverseGeocode(latitude, longitude);
                 },
                 function(error) {
-                    // Menangani error dengan lebih jelas
-                    switch (error.code) {
-                        case error.PERMISSION_DENIED:
-                            userLocation.textContent = 'Izin lokasi ditolak oleh pengguna.';
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            userLocation.textContent = 'Informasi lokasi tidak tersedia.';
-                            break;
-                        case error.TIMEOUT:
-                            userLocation.textContent = 'Permintaan lokasi habis waktu.';
-                            break;
-                        case error.UNKNOWN_ERROR:
-                            userLocation.textContent = 'Terjadi kesalahan yang tidak diketahui.';
-                            break;
-                    }
+                    alert("Gagal mendapatkan lokasi.");
                 }
             );
         } else {
-            userLocation.textContent = 'Geolocation tidak didukung oleh browser ini.';
+            alert("Geolocation tidak didukung oleh browser ini.");
         }
     }
 
-    // Fungsi untuk menampilkan peta Leaflet
+    // Fungsi untuk menampilkan peta
     function tampilkanPeta(lat, lng) {
         const leafletMap = L.map('peta').setView([lat, lng], 15);
 
@@ -188,7 +281,7 @@
             .openPopup();
     }
 
-    // Fungsi untuk reverse geocoding menggunakan Nominatim
+    // Fungsi reverse geocode untuk mendapatkan alamat
     function reverseGeocode(lat, lng) {
         const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
 
@@ -196,19 +289,16 @@
             .then(response => response.json())
             .then(data => {
                 if (data && data.display_name) {
-                    alamatSpesifik.textContent = `Alamat: ${data.display_name}`;
+                    document.getElementById('alamat-spesifik').textContent = `Alamat: ${data.display_name}`;
                 } else {
-                    alamatSpesifik.textContent = 'Tidak dapat menemukan alamat spesifik.';
+                    document.getElementById('alamat-spesifik').textContent = 'Tidak dapat menemukan alamat spesifik.';
                 }
             })
             .catch(error => {
                 console.error('Kesalahan saat melakukan reverse geocoding:', error);
-                alamatSpesifik.textContent = 'Kesalahan saat mengambil alamat spesifik.';
+                document.getElementById('alamat-spesifik').textContent = 'Kesalahan saat mengambil alamat spesifik.';
             });
     }
-
-    // Jalankan pengambilan lokasi saat halaman dimuat
-    window.addEventListener('load', getLocation);
 </script>
 </body>
 @endsection
