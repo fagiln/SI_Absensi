@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kehadiran;
-use App\Models\perizinan;
+use App\Models\Perizinan;
 
 use App\DataTables\User\RiwayatDataTable;
 use Illuminate\Support\Facades\Auth;
