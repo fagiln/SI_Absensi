@@ -77,4 +77,9 @@ class DatabaseSeeder extends Seeder
     //         ]);
     //     }
     // }
+
+
+        User::factory()->count(50)->create();
+    }
+
 }

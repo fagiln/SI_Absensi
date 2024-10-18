@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -21,14 +22,20 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    protected $model = User::class;
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'nik' => $this->faker->unique()->numerify('##########'), // 10 digit unique NIK
+            'username' => substr($this->faker->unique()->userName, 0, 5),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => Hash::make('password'), // Anda bisa menggantinya dengan password sesuai kebutuhan
+            'jabatan' => $this->faker->jobTitle,
+            'no_hp' => $this->faker->phoneNumber,
+            'avatar' => $this->faker->imageUrl(100, 100, 'people', true, 'avatar'), // Gambar avatar acak
+            'role' => 'user', // Set role sebagai user untuk data karyawan
+            'department_id' => $this->faker->numberBetween(1, 2), // Asumsi Anda memiliki 5 departemen
         ];
     }
 
@@ -37,7 +44,7 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

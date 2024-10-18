@@ -22,6 +22,8 @@ class DepartemenDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        Carbon::setLocale('id');
+
         return (new EloquentDataTable($query))
         ->addIndexColumn()
 
@@ -29,10 +31,10 @@ class DepartemenDataTable extends DataTable
                 return view('admin.departemen.action', ['departemen' => $departemen]);
             })
             ->editColumn('created_at', function (Department $departemen) {
-                return Carbon::parse($departemen->created_at)->format('d F Y');
+                return Carbon::parse($departemen->created_at)->translatedFormat('d F Y');
             })
             ->editColumn( 'updated_at', function (Department $departemen) {
-                return Carbon::parse(time: $departemen->updated_at)->format('d F Y');
+                return Carbon::parse(time: $departemen->updated_at)->translatedFormat('d F Y');
 
             })
             ->setRowId('id');
@@ -81,8 +83,8 @@ class DepartemenDataTable extends DataTable
             ->searchable(false),
             Column::make('nama_departemen'),
             Column::make('kode_departemen'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('created_at')->title('Dibuat Pada'),
+            Column::make('updated_at')->title('Diedit Pada'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

@@ -23,6 +23,8 @@ class MonitoringDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        Carbon::setLocale('id');
+
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('Maps Datang', function (Kehadiran $kehadiran) {
@@ -44,15 +46,28 @@ class MonitoringDataTable extends DataTable
                 $query->whereRaw('LOWER(users.name) LIKE ?', ["%{$keyword}%"]);
             })
             ->editColumn('check_in_time', function (Kehadiran $kehadiran) {
-                return Carbon::parse($kehadiran->check_in_time)->format('H:i');
+                return Carbon::parse($kehadiran->check_in_time)->translatedFormat('H:i');
             })->editColumn('check_out_time', function (Kehadiran $kehadiran) {
-                return Carbon::parse($kehadiran->check_out_time)->format('H:i');
+                return Carbon::parse($kehadiran->check_out_time)->translatedFormat('H:i');
             })
             ->editColumn('check_in_photo', function (Kehadiran $kehadiran) {
                 return '<img src="' . asset('img/' . $kehadiran->check_in_photo) . '"width="90px">';
             })
+            ->editColumn('status', function (Kehadiran $kehadiran) {
+                if ($kehadiran->status == 'hadir') {
+                    return '<span class="badge badge-success">Hadir</span>';
+                } elseif ($kehadiran->status == 'telat') {
+                    return '<span class="badge badge-danger">Telat</span>';
+                }
+            })
+            ->addColumn('Jml Jam Kerja', function (Kehadiran $kehadiran) {
+                $checkInTime = Carbon::parse($kehadiran->check_in_time);
+                $checkOutTime = Carbon::parse($kehadiran->check_out_time);
+                $workDuration = $checkOutTime->diffInHours($checkInTime);
+                return $workDuration;
+            })
             ->setRowId('id')
-            ->rawColumns(['check_in_photo']);
+            ->rawColumns(['check_in_photo', 'status']);
     }
 
 
@@ -62,7 +77,7 @@ class MonitoringDataTable extends DataTable
     public function query(Kehadiran $model): QueryBuilder
     {
         // Ambil nilai filter tanggal dari request
-        $filterDate = request('work_date', \Carbon\Carbon::today()->toDateString());
+        $filterDate = request('work_date', Carbon::today()->toDateString());
 
         // Filter data kehadiran berdasarkan tanggal kerja (work_date)
         return $model->newQuery()
@@ -87,7 +102,7 @@ class MonitoringDataTable extends DataTable
                 'autoWidth' => false,  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
             //->dom('Bfrtip')
-            ->orderBy([7, 'asc'])
+            ->orderBy([5, 'desc'])
             ->selectStyleSingle()
             ->buttons([]);
     }
@@ -118,10 +133,14 @@ class MonitoringDataTable extends DataTable
             Column::make('user_nik')->title('NIK'),
             Column::make('user_name')->title('Nama Karyawan'),
             Column::make('check_in_time')->title('Jam Datang'),
-            Column::make('check_out_time')->title('Jam Pulang'),
             Column::make('check_in_photo')->title('Foto Datang'),
+            Column::make('check_out_time')->title('Jam Pulang'),
             Column::make('check_out_photo')->title('Foto Pulang'),
-            Column::make('status')
+            Column::make('status'),
+            Column::computed('Jml Jam Kerja')->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
 
         ];
     }

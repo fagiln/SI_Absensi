@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PerizinanController;
 
+
 // User Controller
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\NotifController;
@@ -15,7 +16,6 @@ use App\Http\Controllers\User\RiwayatController;
 use App\Http\Controllers\User\CutiController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\LayoutController;
-
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +60,8 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
 
         Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
+        Route::get('karyawan-izin', [DashboardController::class, 'karyawanIzin'])->name('karyawan.izin');
+        Route::get('karyawan-sakit', [DashboardController::class, 'karyawanSakit'])->name('karyawan.sakit');
         Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('/karyawan', [KaryawanController::class, 'index'])->name('index.karyawan');
         Route::post('karyawan/add', [KaryawanController::class, 'store'])->name('karyawan.add');
@@ -74,9 +76,21 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::delete('/departemen/{id}', [DepartemenController::class, 'destroy'])->name('departemen.delete');
 
         Route::get('monitoring', [MonitoringController::class, 'index'])->name('monitoring.index');
+        Route::get('karyawan-cuti', [MonitoringController::class, 'karyawanCuti'])->name('karyawan.cuti');
+
 
         Route::get('perizinan', [PerizinanController::class, 'index'])->name('perizinan.index');
         Route::put('perizinan/status/{id}', [PerizinanController::class, 'update'])->name('perizinan.status');
+        Route::get('perizinan/edit/{id}', [PerizinanController::class, 'edit'])->name('perizinan.edit');
+
+        Route::get('presensi', [PresensiController::class, 'index'])->name('presensi.index');
+        Route::get('presensi/export', [PresensiController::class, 'export'])->name('presensi.export');
+        Route::get('presensi/print', [PresensiController::class, 'print'])->name('presensi.print');
+        Route::get('presensi/search', [PresensiController::class, 'search'])->name('presensi.search');
+
+        Route::get('rekap-presensi', [RekapPresensiController::class, 'index'])->name('rekap-presensi.index');
+        Route::get('rekap-presensi/export', [RekapPresensiController::class, 'export'])->name('rekap-presensi.export');
+        Route::get('rekap-presensi/print', [RekapPresensiController::class, 'print'])->name('rekap-presensi.print');
     });
 });
 
