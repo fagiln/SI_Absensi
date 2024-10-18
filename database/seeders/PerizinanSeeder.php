@@ -53,6 +53,7 @@ class PerizinanSeeder extends Seeder
         $reasons = ['sakit', 'izin']; // Daftar alasan sesuai dengan enum yang ada
         $statuses = ['pending', 'diterima', 'ditolak']; // Daftar status sesuai dengan enum yang ada
 
+
         foreach ($users as $user) {
             Perizinan::create([
                 'user_id' => $user->id,
@@ -63,8 +64,8 @@ class PerizinanSeeder extends Seeder
                 'bukti_path' => 'path/to/bukti_' . $user->id . '.jpg', // Sesuaikan path ini dengan lokasi bukti yang disimpan
                 'status' => $statuses[array_rand($statuses)], // Ambil status secara acak dari array
                 'created_at' => now(), // Tanggal sekarang
-            ]);
-        }
+       
+     
     }
      // Fungsi untuk menghasilkan alasan acak
      private function generateRandomReason()

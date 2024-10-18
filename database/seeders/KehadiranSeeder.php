@@ -45,6 +45,7 @@ class KehadiranSeeder extends Seeder
         $tanggal_kehadiran = '2024-10-10'; // Set tanggal 10 Oktober 2024
 
         foreach ($users as $user) {
+
             // Buat data kehadiran untuk setiap user pada tanggal 10/10/2024
             Kehadiran::create([
                 'user_id' => $user->id,
@@ -58,7 +59,12 @@ class KehadiranSeeder extends Seeder
                 'check_out_latitude' => $faker->latitude(-6.21, -6.19),
                 'check_out_longitude' => $faker->longitude(106.81, 106.82),
                 'status' => 'hadir',
-            ]);
+
+            // Buat waktu check-in yang selalu di atas jam 8 pagi (8:00 AM)
+            $checkInTime = Carbon::now()->setTime(8, 0)->addMinutes(rand(1, 120)); // Jam 8 pagi + random menit antara 1 hingga 120 menit
+
+            // Buat data kehadiran untuk setiap user
+          
         }
     }
 }

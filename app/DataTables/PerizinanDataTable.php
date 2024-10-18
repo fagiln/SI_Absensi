@@ -22,10 +22,16 @@ class PerizinanDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        Carbon::setLocale('id');
+
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function (Perizinan $perizinan) {
                 return view('admin.perizinan.action', ['perizinan' => $perizinan]);
+            })->addColumn('bukti_path', function (Perizinan $perizinan) {
+          
+                    return view('admin.perizinan.view_bukti', ['perizinan' => $perizinan]);
+    
             })
             ->editColumn('status', function (Perizinan $perizinan) {
                 if ($perizinan->status == 'diterima') {
@@ -39,7 +45,7 @@ class PerizinanDataTable extends DataTable
                 $query->whereRaw('LOWER(users.nik) LIKE ?', ["%{$keyword}%"]);
             })
             ->editColumn('created_at', function (Perizinan $perizinan) {
-                return Carbon::parse($perizinan->created_at)->format('d F Y');
+                return Carbon::parse($perizinan->created_at)->translatedFormat('d F Y');
             })
             ->filterColumn('user_name', function ($query, $keyword) {
                 $query->whereRaw('LOWER(users.name) LIKE ?', ["%{$keyword}%"]);
@@ -55,15 +61,23 @@ class PerizinanDataTable extends DataTable
      */
     public function query(Perizinan $model): QueryBuilder
     {
-        $filterDate = request('created_at',);
-
+        $filterDate = request('created_at', \Carbon\Carbon::today()->toDateString());
+        $startDate = request('start_date');
+        $filterStatus = request('status');
         return $model->newQuery()
 
             ->join('users', 'users.id', '=', 'perizinan.user_id') // Join dengan tabel users
             ->select('perizinan.*', 'users.nik as user_nik', 'users.name as user_name', 'users.jabatan as user_jabatan')
             ->when($filterDate, function ($query, $filterDate) {
                 return $query->whereDate('perizinan.created_at', $filterDate);
-            });
+            })
+            ->when($startDate, function ($query, $startDate) {
+                return $query->whereDate('perizinan.start_date', $startDate);
+            })
+            ->when($filterStatus, function ($query, $filterStatus) {
+                return $query->where('perizinan.status', $filterStatus);
+            })
+        ;
     }
 
     /**
@@ -79,10 +93,14 @@ class PerizinanDataTable extends DataTable
             ->responsive(true)
             ->parameters([
                 'responsive' => true,
-                'autoWidth' => false,  // Untuk memastikan lebar kolom diatur secara otomatis
+                'autoWidth' => false,
+                'language' => [
+                    'emptyTable' => 'Belum ada yang membuat perizinan hari ini'
+                ],  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
+
             //->dom('Bfrtip')
-            ->orderBy([10, 'dsc'])
+            ->orderBy([11, 'dsc'])
             ->selectStyleSingle()
             ->buttons([]);
     }
@@ -109,6 +127,7 @@ class PerizinanDataTable extends DataTable
             Column::make('keterangan'),
             Column::make('bukti_path')->title('Bukti'),
             Column::make('status'),
+            Column::make('keterangan_ditolak'),
             Column::make('created_at')->title('Dibuat pada'),
 
             Column::computed('action')
