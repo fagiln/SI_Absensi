@@ -91,6 +91,8 @@ Route::middleware(['auth', 'verified', 'user.role:user'])->group(function () {
     Route::get('/user/home', [HomeController::class, 'show'])->name('home');
     Route::get('user/absen_masuk', [HomeController::class, 'absen_masuk'])->name('absen_masuk');
     Route::post('user/absen_masuk', [HomeController::class, 'absen_masuk_store'])->name('absen_masuk.store');
+    Route::get('user/absen_pulang', [HomeController::class, 'absen_pulang'])->name('absen_pulang');
+    Route::post('user/absen_pulang', [HomeController::class, 'absen_pulang_store'])->name('absen_pulang.store');
 
     // -------------------- Profile -------------------------
 

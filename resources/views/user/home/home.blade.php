@@ -73,7 +73,9 @@
         }
 
         .btn-pulang:hover {
-            background-color: darkred;
+            border: 2px solid red;
+            background-color: white;
+            color:  #CC0200;
         }
 
         .icon {
@@ -196,6 +198,7 @@
 </head>
 <body>
     <div class="container">
+      
         <!-- Location Display -->
         <div class="location">
             <span class="location-icon">📍</span>
@@ -206,18 +209,31 @@
         <div class="greeting">
             Selamat {{ $greeting }}, <br><span>{{ $user->name }}</span>
         </div>
-
         <!-- Action Buttons -->
+
         <div class="button-container">
-            <button class="btn btn-masuk" onclick="window.location='{{ route('absen_masuk') }}'">
-                <span class="fas fa-camera" style="margin-right: 10px"></span> 
-                MASUK
+
+            <button class="btn btn-masuk" onclick="window.location='{{ route('absen_masuk') }}'"
+                @if($absenToday) disabled @endif>
+                <span class="fas fa-camera" style="margin-right: 10px"></span>
+                @if($absenToday)
+                    Sudah absen
+                @else
+                    MASUK
+                @endif
             </button>
-            <button class="btn btn-pulang" data-bs-toggle="modal" data-bs-target="#absenModal">
-                <span class="fas fa-camera" style="margin-right: 10px"></span> 
-                PULANG
-            </button>
-        </div>
+            <button class="btn btn-pulang" onclick="window.location='{{ route('absen_pulang') }}'"
+                @if($absenpulangToday) disabled @endif>
+                <span class="fas fa-camera" style="margin-right: 10px"></span>
+                @if($absenpulangToday)
+                    Sudah absen
+                @else
+                    Pulang
+                @endif
+        </button>
+    </div>        
+    {{-- {{ dd(session()->all()) }} --}}
+    
 
         <!-- Bootstrap Modal pop-up konfimasi -->
         <div class="d-flex justify-content-center">
@@ -229,10 +245,10 @@
                             <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Absen Berhasil" width="150" height="100"> 
 
                             <!-- Judul modal -->
-                            <h4 class="mt-3">Alhamdulillah Absen Berhasil!!</h4>
+                            <h4 class="mt-3">Oops!</h4>
 
                             <!-- Pesan -->
-                            <p class="text-muted">Selamat pagi best, semangat ya kerjanya!</p>
+                            <p class="text-muted">Sepertinya Anda belum absen masuk. Silakan lakukan absen pagi terlebih dahulu.</p>
 
                             <!-- Tombol untuk menutup modal -->
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
@@ -242,6 +258,15 @@
             </div>
         </div>
 
+        @if(session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var modal = new bootstrap.Modal(document.getElementById('absenModal'));
+                modal.show();
+            });
+        </script>
+        @endif
+        
         <br>
         <div class="work-time-card">
             <div class="info">
@@ -252,7 +277,7 @@
                 <div class="details">
                     <div>
                         <span>Hari ini</span>
-                        <p>4 Jam</p>
+                        <p style="font-size: 15px">{{ $jamKerjaFormatted }} </p>
                     </div>
                     <div>
                         <span>Total semua jam kerja</span>
@@ -261,6 +286,7 @@
                 </div>
             </div>
         </div>
+        
         <br>
         <h5>Rekap Presensi</h5>
         <div class="attendance-box">
@@ -313,5 +339,4 @@
         </div>
     </div>
 </body>
-</html>
 @endsection

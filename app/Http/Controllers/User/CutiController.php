@@ -67,9 +67,17 @@ class CutiController extends Controller
         // Jika ada file yang diupload
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename); // Pastikan direktori ini ada dan dapat ditulisi
-            $cuti->bukti_path = 'uploads/' . $filename; // Menyimpan path file ke database
+            // Tentukan path penyimpanan di public/storage/perizinan
+        $destinationPath = public_path('storage/perizinan');
+        $createdAt =  now()->format('Ymd');
+        $filename = $userId . '_' . $createdAt . '.' . $file->getClientOriginalExtension();
+        // Nama file dengan user ID dan timestamp
+
+        // Pindahkan file ke direktori public/storage/perizinan
+        $file->move($destinationPath, $filename);
+
+        // Simpan hanya nama file ke database, tanpa path 'uploads'
+        $cuti->bukti_path = $filename;// Menyimpan path file ke database
         }
 
         $cuti->save(); // Simpan data ke database

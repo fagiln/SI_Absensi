@@ -64,7 +64,7 @@
 <body>
     <div class="container text-center">
         <!-- Form Absen -->
-<form id="absen-form" action="{{ route('absen_masuk.store') }}" method="POST" style="display: none;">
+<form id="absen-form" action="{{ route('absen_pulang.store') }}" method="POST" style="display: none;">
     @csrf
     <input type="hidden" name="photo-data" id="photo-data">
     <input type="hidden" name="latitude" id="latitude">
@@ -79,7 +79,7 @@
                 <canvas id="photo-canvas" class="d-none"></canvas>
                 <img id="photo" class="d-none mt-3" alt="Hasil Foto" style="width: 100%;">
 
-                <button class="absen-button mt-3" id="take-photo">Absen Masuk</button>
+                <button class="absen-button mt-3" id="take-photo">Absen Pulang</button>
                 <button class="absen-button mt-3 d-none" id="cancel-photo">Absen Ulang</button>
 
                 <!-- Lokasi Pengguna -->
@@ -111,7 +111,7 @@
                         <h5 class="mt-2">Jazakumullah Khoir</h5>
 
                         <!-- Pesan -->
-                        <p class="text-muted">Selamat pagi, semangat ya kerjanya geis!</p>
+                        <p class="text-muted">Terimakasih telah absen pulang, Hati - hati di jalan</p>
 
                         <!-- Tombol untuk menutup modal -->
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
@@ -194,7 +194,7 @@
 
         // Event listener untuk konfirmasi foto
         confirmButton.addEventListener('click', confirmAbsen);
-        
+
         // Event listener untuk mengambil foto ulang
         retakePhotoButton.addEventListener('click', function() {
             // Tampilkan kembali kamera dan sembunyikan hasil foto
@@ -231,7 +231,6 @@
                 // window.location.href = '/home'; // Ganti dengan URL halaman utama
 
         }, 1800);
-
     }
 
     // Event listener untuk mengambil foto
