@@ -10,7 +10,7 @@
     box-sizing: border-box;
     cursor: pointer;
     display: block;
-    height: 28px;
+    height: calc(2.25rem + 2px);
     user-select: none;
     -webkit-user-select: none
 }
@@ -628,4 +628,53 @@
 
 .select2-container--classic.select2-container--open .select2-dropdown {
     border-color: #5897fb
+}
+
+/* Mode gelap untuk Select2 */
+body.dark-mode .select2-container--default .select2-selection--single {
+    background-color: #343a40;
+    color: #fff;
+    border-color: #6c757d;
+}
+
+body.dark-mode .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #fff;
+    /* Warna teks pilihan */
+}
+
+body.dark-mode .select2-container--default .select2-selection--multiple {
+    background-color: #343a40;
+    color: #fff;
+    border-color: #6c757d;}
+
+body.dark-mode .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    background-color: #343a40;
+    /* Warna latar belakang pilihan yang dipilih */
+    border: 1px solid #6c757d;
+    /* Warna border pilihan yang dipilih */
+    color: #fff;
+    /* Warna teks pilihan yang dipilih */
+}
+
+body.dark-mode .select2-container--default .select2-results__option {
+    background-color: #343a40;
+    /* Warna latar belakang opsi */
+    color: #fff;
+    /* Warna teks opsi */
+}
+
+body.dark-mode .select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #555;
+    /* Warna latar belakang opsi yang dipilih */
+    color: #fff;
+    /* Warna teks opsi yang dipilih */
+}
+
+body.dark-mode .select2-container--default .select2-search--dropdown .select2-search__field {
+    background-color: #343a40;
+    /* Warna latar belakang kotak pencarian */
+    border: 1px solid #6c757d;
+    /* Warna border kotak pencarian */
+    color: #fff;
+    /* Warna teks kotak pencarian */
 }

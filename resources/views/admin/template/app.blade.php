@@ -71,7 +71,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="dark-mode-toggle">
-                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-moon" id="theme-icon"></i>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -265,12 +265,25 @@
         });
         document.addEventListener('DOMContentLoaded', function() {
             const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const themeIcon = document.getElementById('theme-icon');
             const body = document.body;
+
+            // Fungsi untuk mengganti ikon berdasarkan tema
+            function updateThemeIcon() {
+                if (body.classList.contains('dark-mode')) {
+                    themeIcon.classList.replace('fa-moon', 'fa-sun'); // Ganti ke ikon matahari
+                } else {
+                    themeIcon.classList.replace('fa-sun', 'fa-moon'); // Ganti ke ikon bulan
+                }
+            }
 
             // Cek jika pengguna sudah memilih preferensi dark mode sebelumnya
             if (localStorage.getItem('dark-mode') === 'enabled') {
                 body.classList.add('dark-mode');
             }
+
+            // Update ikon saat pertama kali halaman dimuat
+            updateThemeIcon();
 
             darkModeToggle.addEventListener('click', function() {
                 body.classList.toggle('dark-mode');
@@ -281,6 +294,9 @@
                 } else {
                     localStorage.setItem('dark-mode', 'disabled');
                 }
+
+                // Perbarui ikon setelah tema berubah
+                updateThemeIcon();
             });
         });
     </script>
