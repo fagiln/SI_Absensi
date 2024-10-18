@@ -51,7 +51,7 @@ class MonitoringDataTable extends DataTable
                 return Carbon::parse($kehadiran->check_out_time)->translatedFormat('H:i');
             })
             ->editColumn('check_in_photo', function (Kehadiran $kehadiran) {
-                return '<img src="' . asset('img/' . $kehadiran->check_in_photo) . '"width="90px">';
+                return '<img src="' . asset('storage/' . $kehadiran->check_in_photo) . '" style="width:100px; height:100px; object-fit:cover">';
             })
             ->editColumn('status', function (Kehadiran $kehadiran) {
                 if ($kehadiran->status == 'hadir') {

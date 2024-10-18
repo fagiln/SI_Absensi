@@ -9,6 +9,7 @@ use App\Models\Kehadiran;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 // use Illuminate\Http\RedirectResponse;
 // use Illuminate\Support\Facades\Auth;
@@ -68,7 +69,7 @@ class HomeController extends Controller
         $imageName = 'absen_' . time() . '.png'; // Menggunakan waktu untuk penamaan unik
 
         // Simpan file ke storage
-        \Storage::disk('public')->put($imageName, base64_decode($image));
+        Storage::disk(name: 'public')->put($imageName, base64_decode($image));
 
         // Simpan data absen ke database
         Kehadiran::create([

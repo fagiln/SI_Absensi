@@ -64,13 +64,14 @@ class PerizinanSeeder extends Seeder
                 'bukti_path' => 'path/to/bukti_' . $user->id . '.jpg', // Sesuaikan path ini dengan lokasi bukti yang disimpan
                 'status' => $statuses[array_rand($statuses)], // Ambil status secara acak dari array
                 'created_at' => now(), // Tanggal sekarang
-       
-     
+            ]);
+        }
     }
-     // Fungsi untuk menghasilkan alasan acak
-     private function generateRandomReason()
-     {
-         $reasons = ['sakit', 'kegiatan keluarga', 'pernikahan', 'dinas luar', 'acara penting'];
-         return $reasons[array_rand($reasons)];
-     }
+    private function generateRandomReason()
+    {
+        $reasons = ['sakit', 'kegiatan keluarga', 'pernikahan', 'dinas luar', 'acara penting'];
+        return $reasons[array_rand($reasons)];
+    }
+
+    // Fungsi untuk menghasilkan alasan acak
 }

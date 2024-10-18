@@ -41,12 +41,13 @@ class KaryawanController extends Controller
             'password.required' => 'Password wajib diisi.',
             'password.string' => 'Password harus berupa string.',
             'password.min' => 'Password harus minimal 6 karakter.',
-        ]);        if ($request->filled('password')) {
+        ]);
+        if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
 
-        if ($request->filled('edit_password')) {
-            $data['password'] = Hash::make($request->edit_password);
-
+            if ($request->filled('edit_password')) {
+                $data['password'] = Hash::make($request->edit_password);
+            }
         }
         User::create($data);
 
@@ -96,5 +97,4 @@ class KaryawanController extends Controller
         $user->update($data);
         return redirect()->back()->with('status', 'Karyawan Berhasil di Edit');
     }
-
 }
