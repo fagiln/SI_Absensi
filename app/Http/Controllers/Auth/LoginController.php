@@ -28,7 +28,7 @@ class LoginController extends Controller
                 return redirect()->intended('admin/dashboard');
             } elseif (Auth::user()->role == 'user') {
                 $request->session()->regenerate();
-                return redirect()->intended('/home');
+                return redirect()->intended('/user/home');
             }
         }
         return back()->withErrors([
