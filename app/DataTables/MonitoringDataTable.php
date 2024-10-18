@@ -31,6 +31,12 @@ class MonitoringDataTable extends DataTable
                 return view('admin.monitoring.maps_checkin', ['kehadiran' => $kehadiran]);
             })
             ->addColumn('Maps Pulang', function (Kehadiran $kehadiran) {
+
+                if ($kehadiran->check_out_photo  === null) {
+                    return 'Belum absen pulang';
+                }
+
+                // Jika sudah melakukan absen pulang, tampilkan tampilan maps_checkout
                 return view('admin.monitoring.maps_checkout', ['kehadiran' => $kehadiran]);
             })
             ->editColumn('user_nik', function (Kehadiran $kehadiran) {
