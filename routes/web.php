@@ -1,12 +1,22 @@
 <?php
 
+
+// Admin Controller
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartemenController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PerizinanController;
-use App\Http\Controllers\Admin\PresensiController;
-use App\Http\Controllers\Admin\RekapPresensiController;
+
+
+// User Controller
+use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\User\NotifController;
+use App\Http\Controllers\User\RiwayatController;
+use App\Http\Controllers\User\CutiController;
+use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\LayoutController;
+
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,10 +32,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// {{-------------------- Admin -----------------------------}}
+
 Route::get('/home', function () {
     if (Auth::user()->role == 'admin') {
 
         return redirect(route('admin.dashboard'));
+    }elseif(Auth::user()->role == 'user'){
+        return redirect(route('home'));
     }
 });
 
@@ -35,6 +49,12 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/', [LoginController::class, 'authenticate'])->name('login.authenticate');
 });
+
+Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
+    Route::get('admin/dashboard', [DashboardController::class, 'show'])->name('admin.dashboard');
+    Route::get('admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
+});
+
 
 Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
@@ -73,3 +93,41 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::get('rekap-presensi/print', [RekapPresensiController::class, 'print'])->name('rekap-presensi.print');
     });
 });
+
+
+// {{---------------------- User ------------------------------}}
+
+Route::middleware(['auth', 'verified', 'user.role:user'])->group(function () {
+    // Route::group(['prefix' => 'user', ], function () {
+
+    // -------------------- Home ---------------------------
+
+    Route::get('/user/home', [HomeController::class, 'show'])->name('home');
+    Route::get('user/absen_masuk', [HomeController::class, 'absen_masuk'])->name('absen_masuk');
+    Route::post('user/absen_masuk', [HomeController::class, 'absen_masuk_store'])->name('absen_masuk.store');
+
+    // -------------------- Profile -------------------------
+
+    Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::post('/user/profile/update_foto', [ProfileController::class, 'update_foto'])->name('profile.update_foto');
+    Route::post('/user/profile/update_data', [ProfileController::class, 'update_dataprofile'])->name('profile.update_dataprofile');
+    Route::post('/user/profile/update_pass', [ProfileController::class, 'update_pass'])->name('profile.update_pass');
+
+    // -------------------- Notif ---------------------------
+
+    Route::get('/user/notif', [NotifController::class, 'show'])->name('notif');
+
+    // -------------------- Riwayat -------------------------
+
+    Route::get('/user/riwayat', [RiwayatController::class, 'show'])->name('riwayat');
+
+    // -------------------- Cuti ----------------------------
+
+    Route::get('/user/cuti', [CutiController::class, 'show'])->name('cuti');
+    Route::post('/user/cuti/create_cuti', [CutiController::class, 'create_cuti'])->name('cuti.create');
+    Route::get('/user/cuti-detail/{id}', [CutiController::class, 'showdetail'])->name('cuti-detail');
+
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+});
+
