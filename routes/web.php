@@ -7,8 +7,8 @@ use App\Http\Controllers\Admin\DepartemenController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PerizinanController;
-
-
+use App\Http\Controllers\Admin\PresensiController;
+use App\Http\Controllers\Admin\RekapPresensiController;
 // User Controller
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\NotifController;
