@@ -3,6 +3,7 @@
 @section('title', 'Monitoring')
 
 <form action="" method="" class="mb-3">
+    @csrf
     <div class="row">
         <div class="col">
 

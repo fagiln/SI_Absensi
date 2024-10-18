@@ -4,6 +4,7 @@
 <div class="container">
 
     <form action="{{ route('admin.rekap-presensi.export') }}" method="GET">
+        @csrf
         <div class="row">
             <div class="col-md-4">
                 <label for="month">Bulan:</label>
