@@ -114,6 +114,7 @@
 
 
     <div class="modal fade" id="modalView_{{ $item->id }}" tabindex="-1" role="dialog">
+
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -123,10 +124,22 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <img id="buktiImage" src="{{ asset('perizinan/img_' . $item->reason . '_' . $item->id . '.png') }}"
-                        alt="Bukti Izin" class="img-fluid ">
-                    <iframe id="buktiPdf" class="" style="width:100%; height:400px;"
-                        src="{{ asset('perizinan/pdf_' . $item->reason . '_' . $item->id . '.pdf') }}"></iframe>
+                    @php
+                        // Cek apakah file PNG atau PDF ada
+                        $pngPath = 'perizinan/img_' . $item->reason . '_' . $item->id . '.png';
+                        $pdfPath = 'perizinan/pdf_' . $item->reason . '_' . $item->id . '.pdf';
+                        $hasPng = file_exists(public_path($pngPath));
+                        $hasPdf = file_exists(public_path($pdfPath));
+                    @endphp
+
+                    @if ($hasPng)
+                        <img id="buktiImage" src="{{ asset($pngPath) }}" alt="Bukti Izin" class="img-fluid">
+                    @elseif ($hasPdf)
+                        <iframe id="buktiPdf" style="width:100%; height:400px;"
+                            src="{{ asset($pdfPath) }}"></iframe>
+                    @else
+                        <p>Tidak ada bukti atau Format tidak didukung</p>
+                    @endif
                 </div>
             </div>
         </div>
