@@ -277,11 +277,11 @@
                 <div class="details">
                     <div>
                         <span>Hari ini</span>
-                        <p style="font-size: 15px">{{ $jamKerjaFormatted }} </p>
+                        <p style="font-size: 17px">{{ $jamKerjaFormatted }} </p>
                     </div>
                     <div>
                         <span>Total semua jam kerja</span>
-                        <p>160 Jam</p>
+                        <p style="font-size: 17px">{{ $totalJamFormatted }}</p>
                     </div>
                 </div>
             </div>
@@ -292,25 +292,25 @@
         <div class="attendance-box">
             <div class="attendance-item">
                 <img src="{{ asset('img/hadir.svg') }}" alt="Hadir">
-                <span class="badge-number">10</span>
+                <span class="badge-number">{{ $hadirCount }}</span>
                 <p>Hadir</p> 
             </div>
             <div class="attendance-item">
                 <img src="{{ asset('img/izin.svg') }}" alt="Izin">
-                <span class="badge-number">20</span>
+                <span class="badge-number">{{ $izinCount }}</span>
                 <p>Izin</p>
             </div>
             <div class="attendance-item">
                 <img src="{{ asset('img/sakit.svg') }}" alt="Sakit">
-                <span class="badge-number">124</span>
+                <span class="badge-number">{{ $sakitCount }}</span>
                 <p>Sakit</p>
             </div>
             <div class="attendance-item">
                 <img src="{{ asset('img/terlambat.svg') }}" alt="Terlambat">
-                <span class="badge-number">1</span>
+                <span class="badge-number">{{ $terlambatCount }}</span>
                 <p>Terlambat</p>
             </div>
-        </div>
+        </div>        
 
         <h5>Terbaru</h5>
         <div class="terbaru-container">

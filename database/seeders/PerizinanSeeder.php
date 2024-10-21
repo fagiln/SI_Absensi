@@ -51,11 +51,6 @@ class PerizinanSeeder extends Seeder
     // Mengambil user dengan id 2
     $user2 = User::find(2); // menggunakan find untuk mendapatkan user dengan id
 
-<<<<<<< HEAD
-    // Pastikan user ditemukan
-    if (!$user2) {
-        return; // Jika user tidak ada, hentikan eksekusi
-=======
 
         foreach ($users as $user) {
             Perizinan::create([
@@ -68,9 +63,8 @@ class PerizinanSeeder extends Seeder
                 'status' => $statuses[array_rand($statuses)], // Ambil status secara acak dari array
                 'created_at' => now(), // Tanggal sekarang
        
-     
->>>>>>> 4f665d16d8488a98a34f61db0e6d4a3c04f6cadd
-    }
+            ]);
+        }
 
     $reasons = ['sakit', 'izin']; // Daftar alasan sesuai dengan enum yang ada
     $statuses = ['pending', 'diterima', 'ditolak']; // Daftar status sesuai dengan enum yang ada

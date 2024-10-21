@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Kehadiran;
+use App\Models\Perizinan;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
@@ -46,7 +47,7 @@ class HomeController extends Controller
             $greeting = 'Malam';
         }
         
-        // jam kerja
+        // Jam kerja hari ini
         $kehadiran = Kehadiran::where('user_id', $userId)
                                 ->whereDate('check_in_time', Carbon::now()->format('Y-m-d'))
                                 ->first(); // Mengambil record kehadiran hari ini
@@ -58,15 +59,62 @@ class HomeController extends Controller
             $checkOutTime = Carbon::parse($kehadiran->check_out_time);
 
             // Menghitung selisih jam kerja dengan mengurangi 1 jam untuk istirahat
-            $jamKerja = $checkOutTime->diffInHours($checkInTime) - 1; 
+            $jamKerja = $checkOutTime->diffInHours($checkInTime); 
 
-            // Format untuk menampilkan hanya jam
+        // Format untuk menampilkan hanya jam
             $jamKerjaFormatted = $jamKerja . ' Jam';
         } else {
             $jamKerjaFormatted = 'Belum Absen Pulang';
         }
 
-        return view('user.home.home', compact('user', 'greeting', 'absenToday', 'absenpulangToday', 'jamKerjaFormatted'));
+        // Menghitung total jam kerja selama 1 bulan
+        $totalJamKerja = Kehadiran::where('user_id', $userId)
+                                    ->whereMonth('check_in_time', Carbon::now()->month) // Filter berdasarkan bulan
+                                    ->whereYear('check_in_time', Carbon::now()->year) // Filter berdasarkan tahun
+                                    ->get(); // Ambil semua record
+
+        // Menjumlahkan jam kerja bulan ini
+        $totalJam = 0;
+        foreach ($totalJamKerja as $kehadiranBulanan) {
+            if ($kehadiranBulanan->check_out_time) {
+            $checkIn = Carbon::parse($kehadiranBulanan->check_in_time);
+            $checkOut = Carbon::parse($kehadiranBulanan->check_out_time);
+            $jamTotal = $checkOut->diffInHours($checkIn); // Mengurangi 1 jam istirahat
+            $totalJam += $jamTotal; // Menjumlahkan jam total
+            }
+        }
+
+        // Format total jam kerja
+        $totalJamFormatted = $totalJam . ' Jam';
+
+        // Menghitung jumlah kehadiran selama satu bulan
+        $hadirCount = Kehadiran::where('user_id', $userId)
+                                ->where('status', 'hadir')
+                                ->whereMonth('work_date', Carbon::now()->month)
+                                ->whereYear('work_date', Carbon::now()->year)
+                                ->count();
+
+        $izinCount = Perizinan::where('user_id', $userId)
+                                ->where('reason', 'izin')
+                                ->whereMonth('start_date', Carbon::now()->month)
+                                ->whereYear('start_date', Carbon::now()->year)
+                                ->count();
+
+        $sakitCount = Perizinan::where('user_id', $userId)
+        ->where('reason', 'sakit')
+        ->whereMonth('start_date', Carbon::now()->month)
+        ->whereYear('start_date', Carbon::now()->year)
+        ->count();
+
+        $terlambatCount = Kehadiran::where('user_id', $userId)
+        ->where('status', 'telat')
+        ->whereMonth('work_date', Carbon::now()->month)
+        ->whereYear('work_date', Carbon::now()->year)
+        ->count();
+
+        return view('user.home.home', 
+        compact('user', 'greeting', 'absenToday', 'absenpulangToday', 'jamKerjaFormatted', 'totalJamFormatted',
+        'hadirCount', 'izinCount', 'sakitCount', 'terlambatCount'));
     }
 
     public function absen_masuk() {
@@ -98,16 +146,26 @@ class HomeController extends Controller
         $imageName = 'absen_in_' . $userid . '_' . now()->format('Ymd') . '.png'; // Menggunakan waktu untuk penamaan unik
 
         // Simpan file ke storage
-        Storage::disk('public')->put($imageName, base64_decode($image));
+        \Storage::disk('public')->put('kehadiran/' . $imageName, base64_decode($image));
 
-        // Simpan data absen ke database
+        // Waktu check-in yang ditentukan (contoh: 08:10)
+        $scheduledCheckInTime = Carbon::createFromTime(8, 10);
+
+        // Mendapatkan waktu sekarang
+        $currentCheckInTime = Carbon::now();
+
+        // Menentukan status kehadiran
+        $status = $currentCheckInTime->greaterThan($scheduledCheckInTime) ? 'telat' : 'hadir';
+
+        // Menyimpan data kehadiran ke database
         Kehadiran::create([
             'user_id' => $userId,
             'check_in_photo' => $imageName,
             'check_in_latitude' => $latitude,
             'check_in_longitude' => $longitude,
             'work_date' => Carbon::now(),
-            'check_in_time' => Carbon::now(), 
+            'check_in_time' => $currentCheckInTime, 
+            'status' => $status, // Menyimpan status kehadiran
         ]);
 
         // Redirect atau return response
@@ -128,13 +186,14 @@ class HomeController extends Controller
         $fileName = 'absen_' . time() . '.png';
 
         // Menyimpan file ke storage
-        Storage::disk('public')->put($fileName, $image);
+        Storage::disk('public')->put('kehadiran/' . $fileName, $image);
 
         // Mengembalikan path penyimpanan
         return 'storage/kehadiran' . $fileName;
     }
 
     public function absen_pulang() {
+        
         $userId = Auth::id();
         
         // Cek apakah sudah absen masuk hari ini
@@ -154,50 +213,51 @@ class HomeController extends Controller
     }
 
     public function absen_pulang_store(Request $request)
-{
-    // Validasi data yang diterima
-    $request->validate([
-        'photo-data' => 'required|string',
-        'latitude' => 'required|numeric',
-        'longitude' => 'required|numeric',
-    ]);
-
-    $userId = Auth::id(); // Mendapatkan ID pengguna yang sedang login
-
-    // Mendapatkan data dari request
-    $photoData = $request->input('photo-data');
-    $latitude = $request->input('latitude');
-    $longitude = $request->input('longitude');
-
-    // Mengubah foto dari base64 menjadi file
-    $image = str_replace('data:image/png;base64,', '', $photoData);
-    $image = str_replace(' ', '+', $image);
-    $imageName = 'absen_out_' . $userId . '_' . now()->format('Ymd') . '.png'; // Penamaan unik untuk foto absen pulang
-
-    // Simpan file ke storage
-    \Storage::disk('public')->put($imageName, base64_decode($image));
-
-    // Cari absen masuk yang ada pada hari yang sama
-    $today = Carbon::now()->format('Y-m-d');
-    $kehadiran = Kehadiran::where('user_id', $userId)
-                ->whereDate('check_in_time', $today) // Mengecek data berdasarkan absen masuk hari ini
-                ->first();
-
-    if ($kehadiran) {
-        // Update absen pulang pada baris yang sama
-        $kehadiran->update([
-            'check_out_photo' => $imageName,
-            'check_out_latitude' => $latitude,
-            'check_out_longitude' => $longitude,
-            'check_out_time' => Carbon::now(),
+    
+    {
+        // Validasi data yang diterima
+        $request->validate([
+            'photo-data' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
-        return redirect('/home')->with('success', 'Data absen pulang berhasil dikirim!');
-    } else {
-        // Jika tidak ada absen masuk, kembalikan pesan error
-        return redirect('/home')->with('error', 'Anda belum melakukan absen masuk hari ini.');
+        $userId = Auth::id(); // Mendapatkan ID pengguna yang sedang login
+
+        // Mendapatkan data dari request
+        $photoData = $request->input('photo-data');
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+
+        // Mengubah foto dari base64 menjadi file
+        $image = str_replace('data:image/png;base64,', '', $photoData);
+        $image = str_replace(' ', '+', $image);
+        $imageName = 'absen_out_' . $userId . '_' . now()->format('Ymd') . '.png'; // Penamaan unik untuk foto absen pulang
+
+        // Simpan file ke storage
+        \Storage::disk('public')->put('kehadiran/' . $imageName, base64_decode($image));
+
+        // Cari absen masuk yang ada pada hari yang sama
+        $today = Carbon::now()->format('Y-m-d');
+        $kehadiran = Kehadiran::where('user_id', $userId)
+                    ->whereDate('check_in_time', $today) // Mengecek data berdasarkan absen masuk hari ini
+                    ->first();
+
+        if ($kehadiran) {
+            // Update absen pulang pada baris yang sama
+            $kehadiran->update([
+                'check_out_photo' => $imageName,
+                'check_out_latitude' => $latitude,
+                'check_out_longitude' => $longitude,
+                'check_out_time' => Carbon::now(),
+            ]);
+
+            return redirect('/home')->with('success', 'Data absen pulang berhasil dikirim!');
+        } else {
+            // Jika tidak ada absen masuk, kembalikan pesan error
+            return redirect('/home')->with('error', 'Anda belum melakukan absen masuk hari ini.');
+        }
     }
-}
 
 
 }
