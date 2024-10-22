@@ -5,87 +5,37 @@
     <title>Notifikasi</title>
     <style>
         /* Custom CSS untuk notifikasi */
-        
-        .container {
-            max-width: 100%;
-            padding-left: 10px;
-            padding-right: 10px;
-            /* background-color: #f4f4f4; */
-        }
-        
-        .notif-container {
-            /* border: 2px solid #4CAF50; */
+
+        .terbaru-container {
+            width: 100%;
+            max-width: 450px;
+            margin: 15px auto; /* Center the container */
+            padding: 10px;
+            border: 2px solid #b9b9b9; /* Border color */
             border-radius: 10px;
-            padding: 15px; 
+            background-color: #fff; /* Background color */
+            /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); Optional: Add a subtle shadow */
+        }
+        .date {
+            font-weight: bold; /* Make the date stand out */
+            margin-bottom: 10px; /* Space between date and content */
+        }
+        .details {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            max-width: 500px;
-            margin: 15px auto;
-            background-color: #efffdb;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            justify-content: space-between; 
         }
 
-        .notif-left {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .notif-left .message-berhasil {
-            font-weight: bold;
-            font-size: 18px;
-            color: #4CAF50;
-        }
-
-        .notif-left .message-gagal {
-            font-weight: bold;
-            font-size: 18px;
-            color: rgb(204, 37, 37);
-        }
-
-        .notif-left .date {
-            font-size: 14px;
-            color: rgb(98, 98, 98);
-        }
-
-        .notif-right {
-            font-size: 14px;
-            color: #9e9e9e;
-            align-self: flex-end;
-        }
-        
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="notif-container">
-        <!-- Bagian kiri -->
-        <div class="notif-left">
-            <div class="message-berhasil">Berhasil Absen</div>
-            <div class="date">03 Oktober 2024</div>
-        </div>
-        
-        <!-- Bagian kanan bawah -->
-        <div class="notif-right">
-            Jam Absen: 09:45
+    @foreach($dataGabungan as $item)
+    <div class="terbaru-container">
+        <div class="date">{{ $item['type'] }}: {{ $item['message'] }}</div>
+        <div class="details">
+            <div>{{ $item['created_at']->translatedFormat('d F Y') }}</div>
+            <div>{{ $item['created_at']->translatedFormat('H:i') }}</div>
         </div>
     </div>
-</div>
-
-<div class="container">
-    <div class="notif-container">
-        <!-- Bagian kiri -->
-        <div class="notif-left">
-            <div class="message-gagal">Gagal Absen</div>
-            <div class="date">03 Oktober 2024</div>
-        </div>
-        
-        <!-- Bagian kanan bawah -->
-        <div class="notif-right">
-            Jam Absen: 09:45
-        </div>
-    </div>
-</div>
+@endforeach
 </body>
-</html>
+@endsection

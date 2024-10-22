@@ -112,9 +112,15 @@ class HomeController extends Controller
         ->whereYear('work_date', Carbon::now()->year)
         ->count();
 
+        // menampilkan data terbaru
+        $kehadiranTerbaru = Kehadiran::where('user_id', $userId)
+        ->orderBy('work_date', 'desc')
+        ->limit(5) // Menampilkan 5 data terbaru, bisa disesuaikan
+        ->get();
+
         return view('user.home.home', 
         compact('user', 'greeting', 'absenToday', 'absenpulangToday', 'jamKerjaFormatted', 'totalJamFormatted',
-        'hadirCount', 'izinCount', 'sakitCount', 'terlambatCount'));
+        'hadirCount', 'izinCount', 'sakitCount', 'terlambatCount', 'kehadiranTerbaru'));
     }
 
     public function absen_masuk() {
@@ -170,13 +176,11 @@ class HomeController extends Controller
 
         // Redirect atau return response
         return redirect('/home')->with('success', 'Data absen berhasil dikirim!');
-    
 
     }
 
     // Fungsi untuk menyimpan foto
-    private function savePhoto($photoData)
-    {
+    private function savePhoto($photoData){
         // Menghapus prefix data URL
         $photoData = str_replace('data:image/png;base64,', '', $photoData);
         $photoData = str_replace(' ', '+', $photoData);
@@ -212,9 +216,7 @@ class HomeController extends Controller
 
     }
 
-    public function absen_pulang_store(Request $request)
-    
-    {
+    public function absen_pulang_store(Request $request) {
         // Validasi data yang diterima
         $request->validate([
             'photo-data' => 'required|string',

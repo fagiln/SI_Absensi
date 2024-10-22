@@ -21,8 +21,18 @@ class CutiController extends Controller
                                     ->orderBy('created_at', 'desc') // Urutkan dari terbaru
                                     ->get();
 
-        // Kirim data ke view
-        return view('user.cuti', compact('pengajuanCuti'));
+        $pengajuanHariIni = Perizinan::where('user_id', auth()->id())
+                                    ->whereDate('created_at', Carbon::today())
+                                    ->first(); // Mengambil satu data terbaru jika ada
+                            
+        $AjukanUlang = false; // Default, boleh ajukan ulang
+                            
+        // Jika ada pengajuan hari ini dan statusnya bukan 'ditolak'
+        if ($pengajuanHariIni && $pengajuanHariIni->status != 'ditolak') {
+            $AjukanUlang = true; // Tidak boleh ajukan lagi jika status bukan 'ditolak'
+        } 
+                            
+        return view('user.cuti', compact('pengajuanCuti', 'AjukanUlang', 'pengajuanHariIni'));
     }
 
     public function create_cuti(Request $request){
@@ -69,7 +79,7 @@ class CutiController extends Controller
             $file = $request->file('file');
             // Tentukan path penyimpanan di public/storage/perizinan
         $destinationPath = public_path('storage/perizinan');
-        $createdAt =  now()->format('Ymd');
+        $createdAt =  now()->format('YmdHi');
         $filename = $userId . '_' . $createdAt . '.' . $file->getClientOriginalExtension();
         // Nama file dengan user ID dan timestamp
 

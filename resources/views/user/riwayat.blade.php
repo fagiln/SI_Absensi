@@ -18,14 +18,24 @@
         }
 
         /* Custom dropdown */
-        .custom-dropdown {
+        .custom-dropdown{
             margin-left: 10px;
             border: 2px solid crimson; /* Warna pinggir merah */
             background-color: white; /* Warna tengah putih */
             color: black; /* Warna teks hitam */
             padding: 8px;
-            border-radius: 10px;
+            border-radius: 5px;
             width: 100px;
+        }
+
+        .date-input {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 2px solid crimson; /* Sama dengan border pada dropdown */
+            border-radius: 5px;
+            background-color: white;
         }
 
         /* Data tabel css*/
@@ -69,11 +79,11 @@
           <div class="row">  
             <div class="col-md-4">
                 <label for="start_date">Start Date:</label>
-                <input type="date" name="start_date" id="start_date" value="{{ request()->start_date }}" required>
+                <input class="date-input" type="date" name="start_date" id="start_date" value="{{ request()->start_date ?? $startDate->toDateString() }}" required>
             </div>
             <div class="col-md-4 mt-2 mt-md-0">
                 <label for="end_date">End Date:</label>
-                <input type="date" name="end_date" id="end_date" value="{{ request()->end_date }}" required>
+                <input class="date-input" type="date" name="end_date" id="end_date" value="{{ request()->end_date ?? $endDate->toDateString() }}" required>
             </div>
           </div>
         <div style="margin-top: 20px"></div>
@@ -145,6 +155,10 @@
         const endDateInput = document.getElementById("end_date");
         const filterForm = document.getElementById("filterForm");
 
+        // Mendapatkan tanggal bulan ini
+        const currentMonthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
+        const currentMonthEnd = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0];
+
         // Event listener untuk end_date
         endDateInput.addEventListener("change", function() {
             if (endDateInput.value) {
@@ -153,8 +167,8 @@
 
                 // Jika end_date lebih kecil dari start_date, reset end_date
                 if (new Date(endDate) < new Date(startDate)) {
-                    endDateInput.value = ""; // Reset end_date
-                    alert("End date tidak dapat lebih kecil dari start date.");
+                    endDateInput.value = currentMonthEnd; // Reset ke akhir bulan ini
+                    alert("End date tidak dapat lebih kecil dari start date. Tanggal telah di-reset ke akhir bulan ini.");
                 } else {
                     // Reload halaman dengan query string yang diperbarui
                     const url = new URL(filterForm.action);
@@ -166,19 +180,33 @@
             }
         });
 
+        // Event listener untuk start_date
         startDateInput.addEventListener("change", function() {
             const startDate = new Date(startDateInput.value);
             endDateInput.min = startDateInput.value; // Set min date untuk end_date
 
+            // Jika start_date lebih besar dari end_date, reset start_date
+            if (endDateInput.value && new Date(startDate) > new Date(endDateInput.value)) {
+                startDateInput.value = currentMonthStart; // Reset ke awal bulan ini
+                endDateInput.value = currentMonthEnd;     // Reset end_date ke akhir bulan ini
+                alert("Start date tidak dapat lebih besar dari end date. Tanggal telah di-reset ke bulan ini.");
+            }
+
             // Reset end_date jika lebih kecil dari start_date
             if (endDateInput.value && new Date(endDateInput.value) < startDate) {
-                endDateInput.value = ""; // Reset end_date
-                alert("End date tidak dapat lebih kecil dari start date.");
+                endDateInput.value = currentMonthEnd; // Reset ke akhir bulan ini
+                alert("End date tidak dapat lebih kecil dari start date. Tanggal telah di-reset ke akhir bulan ini.");
             }
+
+            // Reload halaman dengan query string yang diperbarui
+            const url = new URL(filterForm.action);
+            url.searchParams.set("start_date", startDateInput.value || currentMonthStart);
+            url.searchParams.set("end_date", endDateInput.value || currentMonthEnd);
+            url.searchParams.set("filter", document.getElementById("filter").value); // Menyimpan filter
+            window.location.href = url;
         });
     });
 </script>
-
 
 </body>
 @endsection

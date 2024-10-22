@@ -313,30 +313,24 @@
         </div>        
 
         <h5>Terbaru</h5>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
+            @foreach($kehadiranTerbaru as $kehadiran)
+                <div class="terbaru-container">
+                    <div class="date">{{ \Carbon\Carbon::parse($kehadiran->work_date)->format('d F Y') }}</div>
+                    <div class="time">Masuk & Pulang</div>
+
+                    @if($kehadiran->check_in_time && $kehadiran->check_out_time)
+                        @php
+                            $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time);
+                            $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time);
+                            $totalJamKerja = $checkOut->diffInHours($checkIn);
+                        @endphp
+                        <div class="time">{{ $totalJamKerja }} Jam</div>
+                        <div class="time">{{ $checkIn->format('H:i') }} - {{ $checkOut->format('H:i') }}</div>
+                    @else
+                        <div class="time">Belum absen pulang</div>
+                    @endif
+                </div>
+            @endforeach
     </div>
 </body>
 @endsection
