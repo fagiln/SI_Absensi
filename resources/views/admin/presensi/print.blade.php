@@ -8,7 +8,7 @@
 
     <title>Laporan Presensi Karyawan</title>
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
     <style>
         @media print {
             .page-break {
