@@ -130,19 +130,38 @@
                             'storage/perizinan/' .
                             $item->user_id .
                             '_' .
-                            \Carbon\Carbon::parse($item->created_at)->format('Ymd') .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
                             '.png';
-                        $pdfPath =   'storage/perizinan/' .
+                        $jpgPath =
+                            'storage/perizinan/' .
                             $item->user_id .
                             '_' .
-                            \Carbon\Carbon::parse($item->created_at)->format('Ymd') .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
+                            '.jpg';
+                        $jpegPath =
+                            'storage/perizinan/' .
+                            $item->user_id .
+                            '_' .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
+                            '.jpeg';
+                        $pdfPath =
+                            'storage/perizinan/' .
+                            $item->user_id .
+                            '_' .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
                             '.pdf';
                         $hasPng = file_exists(public_path($pngPath));
+                        $hasJpg = file_exists(public_path($jpgPath));
+                        $hasJpeg = file_exists(public_path($jpegPath));
                         $hasPdf = file_exists(public_path($pdfPath));
                     @endphp
 
                     @if ($hasPng)
                         <img id="buktiImage" src="{{ asset($pngPath) }}" alt="Bukti Izin" class="img-fluid">
+                    @elseif($hasJpg)
+                        <img id="buktiImage" src="{{ asset($jpgPath) }}" alt="Bukti Izin" class="img-fluid">
+                    @elseif($hasJpeg)
+                        <img id="buktiImage" src="{{ asset($jpegPath) }}" alt="Bukti Izin" class="img-fluid">
                     @elseif ($hasPdf)
                         <iframe id="buktiPdf" style="width:100%; height:400px;"
                             src="{{ asset($pdfPath) }}"></iframe>
