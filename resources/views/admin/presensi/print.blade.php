@@ -76,7 +76,6 @@
                 <tr>
                     <th>No</th>
                     <th>Tanggal Kerja</th>
-                    <th>NIK</th>
                     <th>Jam Datang</th>
                     <th>Foto Datang</th>
                     <th>Jam Pulang</th>
@@ -105,7 +104,6 @@
                     <tr>
                         <td>{{ $no++ }}</td>
                         <td>{{ $item->work_date }}</td>
-                        <td>{{ $item->user->nik }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->check_in_time)->translatedFormat('H:i') }}</td>
                         <td><img src="{{ asset('storage/kehadiran/' . $item->check_in_photo) }}" alt="Foto Datang"
                                 width="50"></td>
