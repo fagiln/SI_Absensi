@@ -18,93 +18,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class RiwayatController extends Controller
 {
-    // public function show(Request $request)
-    // {
-    //     // Ambil data kehadiran dan perizinan berdasarkan user yang login
-    //     $kehadiranQuery = Kehadiran::where('user_id', Auth::id());
-    //     $perizinanQuery = Perizinan::where('user_id', Auth::id());
-
-    //     // Tambahkan filter berdasarkan tanggal jika ada
-    //     if ($request->has('start_date') && $request->has('end_date')) {
-    //         $startDate = Carbon::parse($request->start_date)->startOfDay();
-    //         $endDate = Carbon::parse($request->end_date)->endOfDay();
-
-    //         // Filter kehadiran berdasarkan check_in_time
-    //         $kehadiranQuery->whereBetween('check_in_time', [$startDate, $endDate]);
-
-    //         // Filter perizinan berdasarkan rentang tanggal (start_date dan end_date)
-    //         $perizinanQuery->where(function ($query) use ($startDate, $endDate) {
-    //             $query->whereBetween('start_date', [$startDate, $endDate])
-    //                 ->orWhereBetween('end_date', [$startDate, $endDate]);
-    //         });
-    //     }
-
-    //     // Filter jika ada
-    //     if ($request->has('filter') && $request->filter != 'semua') {
-    //         $filter = $request->filter;
-
-    //         // Filter data kehadiran berdasarkan status
-    //         if (in_array($filter, ['hadir', 'telat'])) {
-    //             $kehadiranQuery->where('status', $filter);
-    //         }
-
-    //         // Filter data perizinan berdasarkan reason
-    //         if (in_array($filter, ['sakit', 'izin'])) {
-    //             $perizinanQuery->where('reason', $filter);
-    //         }
-    //     }
-
-    //     // Ambil data kehadiran dan perizinan yang difilter
-    //     $kehadiran = $kehadiranQuery->get();
-    //     $perizinan = $perizinanQuery->get();
-
-    //     // Gabungkan data kehadiran dan perizinan
-    //     $riwayat = [];
-        
-    //     // Proses data kehadiran
-    //     foreach ($kehadiran as $kehadirans) {
-    //         $checkInTime = Carbon::parse($kehadirans->check_in_time);
-    //         $checkOutTime = $kehadirans->check_out_time ? Carbon::parse($kehadirans->check_out_time) : null;
-    //         $totalHours = $checkOutTime ? $checkOutTime->diffInHours($checkInTime) : '-';
-
-    //         $riwayat[] = [
-    //             'tanggal' => $checkInTime->format('d-m-Y'),
-    //             'masuk' => $checkInTime->format('H:i'),
-    //             'pulang' => $checkOutTime ? $checkOutTime->format('H:i') : '-',
-    //             'jam_kerja' => $totalHours,
-    //             'status' => ucfirst($kehadirans->status),
-    //             'type' => 'kehadiran',
-    //         ];
-    //     }
-
-    //     // Proses data perizinan
-    //     foreach ($perizinan as $izin) {
-    //         $startDate = Carbon::parse($izin->start_date);
-    //         $endDate = Carbon::parse($izin->end_date);
-
-    //         $tanggalPerizinan = $startDate->format('d-m-Y') . ' s/d ' . $endDate->format('d-m-Y');
-
-    //         $riwayat[] = [
-    //             'tanggal' => $tanggalPerizinan,
-    //             'masuk' => '-',
-    //             'pulang' => '-',
-    //             'jam_kerja' => '-',
-    //             'status' => ucfirst($izin->reason),
-    //             'type' => 'perizinan',
-    //         ];
-    //     }
-
-    //     // Sortir data berdasarkan tanggal terbaru
-    //     usort($riwayat, function ($a, $b) {
-    //         return strtotime(explode(' s/d ', $b['tanggal'])[0]) - strtotime(explode(' s/d ', $a['tanggal'])[0]);
-    //     });
-
-    //     // Ambil hanya 8 entri terbaru
-    //     $riwayatTerbaru = array_slice($riwayat, 0, 8);
-
-    //     return view('user.riwayat', compact('riwayatTerbaru'));
-    // }
-
     public function show(Request $request)
     {
         // Inisialisasi query kehadiran dan perizinan
@@ -170,6 +83,9 @@ class RiwayatController extends Controller
             ];
         }
 
+        $startDate = Carbon::now()->startOfMonth(); // Awal bulan ini
+        $endDate = Carbon::now()->endOfMonth();     // Akhir bulan ini
+
         // Sortir data berdasarkan tanggal terbaru
         usort($riwayat, function ($a, $b) {
             return strtotime(explode(' s/d ', $b['tanggal'])[0]) - strtotime(explode(' s/d ', $a['tanggal'])[0]);
@@ -184,7 +100,7 @@ class RiwayatController extends Controller
             'query' => $request->query(),
         ]);
 
-        return view('user.riwayat', compact('riwayatPaginated'));
+        return view('user.riwayat', compact('riwayatPaginated', 'startDate', 'endDate'));
     }
 
     protected function filterTanggal(Request $request, $kehadiranQuery, $perizinanQuery)
