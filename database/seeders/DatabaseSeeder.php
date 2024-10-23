@@ -57,7 +57,20 @@ class DatabaseSeeder extends Seeder
         //     'department_id' => $faker->randomElement([1, 2]),
         //     'password' => Hash::make('user123')
 
-        // ]);
+        // ]);  
+        $faker = Faker::create();
+        User::create([
+            'nik' => $faker->unique()->numerify('######'),
+            'name' => $faker->name,
+            'username' => 'user3',
+            'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
+            'email' => $faker->unique()->safeEmail,
+            'no_hp' => $faker->phoneNumber,
+            'role' => 'user',
+            'department_id' => $faker->randomElement([1, 2]),
+            'password' => Hash::make('user123')
+
+        ]);
     }
 
     // faker data 
@@ -80,6 +93,8 @@ class DatabaseSeeder extends Seeder
     // }
 
 
+    //     User::factory()->count(50)->create();
+    // }
     //     User::factory()->count(50)->create();
     // }
 

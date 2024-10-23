@@ -38,6 +38,7 @@
         }
 
         /* absen */
+        /* absen */
         .button-container {
             margin-top: 30px;
             display: flex;
@@ -108,8 +109,8 @@
         @media (max-width: 344px) {
             /* .button-container {
                 flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
-                /* align-items: center; */
-            /* } */
+                align-items: center;
+            } */
 
             .button-container .btn {
                 font-size: 14px; /* Perkecil ukuran font untuk handphone */
@@ -174,14 +175,46 @@
             margin: 20px;
         }
 
+
         .attendance-item {
             text-align: center;
             width: 120px;
         }
 
+
         .attendance-item img {
             width: 50px;
             height: 50px;
+        }
+
+        /* Media query untuk tablet atau layar yang lebih kecil (di bawah 1024px) */
+        @media (max-width: 768px) {
+            .attendance-item {
+                width: 100px; /* perkecil width untuk layar lebih kecil */
+            }
+            
+            .attendance-item img {
+                width: 38px; /* perkecil gambar */
+                height: 38px;
+            }
+        }
+
+        /* Media query untuk handphone (di bawah 768px) */
+        @media (max-width: 360px) {
+            .attendance-box {
+                flex-direction: row; /* ubah arah tampilan dari horizontal ke vertikal */
+                align-items: center; /* pusatkan item */
+            }
+
+            .attendance-item {
+                width: 70px; /* lebih kecil lagi untuk hp */
+                margin-bottom: 10px; /* beri jarak antar item */
+            }
+            
+            .attendance-item img {
+                width: 27px; /* perkecil gambar lebih jauh */
+                height: 27px;
+            }
         }
 
         /* Media query untuk tablet atau layar yang lebih kecil (di bawah 1024px) */
@@ -301,6 +334,9 @@
             </button>
 
         </div>        
+            </button>
+
+        </div>        
     {{-- {{ dd(session()->all()) }} --}}
     
 
@@ -358,6 +394,7 @@
         
         <br>
         <h5>Rekap Presensi</h5>
+        <div style="margin-top: 20px"></div>
         <div style="margin-top: 20px"></div>
         <div class="attendance-box">
             <div class="attendance-item">
