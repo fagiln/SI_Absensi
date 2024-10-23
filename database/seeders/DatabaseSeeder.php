@@ -49,9 +49,10 @@ class DatabaseSeeder extends Seeder
         User::create([
             'nik' => $faker->unique()->numerify('######'),
             'name' => $faker->name,
-            'username' => 'user1',
+            'username' => 'user3',
             'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
             'email' => $faker->unique()->safeEmail,
+            'no_hp' => $faker->phoneNumber,
             'role' => 'user',
             'department_id' => $faker->randomElement([1, 2]),
             'password' => Hash::make('user123')

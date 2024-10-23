@@ -43,7 +43,8 @@
 
     <div style="text-align: right;">
         <i class="fas fa-sign-out-alt" style="color: crimson;"></i>
-        <a style="color: crimson; text-decoration: none" href="{{ route('logout') }}">Logout</a>
+        <a style="color: crimson; text-decoration: none" href="{{ route('logout') }}"
+        onclick="return confirm('Anda yakin ingin Logout?')">Logout</a>
     </div>
 
 <div style="margin-top: 20px"></div>
