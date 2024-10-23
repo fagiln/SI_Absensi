@@ -50,8 +50,10 @@ class DatabaseSeeder extends Seeder
             'nik' => $faker->unique()->numerify('######'),
             'name' => $faker->name,
             'username' => 'user3',
+            'username' => 'user3',
             'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
             'email' => $faker->unique()->safeEmail,
+            'no_hp' => $faker->phoneNumber,
             'no_hp' => $faker->phoneNumber,
             'role' => 'user',
             'department_id' => $faker->randomElement([1, 2]),
@@ -80,6 +82,7 @@ class DatabaseSeeder extends Seeder
     // }
 
 
-    
+    //     User::factory()->count(50)->create();
+    // }
 
 }

@@ -338,7 +338,7 @@
                 </div>                                
 
                 <div style="margin-top: 20px;"></div>
-                <div class="inline" style="text-align: right;">
+                <div class="inline" style="text-align: right; width:100%;">
                     {{-- <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button> --}}
 
                     <button type="submit" class="btn button-submit"
