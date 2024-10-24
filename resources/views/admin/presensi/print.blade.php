@@ -105,13 +105,25 @@
                         <td>{{ $no++ }}</td>
                         <td>{{ $item->work_date }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->check_in_time)->translatedFormat('H:i') }}</td>
-                        <td><img src="{{ asset('storage/kehadiran/' . $item->check_in_photo) }}" alt="Foto Datang"
-                                width="50"></td>
+                        <td>
+                            @if ($item->check_in_photo == null)
+                                <p>belum foto</p>
+                            @else
+                                <img src="{{ asset('storage/kehadiran/' . $item->check_in_photo) }}" alt="Foto Datang"
+                                    width="50">
+                            @endif
+                        </td>
                         <td>{{ \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') }}</td>
-                        <td><img src="{{ asset('storage/kehadiran/' . $item->check_out_photo) }}" alt="Foto Pulang"
-                                width="50"></td>
+                        <td>
+                            @if ($item->check_out_photo == null)
+                                <p>belum foto</p>
+                            @else
+                                <img src="{{ asset('storage/kehadiran/' . $item->check_out_photo) }}" alt="Foto Pulang"
+                                    width="50">
+                            @endif
+                        </td>
                         <td>{{ $item->status }}</td>
-                        <td>{{ $hours }} Jam {{$minutes}} Menit</td>
+                        <td>{{ $hours }} Jam {{ $minutes }} Menit</td>
                     </tr>
                 @endforeach
             </tbody>
