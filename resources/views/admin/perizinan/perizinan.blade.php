@@ -166,7 +166,7 @@
                         <iframe id="buktiPdf" style="width:100%; height:400px;"
                             src="{{ asset($pdfPath) }}"></iframe>
                     @else
-                        <p>Tidak ada bukti atau Format tidak didukung</p>
+                        <p>Tidak ada bukti</p>
                     @endif
                 </div>
             </div>
