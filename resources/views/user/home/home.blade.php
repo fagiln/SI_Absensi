@@ -108,8 +108,8 @@
         @media (max-width: 344px) {
             /* .button-container {
                 flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
-                align-items: center;
-            } */
+                /* align-items: center; */
+            /* } */
 
             .button-container .btn {
                 font-size: 14px; /* Perkecil ukuran font untuk handphone */
@@ -311,7 +311,7 @@
                     <div class="modal-content" style="width: 60%">
                         <div class="modal-body text-center">
                             <!-- Gambar emoji absen berhasil -->
-                            <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Absen Berhasil" width="150" height="100"> 
+                            <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Belum Absen" width="150" height="100"> 
 
                             <!-- Judul modal -->
                             <h4 class="mt-3">Oops!</h4>
