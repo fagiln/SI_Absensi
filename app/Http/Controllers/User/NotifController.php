@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 class NotifController extends Controller
 {
     public function show(){
-        // return view('user.notif', compact());
 
         $user = Auth::user();
         $userId = auth()->id();
@@ -54,4 +53,4 @@ class NotifController extends Controller
 
         return view('user.notif', compact('dataGabungan'));
     }
-    }
+}
