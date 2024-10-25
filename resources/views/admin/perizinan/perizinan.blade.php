@@ -74,34 +74,72 @@
                         <div class="form-group">
                             <label>Status Persetujuan:</label>
                             <div>
-                                <label for="pending">
-                                    <input type="radio" id="pending" name="status" value="pending"
-                                        {{ $item->status == 'pending' ? 'checked' : '' }}>
+                                <label for="pending_{{ $item->id }}">
+                                    <input type="radio" id="pending_{{ $item->id }}" name="status"
+                                        value="pending" {{ $item->status == 'pending' ? 'checked' : '' }}
+                                        onclick="toggleReason({{ $item->id }})">
                                     Pending
                                 </label>
                             </div>
                             <div>
-                                <label for="diterima">
-                                    <input type="radio" id="diterima" name="status" value="diterima"
-                                        {{ $item->status == 'diterima' ? 'checked' : '' }}>
+                                <label for="diterima_{{ $item->id }}">
+                                    <input type="radio" id="diterima_{{ $item->id }}" name="status"
+                                        value="diterima" {{ $item->status == 'diterima' ? 'checked' : '' }}
+                                        onclick="toggleReason({{ $item->id }})">
                                     Diterima
                                 </label>
                             </div>
                             <div>
-                                <label for="ditolak">
-                                    <input type="radio" id="ditolak" name="status" value="ditolak"
-                                        {{ $item->status == 'ditolak' ? 'checked' : '' }}>
+                                <label for="ditolak_{{ $item->id }}">
+                                    <input type="radio" id="ditolak_{{ $item->id }}" name="status"
+                                        value="ditolak" {{ $item->status == 'ditolak' ? 'checked' : '' }}
+                                        onclick="toggleReason({{ $item->id }})">
                                     Ditolak
                                 </label>
                             </div>
                         </div>
-
-
+                        <div class="form-group" id="reason-container-{{ $item->id }}" style="display: none">
+                            <label for="reason_{{ $item->id }}">Alasan ditolak</label>
+                            <input type="text" id="reason_{{ $item->id }}" name="reason" class="form-control">
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-custom">Simpan</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="modalView_{{ $item->id }}" tabindex="-1" role="dialog">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bukti Izin {{ $item->id }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @php
+                        // Cek apakah file PNG atau PDF ada
+                        $pngPath = 'perizinan/img_' . $item->reason . '_' . $item->id . '.png';
+                        $pdfPath = 'perizinan/pdf_' . $item->reason . '_' . $item->id . '.pdf';
+                        $hasPng = file_exists(public_path($pngPath));
+                        $hasPdf = file_exists(public_path($pdfPath));
+                    @endphp
+
+                    @if ($hasPng)
+                        <img id="buktiImage" src="{{ asset($pngPath) }}" alt="Bukti Izin" class="img-fluid">
+                    @elseif ($hasPdf)
+                        <iframe id="buktiPdf" style="width:100%; height:400px;"
+                            src="{{ asset($pdfPath) }}"></iframe>
+                    @else
+                        <p>Tidak ada bukti atau Format tidak didukung</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -156,6 +194,51 @@
                 0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
             filterDateInput.value = today;
         });
+
+
+        function toggleReason(id) {
+            const reasonContainer = document.getElementById(`reason-container-${id}`);
+            const isRejected = document.getElementById(`ditolak_${id}`).checked;
+            reasonContainer.style.display = isRejected ? 'block' : 'none';
+        }
+
+        // Pastikan form menampilkan alasan jika status awalnya "ditolak"
+        document.addEventListener('DOMContentLoaded', function() {
+            @foreach ($perizinan as $item)
+                toggleReason({{ $item->id }});
+            @endforeach
+        });
+
+        $(document).on('click', 'a[data-toggle="modal"]', function() {
+            var perizinanId = $(this).data('id'); // Ambil ID dari tombol edit
+            var url = '/admin/perizinan/edit/' + perizinanId; // URL untuk ambil data
+            // var updateUrl = '/admin/karyawan/' + userId;
+            // Request AJAX untuk mendapatkan data karyawan berdasarkan ID
+            console.log(perizinanId);
+            $.get(url, function(data) {
+                // Isi field modal dengan data yang didapat dari server
+                $('#reason_' + perizinanId).val(data.keterangan_ditolak);
+
+
+                // $('#formEditKaryawan').attr('action', updateUrl);
+            });
+        });
+        // $(document).on('click', '#btn_view_modal', function() {
+        //     const fileUrl = 'public/perizinan/pdf_izin_3.pdf';
+        //     const fileType = 'pdf';
+        //     var perizinanId = $(this).data('id');
+
+        //     if (fileType === 'pdf') {
+        //         $('#buktiImage').addClass('d-none');
+        //         $('#buktiPdf').removeClass('d-none').attr('src', fileUrl);
+        //     } else {
+        //         $('#buktiPdf').addClass('d-none');
+        //         $('#buktiImage').removeClass('d-none').attr('src', fileUrl);
+        //     }
+
+        //     $('#modalView_' + perizinanId).modal('show');
+
+        // });
     </script>
 @endpush
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Kehadiran;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PresensiController extends Controller
@@ -23,7 +24,7 @@ class PresensiController extends Controller
         $userId = $request->input('user_id');
         $month = $request->input('month');
         $year = $request->input('year');
-   
+
         // Ambil data presensi berdasarkan user_id dan bulan serta tahun
         $presensi = Kehadiran::where('user_id', $userId)
             ->whereMonth('work_date', $month)
@@ -37,7 +38,7 @@ class PresensiController extends Controller
         $filename = $karyawan ? "{$karyawan->name}_{$month}-{$year}_laporan_presensi.xlsx" : 'laporan_presensi.xlsx';
 
         // Ekspor ke Excel dengan data yang sesuai
-        return Excel::download(new PresensiExport($presensi), $filename);
+        return Excel::download(new PresensiExport($presensi, $karyawan, $month, $year), $filename);
     }
 
 
@@ -57,5 +58,17 @@ class PresensiController extends Controller
 
         // Kirim data ke view print.blade.php
         return view('admin.presensi.print', compact('presensi', 'karyawan', 'month', 'year'));
+    }
+
+    public function search(Request $request)
+    {
+        $searchTerm = $request->get('q');
+
+        // Mengambil karyawan berdasarkan pencarian
+        $karyawan = User::where('name', 'LIKE', '%' . $searchTerm . '%')
+            ->select('id', 'name') // Ambil hanya kolom yang diperlukan
+            ->get();
+        Log::info('Data karyawan:', $karyawan->toArray());
+        return response()->json(['items' => $karyawan]);
     }
 }

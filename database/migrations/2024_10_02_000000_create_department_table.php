@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('department', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_departemen', 10)->default('DEFAULT_CODE')->unique();
+            $table->string('kode_departemen', 10)->unique();
             $table->string('nama_departemen', 50);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();

@@ -1,6 +1,7 @@
 @extends('admin.template.app')
 @section('title', 'Presensi Karyawan')
 @section('content')
+
     <div class="container">
 
         <form action="{{ route('admin.presensi.export') }}" method="GET">
@@ -24,7 +25,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="user_id" class="mt-3 mt-md-0">Nama Karyawan:</label>
-                    <select name="user_id" id="user_id" class="form-control">
+                    <select name="user_id" id="user_id" class="form-control select2" style="padding-bottom: 3px; width: 100%">
                         <option value="">Pilih Karyawan</option>
                         @foreach ($karyawan as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -34,8 +35,9 @@
             </div>
 
             <div class="mt-3 d-flex justify-content-between justify-content-md-start  ">
-                <button type="submit" id="exportButton" class="btn btn-success mr-md-3"><i class="fas fa-download"></i> Cetak ke Excel</button>
-                <a href="#" id="printButton" class="btn btn-secondary"><i class="fas fa-print"></i>           Print Laporan</a>
+                <button type="submit" id="exportButton" class="btn btn-success mr-md-3"><i class="fas fa-download"></i>
+                    Cetak ke Excel</button>
+                <a href="#" id="printButton" class="btn btn-secondary"><i class="fas fa-print"></i> Print Laporan</a>
             </div>
         </form>
 
@@ -72,6 +74,49 @@
                     // Jika sudah dipilih, submit form untuk export
                     document.getElementById('exportForm').submit();
                 }
+            });
+            $(document).ready(function() {
+                $('#user_id').select2({
+                
+                    placeholder: 'Cari Karyawan',
+                    allowClear: true,
+                    ajax: {
+                        url: '/admin/presensi/search', // URL untuk mendapatkan data karyawan
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                q: params.term // Term pencarian
+                            };
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: data.items.map(function(item) {
+                                    return {
+                                        id: item.id,
+                                        text: item.name // Menampilkan nama karyawan di dropdown
+                                    };
+                                })
+                            };
+                        },
+                        cache: true
+                    },
+                    minimumInputLength: 1 // Minimal karakter sebelum memulai pencarian
+                });
+            });
+            $(document).ready(function() {
+                $('#user_id').select2({
+                    placeholder: 'Cari Karyawan',
+                    allowClear: true,
+                    data: [
+                        @foreach ($karyawan as $item)
+                            {
+                                id: '{{ $item->id }}',
+                                text: '{{ $item->name }}'
+                            },
+                        @endforeach
+                    ]
+                });
             });
         </script>
     @endpush

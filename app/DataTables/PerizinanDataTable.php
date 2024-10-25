@@ -22,10 +22,16 @@ class PerizinanDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        Carbon::setLocale('id');
+
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->addColumn('action', function (Perizinan $perizinan) {
                 return view('admin.perizinan.action', ['perizinan' => $perizinan]);
+            })->addColumn('bukti_path', function (Perizinan $perizinan) {
+          
+                    return view('admin.perizinan.view_bukti', ['perizinan' => $perizinan]);
+    
             })
             ->editColumn('status', function (Perizinan $perizinan) {
                 if ($perizinan->status == 'diterima') {
@@ -39,7 +45,7 @@ class PerizinanDataTable extends DataTable
                 $query->whereRaw('LOWER(users.nik) LIKE ?', ["%{$keyword}%"]);
             })
             ->editColumn('created_at', function (Perizinan $perizinan) {
-                return Carbon::parse($perizinan->created_at)->format('d F Y');
+                return Carbon::parse($perizinan->created_at)->translatedFormat('d F Y');
             })
             ->filterColumn('user_name', function ($query, $keyword) {
                 $query->whereRaw('LOWER(users.name) LIKE ?', ["%{$keyword}%"]);
@@ -94,7 +100,7 @@ class PerizinanDataTable extends DataTable
             ])
 
             //->dom('Bfrtip')
-            ->orderBy([10, 'dsc'])
+            ->orderBy([11, 'dsc'])
             ->selectStyleSingle()
             ->buttons([]);
     }
@@ -121,6 +127,7 @@ class PerizinanDataTable extends DataTable
             Column::make('keterangan'),
             Column::make('bukti_path')->title('Bukti'),
             Column::make('status'),
+            Column::make('keterangan_ditolak'),
             Column::make('created_at')->title('Dibuat pada'),
 
             Column::computed('action')

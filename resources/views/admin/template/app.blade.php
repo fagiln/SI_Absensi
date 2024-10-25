@@ -31,7 +31,8 @@
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}">
     <link rel="stylesheet" href="{{ asset('leaflet/leaflet.css') }}">
-    <link rel="shortcut icon" href="{{asset('img/logo.png')}}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ asset('select2/select2.css') }}">
+    <link rel="shortcut icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
     @stack('style')
     <style>
         body {
@@ -68,25 +69,25 @@
 
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
-                <!-- Navbar Search -->
-
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('seller/user-list/' . Auth::user()->id . '/edit') }}">
-                        Welcome, Admin {{ Auth::user()->username }} !
-                        {{-- <img src="{{ asset('uploads/' . Auth::user()->avatar) }}" alt=""
-                            class="ml-2 rounded-circle"
-                            style="width: 30px; height: 30px; object-fit: cover; margin-right: 10px;"> --}}
+                    <a class="nav-link" href="#" id="dark-mode-toggle">
+                        <i class="fas fa-moon" id="theme-icon"></i>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        Welcome, Admin {{ Auth::user()->username }}!
+                    </a>
+                </li>
             </ul>
+
         </nav>
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="seller/dashboard" class="brand-link">
+            <a href="{{ route('admin.dashboard') }}" class="brand-link ">
                 <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image" />
                 <span class="brand-text font-weight-bold">ADMIN</span>
             </a>
@@ -134,7 +135,7 @@
                             </a>
                         </li>
                         <li class="nav-item rounded">
-                            <a href="{{route('admin.perizinan.index')}}" class="nav-link">
+                            <a href="{{ route('admin.perizinan.index') }}" class="nav-link">
                                 <i class="fas fa-notes-medical nav-icon"></i>
                                 <p>Perizinan Karyawan</p>
                             </a>
@@ -149,13 +150,13 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route('admin.presensi.index')}}" class="nav-link">
+                                    <a href="{{ route('admin.presensi.index') }}" class="nav-link">
                                         <i class="nav-icon fas fa-user-plus"></i>
                                         <p>Presensi</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route('admin.rekap-presensi.index')}}" class="nav-link">
+                                    <a href="{{ route('admin.rekap-presensi.index') }}" class="nav-link">
                                         <i class="nav-icon fas fa-users"></i>
                                         <p>Rekap Presensi</p>
                                     </a>
@@ -242,6 +243,7 @@
     <script src="{{ asset('adminlte/dist/js/pages/dashboard.js') }}"></script>
     <script src="{{ asset('datatables/datatables.bundle.js') }}"></script>
     <script src="{{ asset('datatables/bootstrap.datatables.js') }}"></script>
+    <script src="{{ asset('select2/select2.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
@@ -259,6 +261,42 @@
                         parentMenu.classList.add('menu-open');
                     }
                 }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const body = document.body;
+
+            // Fungsi untuk mengganti ikon berdasarkan tema
+            function updateThemeIcon() {
+                if (body.classList.contains('dark-mode')) {
+                    themeIcon.classList.replace('fa-moon', 'fa-sun'); // Ganti ke ikon matahari
+                } else {
+                    themeIcon.classList.replace('fa-sun', 'fa-moon'); // Ganti ke ikon bulan
+                }
+            }
+
+            // Cek jika pengguna sudah memilih preferensi dark mode sebelumnya
+            if (localStorage.getItem('dark-mode') === 'enabled') {
+                body.classList.add('dark-mode');
+            }
+
+            // Update ikon saat pertama kali halaman dimuat
+            updateThemeIcon();
+
+            darkModeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-mode');
+
+                // Simpan preferensi pengguna di localStorage
+                if (body.classList.contains('dark-mode')) {
+                    localStorage.setItem('dark-mode', 'enabled');
+                } else {
+                    localStorage.setItem('dark-mode', 'disabled');
+                }
+
+                // Perbarui ikon setelah tema berubah
+                updateThemeIcon();
             });
         });
     </script>
