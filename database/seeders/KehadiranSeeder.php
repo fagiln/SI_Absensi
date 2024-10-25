@@ -71,6 +71,8 @@ class KehadiranSeeder extends Seeder
 
     // Buat data kehadiran untuk User 2
     $attendanceCount = 0; // Counter for attendance records
+    // Buat data kehadiran untuk User 2
+    $attendanceCount = 0; // Counter for attendance records
 
     while ($startDate <= $endDate && $attendanceCount < 10) {
         // Buat data kehadiran hanya jika kita belum mencapai 10 catatan

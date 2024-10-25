@@ -8,7 +8,7 @@
 
     <title>Laporan Presensi Karyawan</title>
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
     <style>
         @media print {
             .page-break {
@@ -76,7 +76,6 @@
                 <tr>
                     <th>No</th>
                     <th>Tanggal Kerja</th>
-                    <th>NIK</th>
                     <th>Jam Datang</th>
                     <th>Foto Datang</th>
                     <th>Jam Pulang</th>
@@ -93,19 +92,38 @@
                     @php
                         $checkInTime = \Carbon\Carbon::parse($item->check_in_time);
                         $checkOutTime = \Carbon\Carbon::parse($item->check_out_time);
-                        $workDuration = $checkOutTime->diffInHours($checkInTime);
+
+                        // Menghitung durasi kerja dalam menit
+                        $workDurationInMinutes = $checkOutTime->diffInMinutes($checkInTime);
+
+                        // Mengonversi menit menjadi jam dan menit
+                        $hours = floor($workDurationInMinutes / 60);
+                        $minutes = $workDurationInMinutes % 60;
 
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
                         <td>{{ $item->work_date }}</td>
-                        <td>{{ $item->user->nik }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->check_in_time)->translatedFormat('H:i') }}</td>
-                        <td><img src="{{ asset($item->check_in_photo) }}" alt="Foto Datang" width="50"></td>
+                        <td>
+                            @if ($item->check_in_photo == null)
+                                <p>belum foto</p>
+                            @else
+                                <img src="{{ asset('storage/kehadiran/' . $item->check_in_photo) }}" alt="Foto Datang"
+                                    width="50">
+                            @endif
+                        </td>
                         <td>{{ \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') }}</td>
-                        <td><img src="{{ asset($item->check_out_photo) }}" alt="Foto Pulang" width="50"></td>
+                        <td>
+                            @if ($item->check_out_photo == null)
+                                <p>belum foto</p>
+                            @else
+                                <img src="{{ asset('storage/kehadiran/' . $item->check_out_photo) }}" alt="Foto Pulang"
+                                    width="50">
+                            @endif
+                        </td>
                         <td>{{ $item->status }}</td>
-                        <td>{{ $workDuration }} Jam</td>
+                        <td>{{ $hours }} Jam {{ $minutes }} Menit</td>
                     </tr>
                 @endforeach
             </tbody>

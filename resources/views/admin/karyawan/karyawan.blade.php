@@ -37,7 +37,7 @@
                             @enderror
                         </div>
                         <div class="mt-3 d-flex flex-column">
-                            <label for="nik">Username</label>
+                            <label for="username">Username</label>
                             <input class=" form-control" type="text" id="username" name="username"
                                 placeholder="Masukkan Username" value="{{ old('username') }}">
                             @error('username')
@@ -45,7 +45,7 @@
                             @enderror
                         </div>
                         <div class="mt-3 d-flex flex-column">
-                            <label for="nik">Departemen</label>
+                            <label for="departement_id">Departemen</label>
                             <select class=" form-control" name="department_id" id="department_id"
                                 placeholder="Masukkan Departemen">
                                 <option value="">Pilih Departemen</option>
@@ -58,7 +58,15 @@
                             @enderror
                         </div>
                         <div class="mt-3 d-flex flex-column">
-                            <label for="nik">Password</label>
+                            <label for="jabatan">Jabatan</label>
+                            <input class=" form-control" type="text" id="jabatan" name="jabatan"
+                                placeholder="Masukkan Jabatan" value="{{ old('jabatam') }}">
+                            @error('jabatan')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mt-3 d-flex flex-column">
+                            <label for="password">Password</label>
                             <input class=" form-control" type="password" id="password" name="password"
                                 placeholder="Masukkan Password">
                             @error('password')

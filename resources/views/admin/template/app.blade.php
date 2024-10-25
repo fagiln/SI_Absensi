@@ -203,7 +203,7 @@
         <footer class="main-footer">
             <span class="text d-none d-sm-inline-block"><strong>This </strong>was made by &#10084; </span>
             <div class="float-right d-none d-sm-inline-block">
-                <b>Beta Version</b> 1.0.0
+                <b>Sistem Informasi Absensi PT. Multi Power Abadi</b> 
             </div>
         </footer>
     </div>

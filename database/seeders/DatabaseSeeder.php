@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
             'email' => $faker->unique()->safeEmail,
             'no_hp' => $faker->phoneNumber,
+            'no_hp' => $faker->phoneNumber,
             'role' => 'user',
             'department_id' => $faker->randomElement([1, 2]),
             'password' => Hash::make('user123')

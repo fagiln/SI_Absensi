@@ -95,7 +95,7 @@ class PerizinanDataTable extends DataTable
                 'responsive' => true,
                 'autoWidth' => false,
                 'language' => [
-                    'emptyTable' => 'Belum ada yang membuat perizinan hari ini'
+                    'emptyTable' => 'Tidak ada data perizinan'
                 ],  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
 

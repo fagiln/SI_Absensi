@@ -3,6 +3,7 @@
 @section('title', 'Monitoring')
 
 <form action="" method="" class="mb-3">
+    @csrf
     <div class="row">
         <div class="col">
 
@@ -108,7 +109,7 @@
             const modalId = $(this).attr('id'); // Ambil ID modal yang sedang dibuka
 
             // Inisialisasi peta
-            const map = L.map(`mapIn${button.data('id')}`).setView([latitude, longitude], 15);
+            const map = L.map(`mapIn${button.data('id')}`).setView([latitude, longitude], 19);
 
             // Tambahkan layer OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -128,7 +129,7 @@
             const modalId = $(this).attr('id'); // Ambil ID modal yang sedang dibuka
 
             // Inisialisasi peta
-            const map = L.map(`mapOut${button.data('id')}`).setView([latitude, longitude], 15);
+            const map = L.map(`mapOut${button.data('id')}`).setView([latitude, longitude], 19);
 
             // Tambahkan layer OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -138,7 +139,7 @@
 
             // Tambahkan marker di lokasi
             L.marker([latitude, longitude]).addTo(map)
-                .bindPopup(`Lokasi: ${button.data('latitude')}`)
+                .bindPopup(`Lokasi: ${button.data('name')}`)
                 .openPopup();
         });
         $('[id^="modalMapsOut_"]').on('hidden.bs.modal', function() {

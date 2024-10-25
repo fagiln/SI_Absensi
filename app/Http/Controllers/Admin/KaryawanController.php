@@ -25,12 +25,14 @@ class KaryawanController extends Controller
             'nik' => 'required|unique:users,nik|digits_between:6,20|numeric',
             'username' => 'required|unique:users,username|max:10',
             'department_id' => 'required',
+            'jabatan' => 'required',
             'password' => 'required|string|min:6',
         ], [
             'nik.required' => 'NIK wajib diisi.',
+            'jabatan.required' => 'Jabatan wajib diisi.',
             'nik.unique' => 'NIK ini sudah terdaftar.',
-            'nik.digits_between' => 'NIK harus terdiri dari 6 hingga 20 angka.',
             'nik.numeric' => 'NIK harus berupa angka.',
+            'nik.digits_between' => 'NIK harus terdiri dari 6 hingga 20 digit angka.',
 
             'username.required' => 'Username wajib diisi.',
             'username.unique' => 'Username ini sudah digunakan.',
@@ -41,12 +43,13 @@ class KaryawanController extends Controller
             'password.required' => 'Password wajib diisi.',
             'password.string' => 'Password harus berupa string.',
             'password.min' => 'Password harus minimal 6 karakter.',
-        ]);        if ($request->filled('password')) {
+        ]);
+        if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
 
-        if ($request->filled('edit_password')) {
-            $data['password'] = Hash::make($request->edit_password);
-
+            if ($request->filled('edit_password')) {
+                $data['password'] = Hash::make($request->edit_password);
+            }
         }
         User::create($data);
 
@@ -96,5 +99,4 @@ class KaryawanController extends Controller
         $user->update($data);
         return redirect()->back()->with('status', 'Karyawan Berhasil di Edit');
     }
-
 }

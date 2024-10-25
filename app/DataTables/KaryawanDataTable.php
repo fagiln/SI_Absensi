@@ -15,7 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class KaryawanDataTable extends DataTable
 {
-    
+
     /**
      * Build the DataTable class.
      *
@@ -39,10 +39,16 @@ class KaryawanDataTable extends DataTable
                 return Carbon::parse($user->updated_at)->translatedFormat('d F Y ');
             })
             ->editColumn('department_id', function (User $user) {
-                
+
                 return $user->departemen->nama_departemen;
             })
-            ->rawColumns(['action'])
+            ->editColumn('avatar', function (User $user) {
+                if ($user->avatar == null) {
+                    return '-';
+                }
+                return '<img src="' . asset('storage/photos/' . $user->id . $user->username . '.png') . '" style="width:100px; height:100px;   object-fit: cover;">';
+            })
+            ->rawColumns(['action', 'avatar'])
             ->setRowId('id');
     }
 
@@ -51,7 +57,8 @@ class KaryawanDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->newQuery()->where('role', '!=', 'admin');    }
+        return $model->newQuery()->where('role', '!=', 'admin');
+    }
 
     /**
      * Optional method if you want to use the html builder.
@@ -68,7 +75,7 @@ class KaryawanDataTable extends DataTable
                 'autoWidth' => false,  // Untuk memastikan lebar kolom diatur secara otomatis
             ])
             //->dom('Bfrtip')
-            ->orderBy([7, 'asc'])
+            ->orderBy([9, 'asc'])
             ->selectStyleSingle()
             ->buttons([]);
     }
@@ -80,12 +87,12 @@ class KaryawanDataTable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex')
-            ->title('No.') // Ubah judul kolom menjadi "No."
-            ->searchable(false)
-            ->orderable(false)
-            ->width(30)
-            ->addClass('text-center')
-            ->searchable(false),
+                ->title('No.') // Ubah judul kolom menjadi "No."
+                ->searchable(false)
+                ->orderable(false)
+                ->width(30)
+                ->addClass('text-center')
+                ->searchable(false),
             Column::make('nik'),
             Column::make('username'),
             Column::make('name'),

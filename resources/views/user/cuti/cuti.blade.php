@@ -86,53 +86,61 @@
         }
 
         /* Style untuk modal gambar */
-        .modal {
-            display: none; /* Tersembunyi secara default */
-            position: fixed; /* Modal tetap pada tempatnya */
-            z-index: 1; /* Di atas konten lainnya */
-            padding-top: 100px; /* Jarak dari atas layar */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto; /* Jika konten melampaui ukuran modal */
-            background-color: rgb(0,0,0); /* Background hitam */
-            background-color: rgba(0,0,0,0.9); /* Hitam dengan opacity */
-        }
-
-        /* Gambar dalam modal */
-        .modal-content {
-            margin: auto;
-            display: block;
-            width: 80%;
-            max-width: 700px;
-        }
-
-        /* Close button */
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 35px;
-            color: #fff;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        /* Style untuk hover pada close button */
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Responsif */
-        @media only screen and (max-width: 700px) {
-            .modal-content {
+            .modal {
+                display: none; /* Tersembunyi secara default */
+                position: fixed; /* Modal tetap pada tempatnya */
+                z-index: 1; /* Di atas konten lainnya */
+                padding-top: 100px; /* Jarak dari atas layar */
+                left: 0;
+                top: 0;
                 width: 100%;
+                height: 100%;
+                overflow: auto; /* Jika konten melampaui ukuran modal */
+                background-color: rgb(0,0,0); /* Background hitam */
+                background-color: rgba(0,0,0,0.9); /* Hitam dengan opacity */
             }
+
+            /* Gambar dalam modal */
+            .modal-content {
+                margin: auto;
+                display: block;
+                width: 80%;
+                max-width: 700px;
+            }
+
+            /* Close button */
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #fff;
+                font-size: 40px;
+                font-weight: bold;
+                transition: 0.3s;
+                cursor: pointer;
+            }
+
+            /* Style untuk hover pada close button */
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* Responsif */
+            @media only screen and (max-width: 700px) {
+                .modal-content {
+                    width: 100%;
+                }
+            }
+
+        .button-submit{
+            height: 35px; 
+            width: 100px;
+            align-content: flex-start;
+            color: white;
+            background-color: #CC0200;
         }
 
         .button-submit{
