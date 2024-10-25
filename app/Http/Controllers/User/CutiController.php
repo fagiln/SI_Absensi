@@ -35,7 +35,7 @@ class CutiController extends Controller
             }
         }
                             
-        return view('user.cuti', compact('pengajuanCuti', 'AjukanUlang', 'pengajuanHariIni'));
+        return view('user.cuti.cuti', compact('pengajuanCuti', 'AjukanUlang', 'pengajuanHariIni'));
     }
 
     public function create_cuti(Request $request){

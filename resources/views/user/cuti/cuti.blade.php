@@ -290,7 +290,8 @@
                 <div class="inline" style="text-align: right; width:100%;">
                     {{-- <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button> --}}
 
-                    <button type="submit" class="btn button-submit"
+                    <button type="submit" class="btn button-submit" 
+                    {{-- id="btnAjukan" data-bs-toggle="modal" data-bs-target="#berhasilModal"  --}}
                     @if($AjukanUlang) disabled @endif>Ajukan</button>
                 </div>
             </from>   

@@ -109,8 +109,8 @@
         @media (max-width: 344px) {
             /* .button-container {
                 flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
-                align-items: center;
-            } */
+                /* align-items: center; */
+            /* } */
 
             .button-container .btn {
                 font-size: 14px; /* Perkecil ukuran font untuk handphone */
