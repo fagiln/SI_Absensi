@@ -35,7 +35,7 @@ class CutiController extends Controller
             }
         }
                             
-        return view('user.cuti', compact('pengajuanCuti', 'AjukanUlang', 'pengajuanHariIni'));
+        return view('user.cuti.cuti', compact('pengajuanCuti', 'AjukanUlang', 'pengajuanHariIni'));
     }
 
     public function create_cuti(Request $request){
@@ -104,7 +104,7 @@ class CutiController extends Controller
         
         $cuti = Perizinan::findOrFail($id);
         
-        return view('user.cuti-detail', compact('cuti'));
+        return view('user.cuti.cuti-detail', compact('cuti'));
 
     }
 }

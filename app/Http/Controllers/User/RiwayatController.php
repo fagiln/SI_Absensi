@@ -10,8 +10,8 @@ use App\DataTables\User\RiwayatDataTable;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
 use Illuminate\Pagination\LengthAwarePaginator;
+
 // use Illuminate\Support\Collection;
 // use Illuminate\Http\RedirectResponse;
 
@@ -73,14 +73,16 @@ class RiwayatController extends Controller
 
             $tanggalPerizinan = $startDate->format('d-m-Y') . ' s/d ' . $endDate->format('d-m-Y');
 
-            $riwayat[] = [
-                'tanggal' => $tanggalPerizinan,
-                'masuk' => '-',
-                'pulang' => '-',
-                'jam_kerja' => '-',
-                'status' => ucfirst($izin->reason),
-                'type' => 'perizinan',
-            ];
+            if ($izin->status == 'diterima') {
+                $riwayat[] = [
+                    'tanggal' => $tanggalPerizinan,
+                    'masuk' => '-',
+                    'pulang' => '-',
+                    'jam_kerja' => '-',
+                    'status' => ucfirst($izin->reason),
+                    'type' => 'perizinan',
+                ];
+            }
         }
 
         $startDate = Carbon::now()->startOfMonth(); // Awal bulan ini

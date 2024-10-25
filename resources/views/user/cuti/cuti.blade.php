@@ -289,7 +289,8 @@
                 <div class="inline" style="text-align: right; width:100%;">
                     {{-- <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button> --}}
 
-                    <button type="submit" class="btn button-submit"
+                    <button type="submit" class="btn button-submit" 
+                    {{-- id="btnAjukan" data-bs-toggle="modal" data-bs-target="#berhasilModal"  --}}
                     @if($AjukanUlang) disabled @endif>Ajukan</button>
                 </div>
             </from>   
@@ -297,6 +298,29 @@
         </div>
 
     </div>
+
+    <!-- Modal -->
+    {{-- <div class="d-flex justify-content-center">
+        <div class="modal fade" id="berhasilModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="max-width: 400px; width: 100%">
+                    <div class="modal-body text-center p-4">
+                        <!-- Gambar emoji absen -->
+                        <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Absen Berhasil" width="100" height="100"> 
+
+                        <!-- Judul modal -->
+                        <h4 class="mt-3">Oops!</h4>
+
+                        <!-- Pesan -->
+                        <p class="text-muted">Sepertinya Anda belum absen masuk. Silakan lakukan absen pagi terlebih dahulu.</p>
+
+                        <!-- Tombol untuk menutup modal -->
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
    
     {{-- Bagian Tabel --}}
 
@@ -395,7 +419,7 @@
 </script>
 {{-- untuk periode tanggal --}}
 <script>
-     document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const startDateInput = document.getElementById('start_date');
         const endDateInput = document.getElementById('end_date');
 
@@ -417,6 +441,25 @@
 
             // Set minimum tanggal akhir (end_date) sesuai dengan start_date yang dipilih
             endDateInput.min = startDateValue;
+
+            // Jika end_date sebelumnya lebih kecil dari start_date yang baru dipilih, reset end_date
+            if (endDateInput.value && endDateInput.value < startDateValue) {
+                endDateInput.value = ""; // Reset nilai end_date
+                alert("Tanggal awal cuti tidak boleh lebih besar dari tanggal akhir cuti.");
+            }
+        });
+
+        // Event listener untuk end_date
+        endDateInput.addEventListener('change', function () {
+            const startDateValue = startDateInput.value;
+            const endDateValue = endDateInput.value;
+
+            // Validasi jika end_date lebih kecil dari start_date
+            if (endDateValue < startDateValue) {
+                // Reset end_date dan tampilkan pesan peringatan
+                endDateInput.value = "";
+                alert("Tanggal awal cuti tidak boleh lebih besar dari tanggal akhir cuti.");
+            }
         });
     });
 </script>
