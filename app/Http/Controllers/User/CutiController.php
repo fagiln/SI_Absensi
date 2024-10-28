@@ -97,8 +97,7 @@ class CutiController extends Controller
         $cuti->save(); // Simpan data ke database
 
         // Redirect atau kembali dengan pesan sukses
-        return redirect()->back() // Ganti dengan route yang sesuai
-            ->with('success', 'Pengajuan cuti berhasil diajukan.');
+        return redirect()->back()->with('success', 'Pengajuan cuti berhasil diajukan.');
     }
     
     public function showdetail($id){
