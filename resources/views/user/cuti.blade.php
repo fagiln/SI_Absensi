@@ -286,11 +286,9 @@
                 </div>                                
 
                 <div style="margin-top: 20px;"></div>
-                <div class="inline" style="text-align: right;">
-                    {{-- <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button> --}}
-
-                    <button type="submit" class="btn button-submit"
-                    @if($AjukanUlang) disabled @endif>Ajukan</button>
+                <div class="inline" style="display: flex; justify-content: space-between;">
+                    <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button>
+                    <button type="submit" style="height: 35px; width: 100px; color: white; background-color: crimson; border-radius: 6px;">Ajukan</button>
                 </div>
             </from>   
 

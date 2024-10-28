@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use App\Models\Perizinan;
 use Illuminate\Foundation\Testing\RefreshDatabase;

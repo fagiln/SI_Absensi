@@ -1,6 +1,7 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
+
 use App\Models\Kehadiran;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;

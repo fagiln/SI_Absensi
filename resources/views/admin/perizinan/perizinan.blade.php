@@ -118,7 +118,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Bukti Izin {{ $item->id }}</h5>
+                    <h5 class="modal-title">Bukti Izin {{ $item->user->name }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -126,19 +126,47 @@
                 <div class="modal-body">
                     @php
                         // Cek apakah file PNG atau PDF ada
-                        $pngPath = 'perizinan/img_' . $item->reason . '_' . $item->id . '.png';
-                        $pdfPath = 'perizinan/pdf_' . $item->reason . '_' . $item->id . '.pdf';
+                        $pngPath =
+                            'storage/perizinan/' .
+                            $item->user_id .
+                            '_' .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
+                            '.png';
+                        $jpgPath =
+                            'storage/perizinan/' .
+                            $item->user_id .
+                            '_' .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
+                            '.jpg';
+                        $jpegPath =
+                            'storage/perizinan/' .
+                            $item->user_id .
+                            '_' .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
+                            '.jpeg';
+                        $pdfPath =
+                            'storage/perizinan/' .
+                            $item->user_id .
+                            '_' .
+                            \Carbon\Carbon::parse($item->created_at)->format('YmdHi') .
+                            '.pdf';
                         $hasPng = file_exists(public_path($pngPath));
+                        $hasJpg = file_exists(public_path($jpgPath));
+                        $hasJpeg = file_exists(public_path($jpegPath));
                         $hasPdf = file_exists(public_path($pdfPath));
                     @endphp
 
                     @if ($hasPng)
                         <img id="buktiImage" src="{{ asset($pngPath) }}" alt="Bukti Izin" class="img-fluid">
+                    @elseif($hasJpg)
+                        <img id="buktiImage" src="{{ asset($jpgPath) }}" alt="Bukti Izin" class="img-fluid">
+                    @elseif($hasJpeg)
+                        <img id="buktiImage" src="{{ asset($jpegPath) }}" alt="Bukti Izin" class="img-fluid">
                     @elseif ($hasPdf)
                         <iframe id="buktiPdf" style="width:100%; height:400px;"
                             src="{{ asset($pdfPath) }}"></iframe>
                     @else
-                        <p>Tidak ada bukti atau Format tidak didukung</p>
+                        <p>Tidak ada bukti</p>
                     @endif
                 </div>
             </div>

@@ -80,7 +80,11 @@ class DatabaseSeeder extends Seeder
     // }
 
 
+<<<<<<< HEAD
     //     User::factory()->count(50)->create();
     // }
+=======
+    
+>>>>>>> d7c98466c3afd6388bca87a82456a4ad171bb9a9
 
 }

@@ -21,18 +21,8 @@ class CutiController extends Controller
                                     ->orderBy('created_at', 'desc') // Urutkan dari terbaru
                                     ->get();
 
-        $pengajuanHariIni = Perizinan::where('user_id', auth()->id())
-                                    ->whereDate('created_at', Carbon::today())
-                                    ->first(); // Mengambil satu data terbaru jika ada
-                            
-        $AjukanUlang = false; // Default, boleh ajukan ulang
-                            
-        // Jika ada pengajuan hari ini dan statusnya bukan 'ditolak'
-        if ($pengajuanHariIni && $pengajuanHariIni->status != 'ditolak') {
-            $AjukanUlang = true; // Tidak boleh ajukan lagi jika status bukan 'ditolak'
-        } 
-                            
-        return view('user.cuti', compact('pengajuanCuti', 'AjukanUlang', 'pengajuanHariIni'));
+        // Kirim data ke view
+        return view('user.cuti', compact('pengajuanCuti'));
     }
 
     public function create_cuti(Request $request){

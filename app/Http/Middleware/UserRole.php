@@ -19,6 +19,5 @@ class UserRole
 
             return $next($request);
         }
-        return response()->json(['You couldnt access this page']);
-    }
+        return response()->view('errors.unauthorized', [], 403);    }
 }
