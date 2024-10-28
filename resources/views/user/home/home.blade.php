@@ -108,13 +108,8 @@
         @media (max-width: 344px) {
             /* .button-container {
                 flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
-<<<<<<< HEAD
                 /* align-items: center; */
             /* } */
-=======
-                align-items: center;
-            } */
->>>>>>> 00bb4388301bcd1c8aa64ebc72377118b1b18a12
 
             .button-container .btn {
                 font-size: 14px; /* Perkecil ukuran font untuk handphone */
@@ -407,5 +402,6 @@
                 </div>
             @endforeach
     </div>
+    <div style="margin-bottom: 70px"></div>
 </body>
 @endsection

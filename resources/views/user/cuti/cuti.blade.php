@@ -2,10 +2,8 @@
 
 @section('content')
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuti</title>
-    <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.css') }}"> --}}
     <style>
         /* Responsiveness */
         .container {
@@ -86,18 +84,18 @@
         }
 
         /* Style untuk modal gambar */
-            .modal {
-                display: none; /* Tersembunyi secara default */
-                position: fixed; /* Modal tetap pada tempatnya */
-                z-index: 1; /* Di atas konten lainnya */
-                padding-top: 100px; /* Jarak dari atas layar */
+            .modalfoto {
+                display: none; 
+                position: fixed; 
+                z-index: 200; 
+                padding-top: 100px; 
                 left: 0;
                 top: 0;
                 width: 100%;
                 height: 100%;
-                overflow: auto; /* Jika konten melampaui ukuran modal */
-                background-color: rgb(0,0,0); /* Background hitam */
-                background-color: rgba(0,0,0,0.9); /* Hitam dengan opacity */
+                overflow: auto; 
+                background-color: rgb(0,0,0); 
+                background-color: rgba(0,0,0,0.9); 
             }
 
             /* Gambar dalam modal */
@@ -287,7 +285,7 @@
                 </div>
                 
                 <!-- Modal untuk tampilan gambar besar -->
-                <div id="imageModal" class="modal">
+                <div id="imageModal" class="modalfoto">
                     <span class="close">&times;</span>
                     <img class="modal-content" id="modalImage">
                     <div id="caption"></div>
@@ -298,8 +296,8 @@
                     {{-- <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button> --}}
 
                     <button type="submit" class="btn button-submit" 
-                    {{-- id="btnAjukan" data-bs-toggle="modal" data-bs-target="#berhasilModal"  --}}
-                    @if($AjukanUlang) disabled @endif>Ajukan</button>
+                    @if($AjukanUlang) disabled @endif
+                    >Ajukan</button>
                 </div>
             </from>   
 
@@ -307,20 +305,20 @@
 
     </div>
 
-    <!-- Modal -->
-    {{-- <div class="d-flex justify-content-center">
+<!-- Modal -->
+    <div class="d-flex justify-content-center">
         <div class="modal fade" id="berhasilModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content" style="max-width: 400px; width: 100%">
                     <div class="modal-body text-center p-4">
                         <!-- Gambar emoji absen -->
-                        <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Absen Berhasil" width="100" height="100"> 
+                        <img src="{{ asset('img/Emoji_berhasil.svg') }}" alt="Absen Berhasil" width="100" height="100"> 
 
                         <!-- Judul modal -->
-                        <h4 class="mt-3">Oops!</h4>
+                        <h4 class="mt-3">Yeyy!</h4>
 
                         <!-- Pesan -->
-                        <p class="text-muted">Sepertinya Anda belum absen masuk. Silakan lakukan absen pagi terlebih dahulu.</p>
+                        <p class="text-muted">Pengajuan berhasil. Silahkan tunggu konfimasi dari admin atau segera hubungi admin</p>
 
                         <!-- Tombol untuk menutup modal -->
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
@@ -328,10 +326,18 @@
                 </div>
             </div>
         </div>
-    </div> --}}
-   
-    {{-- Bagian Tabel --}}
+    </div>
 
+    @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var modal = new bootstrap.Modal(document.getElementById('berhasilModal'));
+                modal.show();
+            });
+        </script>
+    @endif
+
+    {{-- Bagian Tabel --}}
     <div class="table-responsive mt-4">
         <p style="font-weight: bold; margin-top: 20px;">Status</p>
         <table>
@@ -390,6 +396,7 @@
             </tbody>
         </table>
     </div>
+
 </div>
 <div style="margin-bottom: 70px"></div>
 {{-- untuk pilih cuti --}}
@@ -532,6 +539,5 @@
         }
     };
 </script>
-{{-- Bagian Tabel --}}
 </body>
 @endsection

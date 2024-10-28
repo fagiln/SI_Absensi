@@ -30,7 +30,7 @@
 
             .details {
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
                 justify-content: space-between;
             }
         </style>
@@ -54,8 +54,8 @@
 
                 </div>
                 <div class="details">
-                    <div>{{ $item['created_at']->translatedFormat('d F Y') }}</div>
-                    <div>{{ $item['created_at']->translatedFormat('H:i') }}</div>
+                    <div>{{ $item['updated_at']->translatedFormat('d F Y') }}</div>
+                    <div>{{ $item['updated_at']->translatedFormat('H:i') }}</div>
                 </div>
             </div>
         @empty
