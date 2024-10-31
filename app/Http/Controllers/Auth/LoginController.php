@@ -32,7 +32,7 @@ class LoginController extends Controller
             }
         }
         return back()->withErrors([
-            'username' => 'Login Failed Please Check Your Email and Password !',
+            'username' => 'Login gagal, Mohon periksa kembali Username dan Password anda !',
         ]);
     }
 

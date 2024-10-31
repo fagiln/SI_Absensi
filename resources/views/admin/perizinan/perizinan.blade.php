@@ -1,14 +1,7 @@
 @extends('admin.template.app')
 @section('content')
 @section('title', 'Perizinan Karyawan')
-@if (session('status'))
-    <div class="my-3">
-        <div id="success-alert" class="alert alert-success d-flex justify-content-between fade show" role="alert">
-            {{ session('status') }}
 
-        </div>
-    </div>
-@endif
 
 <div class="row">
     <div class="col-md-3">

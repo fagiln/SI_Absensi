@@ -2,6 +2,8 @@
 
 
 // Admin Controller
+
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DepartemenController;
 use App\Http\Controllers\Admin\KaryawanController;
@@ -37,7 +39,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/home', function () {
     if (Auth::user()->role == 'admin') {
         return redirect(route('admin.dashboard'));
-    }elseif(Auth::user()->role == 'user'){
+    } elseif (Auth::user()->role == 'user') {
         return redirect(route('home'));
     }
 });
@@ -57,6 +59,7 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+
 
         Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
         Route::get('karyawan-izin', [DashboardController::class, 'karyawanIzin'])->name('karyawan.izin');
@@ -90,6 +93,9 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::get('rekap-presensi', [RekapPresensiController::class, 'index'])->name('rekap-presensi.index');
         Route::get('rekap-presensi/export', [RekapPresensiController::class, 'export'])->name('rekap-presensi.export');
         Route::get('rekap-presensi/print', [RekapPresensiController::class, 'print'])->name('rekap-presensi.print');
+
+        Route::put('edit/{id}',  [AdminController::class, 'update'])->name('edit');
+
     });
 });
 
@@ -129,6 +135,4 @@ Route::middleware(['auth', 'verified', 'user.role:user'])->group(function () {
     Route::get('/user/cuti-detail/{id}', [CutiController::class, 'showdetail'])->name('cuti-detail');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
-
 });
-

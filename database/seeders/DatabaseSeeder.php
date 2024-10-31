@@ -34,31 +34,30 @@ class DatabaseSeeder extends Seeder
         //     'nama_departemen'=> 'Rajata Wedding Organizer Islami'
         // ]);
         
-        // User::create([
-        //     'nik' => '0000001',
-        //     'name' => 'Fagil Nuril Akbar',
-        //     'username' => 'fagil',
-        //     'jabatan' => 'Owner',
-        //     'email' => 'fagil@test.com',
-        //     'role' => 'admin',
-        //     'department_id' => '1',
-        //     'password' => Hash::make('123456')
-
-        // ]);  
-        $faker = Faker::create();
         User::create([
-            'nik' => $faker->unique()->numerify('######'),
-            'name' => $faker->name,
-            'username' => 'user5',
-            'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
-            'email' => $faker->unique()->safeEmail,
-            'no_hp' => $faker->phoneNumber,
-            'no_hp' => $faker->phoneNumber,
-            'role' => 'user',
-            'department_id' => $faker->randomElement([1, 2]),
-            'password' => Hash::make('user123')
+            'nik' => '0000001',
+            'name' => 'Fagil Nuril Akbar',
+            'username' => 'fagil',
+            'jabatan' => 'Owner',
+            'email' => 'fagil@test.com',
+            'role' => 'admin',
+            'department_id' => '1',
+            'password' => Hash::make('123456')
 
-        ]);
+        ]);  
+        // $faker = Faker::create();
+        // User::create([
+        //     'nik' => $faker->unique()->numerify('######'),
+        //     'name' => $faker->name,
+        //     'username' => 'user5',
+        //     'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
+        //     'email' => $faker->unique()->safeEmail,
+        //     'no_hp' => $faker->phoneNumber,
+        //     'role' => 'user',
+        //     'department_id' => $faker->randomElement([1, 2]),
+        //     'password' => Hash::make('user123')
+
+        // ]);
     }
 
     // faker data 
