@@ -89,7 +89,7 @@
                     $no = 1;
                 @endphp
                 @foreach ($presensi as $item)
-                    @php
+                    {{-- @php
                         $checkInTime = \Carbon\Carbon::parse($item->check_in_time);
                         $checkOutTime = \Carbon\Carbon::parse($item->check_out_time);
 
@@ -100,6 +100,27 @@
                         $hours = floor($workDurationInMinutes / 60);
                         $minutes = $workDurationInMinutes % 60;
 
+                    @endphp --}}
+                    @php
+                        $checkInTime = \Carbon\Carbon::parse($item->check_in_time);
+                        
+                        // Cek apakah check_out_time tidak null
+                        if ($item->check_out_time) {
+                            $checkOutTime = \Carbon\Carbon::parse($item->check_out_time);
+                            
+                            // Menghitung durasi kerja dalam menit
+                            $workDurationInMinutes = $checkOutTime->diffInMinutes($checkInTime);
+
+                            // Mengonversi menit menjadi jam dan menit
+                            $hours = floor($workDurationInMinutes / 60);
+                            $minutes = $workDurationInMinutes % 60;
+
+                            // Menampilkan hasil
+                            $workDuration = "{$hours} jam {$minutes} menit";
+                        } else {
+                            // Jika check_out_time null
+                            $workDuration = "Tidak absen pulang";
+                        }
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
@@ -113,7 +134,10 @@
                                     width="50">
                             @endif
                         </td>
-                        <td>{{ \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') }}</td>
+                        {{-- <td>{{ \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') }}</td> --}}
+                        <td>
+                            {{ $item->check_out_time ? \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') : 'Belum absen pulang' }}
+                        </td>
                         <td>
                             @if ($item->check_out_photo == null)
                                 <p>belum foto</p>
@@ -123,7 +147,8 @@
                             @endif
                         </td>
                         <td>{{ $item->status }}</td>
-                        <td>{{ $hours }} Jam {{ $minutes }} Menit</td>
+                        {{-- <td>{{ $hours }} Jam {{ $minutes }} Menit</td> --}}
+                        <td>{{ $workDuration }}</td>
                     </tr>
                 @endforeach
             </tbody>

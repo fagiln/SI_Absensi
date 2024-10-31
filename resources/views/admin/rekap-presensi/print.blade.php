@@ -81,7 +81,8 @@
                     <td>
                         @if ($presensiOnDay)
                             {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
-                            {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }}
+                            {{-- {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }} --}}
+                            {{ $presensiOnDay->check_out_time ? \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') : 'Tidak absen pulang' }}
                         @endif
                     </td>
                 @endfor
@@ -121,7 +122,8 @@
                     <td>
                         @if ($presensiOnDay)
                             {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
-                            {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }}
+                            {{-- {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }} --}}
+                            {{ $presensiOnDay->check_out_time ? \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') : 'Tidak absen pulang' }}
                         @endif
                     </td>
                 @endfor
