@@ -303,6 +303,32 @@
         </div>        
     {{-- {{ dd(session()->all()) }} --}}
     
+        {{-- @php
+            $phone = '6287855913391';
+            $groupId = 'HytBaylsca85e8kKc8obpR'; // Ganti dengan nomor tujuan
+            $messages = [
+                "Halo, malkis coklat kayak e enak. Aku {$user->name} minta dong. {$perizinan->keterangan}",
+                "Hai, malkis coklatnya enak banget! Aku {$user->name}, bisa minta?",
+                "Selamat siang! Aku {$user->name}. Boleh minta malkis coklatnya?",
+                "Kabar baik? Aku {$user->name}, minta malkis coklat dong. {$perizinan->keterangan}",
+                "Apa kabar? Ini {$user->name}, mau minta malkis coklat yang enak!",
+                "Halo! Aku {$user->name}, pengen malkis coklat, ya?",
+                "Selamat datang! Aku {$user->name}, bisa tolong minta malkis coklat?",
+                "Hey! Malkis coklatnya bikin ngiler. Aku {$user->name}, minta dong!",
+                "Malkis coklat itu enak! Ini {$user->name}, minta ya. {$perizinan->keterangan}",
+                "Mau nanya, malkis coklatnya ada? Aku {$user->name}, bisa minta?",
+            ];// Ganti dengan pesan yang diinginkan
+            
+            $randomMessage = $messages[array_rand($messages)]; 
+
+            $latitude = '-7.123456'; // Ganti dengan latitude yang sesuai
+            $longitude = '112.123456';
+
+            $waLink = "https://wa.me/{$phone}?text=" . urlencode($randomMessage) . " Lokasi saya: https://www.google.com/maps?q={$latitude},{$longitude}";
+
+            // $waLink = "https://chat.whatsapp.com/{$groupId}?text=" . urlencode($message) . " Lokasi saya: https://www.google.com/maps?q={$latitude},{$longitude}";
+            // $waLink = "https://wa.me/{$phone}?text=" . urlencode($message);
+        @endphp --}}
 
         <!-- Bootstrap Modal pop-up konfimasi -->
         <div class="d-flex justify-content-center">
@@ -321,6 +347,11 @@
 
                             <!-- Tombol untuk menutup modal -->
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
+                            {{-- <div class="d-grid gap-2 d-md-block">
+                            <a href="{{ $waLink }}" target="_blank">
+                                <button type="button" class="btn btn-success">Whatsapp send</button>
+                            </a>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

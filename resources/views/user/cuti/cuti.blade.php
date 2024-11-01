@@ -87,7 +87,7 @@
             .modalfoto {
                 display: none; 
                 position: fixed; 
-                z-index: 200; 
+                z-index: 2000; 
                 padding-top: 100px; 
                 left: 0;
                 top: 0;
