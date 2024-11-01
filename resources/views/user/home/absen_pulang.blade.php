@@ -213,26 +213,7 @@
         });
     }
 
-    // Fungsi untuk konfirmasi absen dan kirim data
-    function confirmAbsen() {
-        // Tampilkan modal konfirmasi
-        const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'));
-        confirmationModal.show();
-        
-        setTimeout(function() {
-                // Set lokasi pengguna ke dalam form
-                document.getElementById('latitude').value = latitude;
-                document.getElementById('longitude').value = longitude;
-
-                // Kirim form absen ke server
-                document.getElementById('absen-form').submit();
-                
-                // Redirect ke halaman utama
-                // window.location.href = '/home'; // Ganti dengan URL halaman utama
-
-        }, 1800);
-    }
-
+    
     // Event listener untuk mengambil foto
     takePhotoButton.addEventListener('click', takePhoto);
 
@@ -304,6 +285,27 @@
                 document.getElementById('alamat-spesifik').textContent = 'Kesalahan saat mengambil alamat spesifik.';
             });
     }
+
+    // Fungsi untuk konfirmasi absen dan kirim data
+    function confirmAbsen() {
+        // Tampilkan modal konfirmasi
+        const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'));
+        confirmationModal.show();
+        
+        setTimeout(function() {
+                // Set lokasi pengguna ke dalam form
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+
+                // Kirim form absen ke server
+                document.getElementById('absen-form').submit();
+                
+                // Redirect ke halaman utama
+                // window.location.href = '/home'; // Ganti dengan URL halaman utama
+
+        }, 1800);
+    }
+
 </script>
 </body>
 @endsection

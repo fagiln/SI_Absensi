@@ -3,6 +3,7 @@
 @section('content')
 <head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Absen masuk dengan Lokasi Spesifik</title>
 
     <style>
@@ -32,6 +33,17 @@
             width: 100%;
             border-radius: 10px;
         }
+
+        .btn-custom {
+            padding: 10px 20px; /* Ukuran padding untuk memperbesar tombol */
+            font-size: 16px; /* Ukuran font yang sesuai */
+            border-radius: 5px; /* Sudut membulat */
+        }
+
+        .modal-footer {
+            padding: 10px 0; /* Mengatur jarak antara footer dan konten modal */
+        }
+
         .map {
             margin-top: 20px;
             width: 100%;
@@ -57,7 +69,7 @@
             width: 100%;
             margin-top: 20px;
         }
-        #peta { height: 300px; }
+        #peta { height: 300px;z-index: 50px }
     </style>
 
 </head>
@@ -97,6 +109,38 @@
     </div>
 <div style="margin-bottom: 70px"></div>
 
+@php
+    // Ambil data absensi hari ini
+    $today = \Carbon\Carbon::today(); // Mengambil tanggal hari ini
+    $attendance = App\Models\Kehadiran::where('user_id', $user->id) // Ambil absensi berdasarkan user
+        ->whereDate('created_at', $today)
+        ->first(); // Ambil absensi pertama hari ini
+
+    // Pastikan ada absensi untuk hari ini
+    if ($attendance) {
+        $latitude = $attendance->latitude; // Ambil latitude dari absensi
+        $longitude = $attendance->longitude; // Ambil longitude dari absensi
+        
+        // Mengambil nomor HP admin
+        $admin = App\Models\User::where('role', 'admin')->first(); // Ambil admin pertama
+        $phone = $admin ? $admin->no_hp : 'default_phone_number'; // Pastikan ada admin dan ambil nomor HP admin
+        
+        // Pesan yang ingin dikirim
+        $messages = [
+            "{$user->name}, absen hari ini jam {$attendance->check_in_time}.", // Ganti $kehadiran dengan $attendance
+        ];
+
+        // Ambil pesan pertama dari array messages
+        $message = $messages[0];
+
+        // Buat link WhatsApp
+        $waLink = "https://wa.me/{$phone}?text=" . urlencode($message) . " Lokasi saya: https://www.google.com/maps?q={$latitude},{$longitude}";
+    } else {
+        $waLink = ''; // Atau tangani jika tidak ada absensi untuk hari ini
+    }
+@endphp
+
+
     <!-- Bootstrap Modal pop-up konfimasi -->
     <div class="d-flex justify-content-center">
         <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
@@ -114,7 +158,15 @@
                         <p class="text-muted">Selamat pagi, semangat ya kerjanya geis!</p>
 
                         <!-- Tombol untuk menutup modal -->
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
+                        <div class="modal-footer justify-content-center">
+                            <button id="button_siap" type="button" class="btn btn-primary btn-custom mx-2" data-bs-dismiss="modal">Siap</button>
+                            <a id="waLink" href="#" target="_blank" class="btn btn-success">Kirim Pesan WhatsApp</a>
+                            {{-- @if($waLink)
+                                <a href="{{ $waLink }}" target="_blank">
+                                    <button type="button" class="btn btn-success btn-custom">Whatsapp Send</button>
+                                </a>
+                            @endif --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,7 +174,7 @@
     </div>
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
+{{-- <script>
     const video = document.getElementById('camera');
     const canvas = document.getElementById('photo-canvas');
     const photo = document.getElementById('photo');
@@ -213,27 +265,7 @@
         });
     }
 
-    // Fungsi untuk konfirmasi absen dan kirim data
-    function confirmAbsen() {
-        // Tampilkan modal konfirmasi
-        const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'));
-        confirmationModal.show();
-        
-        setTimeout(function() {
-                // Set lokasi pengguna ke dalam form
-                document.getElementById('latitude').value = latitude;
-                document.getElementById('longitude').value = longitude;
-
-                // Kirim form absen ke server
-                document.getElementById('absen-form').submit();
-                
-                // Redirect ke halaman utama
-                // window.location.href = '/home'; // Ganti dengan URL halaman utama
-
-        }, 1800);
-
-    }
-
+    
     // Event listener untuk mengambil foto
     takePhotoButton.addEventListener('click', takePhoto);
 
@@ -261,15 +293,15 @@
                 function(position) {
                     latitude = position.coords.latitude;
                     longitude = position.coords.longitude;
-
+                    
                     tampilkanPeta(latitude, longitude);
                     reverseGeocode(latitude, longitude);
                 },
                 function(error) {
                     alert("Gagal mendapatkan lokasi.");
                 }
-            );
-        } else {
+                );
+            } else {
             alert("Geolocation tidak didukung oleh browser ini.");
         }
     }
@@ -277,14 +309,14 @@
     // Fungsi untuk menampilkan peta
     function tampilkanPeta(lat, lng) {
         const leafletMap = L.map('peta').setView([lat, lng], 15);
-
+        
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(leafletMap);
-
+        
         L.marker([lat, lng]).addTo(leafletMap)
-            .bindPopup("Lokasi Anda")
-            .openPopup();
+        .bindPopup("Lokasi Anda")
+        .openPopup();
     }
 
     // Fungsi reverse geocode untuk mendapatkan alamat
@@ -305,6 +337,250 @@
                 document.getElementById('alamat-spesifik').textContent = 'Kesalahan saat mengambil alamat spesifik.';
             });
     }
+        // Fungsi untuk konfirmasi absen dan kirim data
+        // function confirmAbsen() {
+        //     // Tampilkan modal konfirmasi
+        //     const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'));
+        //     confirmationModal.show();
+            
+        //     // setTimeout(
+        //     //     function() {
+        //     //         // Set lokasi pengguna ke dalam form
+        //     //         document.getElementById('latitude').value = latitude;
+        //     //         document.getElementById('longitude').value = longitude;
+        
+        //     //         // Kirim form absen ke server
+        //     //         document.getElementById('absen-form').submit();
+                    
+        //     //         // Redirect ke halaman utama
+        //     //         // window.location.href = '/home'; // Ganti dengan URL halaman utama
+        
+        //     // }, 1800);
+        // }
+
+        function confirmAbsen() {
+           // Tampilkan modal konfirmasi
+        const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'));
+        confirmationModal.show();
+        
+        setTimeout(function() {
+                // Set lokasi pengguna ke dalam form
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+
+                // Kirim form absen ke server
+                document.getElementById('absen-form').submit();
+                
+                // Redirect ke halaman utama
+                // window.location.href = '/home'; // Ganti dengan URL halaman utama
+
+        }, 1800);
+        }
+
+</script> --}}
+
+<script>
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('photo-canvas');
+    const photo = document.getElementById('photo');
+    const takePhotoButton = document.getElementById('take-photo');
+    const cancelPhotoButton = document.getElementById('cancel-photo');
+    const absenForm = document.getElementById('absen-form');
+    let latitude, longitude;
+
+    // Fungsi untuk mengaktifkan kamera
+    function enableCamera() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.classList.remove('d-none');
+                video.style.transform = 'scaleX(-1)';
+            })
+            .catch(err => {
+                console.error('Kesalahan mengakses kamera: ', err);
+            });
+    }
+
+    // Fungsi untuk mengambil foto
+    function takePhoto() {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        context.save();
+        context.translate(canvas.width, 0);
+        context.scale(-1, 1);
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        context.restore();
+
+        const dataUrl = canvas.toDataURL('image/png');
+        photo.src = dataUrl;
+        photo.classList.remove('d-none');
+        video.classList.add('d-none');
+        canvas.classList.add('d-none');
+
+        document.getElementById('photo-data').value = dataUrl;
+
+        takePhotoButton.classList.add('d-none');
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+
+        photo.parentNode.insertBefore(buttonContainer, photo.nextSibling);
+
+        const confirmButton = document.createElement('button');
+        confirmButton.id = 'confirm-absen';
+        confirmButton.classList.add('absen-button', 'mr-2', 'mt-3');
+        confirmButton.textContent = 'Konfirmasi';
+        buttonContainer.appendChild(confirmButton);
+
+        const retakePhotoButton = document.createElement('button');
+        retakePhotoButton.id = 'retake-photo';
+        retakePhotoButton.classList.add('absen-button', 'mt-3');
+        retakePhotoButton.textContent = 'Ambil Ulang';
+        buttonContainer.appendChild(retakePhotoButton);
+
+        // Event listener untuk konfirmasi foto
+        confirmButton.addEventListener('click', confirmAbsen);
+
+        // Event listener untuk mengambil foto ulang
+        retakePhotoButton.addEventListener('click', function() {
+            video.classList.remove('d-none');
+            photo.classList.add('d-none');
+            takePhotoButton.classList.remove('d-none');
+            takePhotoButton.textContent = 'Absen';
+            buttonContainer.remove();
+        });
+    }
+
+    // Event listener untuk mengambil foto
+    takePhotoButton.addEventListener('click', takePhoto);
+
+    // Event listener untuk tombol batal
+    cancelPhotoButton.addEventListener('click', function() {
+        video.classList.remove('d-none');
+        photo.classList.add('d-none');
+        canvas.classList.add('d-none');
+        cancelPhotoButton.classList.add('d-none');
+        takePhotoButton.classList.remove('d-none');
+        takePhotoButton.textContent = 'Absen';
+    });
+
+    // Jalankan kamera saat halaman dimuat
+    window.addEventListener('load', enableCamera);
+    // Jalankan pengambilan lokasi saat halaman dimuat
+    window.addEventListener('load', getLocation);
+
+    // Lokasi pengguna
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    
+                    tampilkanPeta(latitude, longitude);
+                    reverseGeocode(latitude, longitude);
+                },
+                function(error) {
+                    alert("Gagal mendapatkan lokasi.");
+                }
+            );
+        } else {
+            alert("Geolocation tidak didukung oleh browser ini.");
+        }
+    }
+
+    // Fungsi untuk menampilkan peta
+    function tampilkanPeta(lat, lng) {
+        const leafletMap = L.map('peta').setView([lat, lng], 15);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(leafletMap);
+        
+        L.marker([lat, lng]).addTo(leafletMap)
+        .bindPopup("Lokasi Anda")
+        .openPopup();
+    }
+
+    // Fungsi reverse geocode untuk mendapatkan alamat
+    function reverseGeocode(lat, lng) {
+        const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.display_name) {
+                    document.getElementById('alamat-spesifik').textContent = `Alamat: ${data.display_name}`;
+                } else {
+                    document.getElementById('alamat-spesifik').textContent = 'Tidak dapat menemukan alamat spesifik.';
+                }
+            })
+            .catch(error => {
+                console.error('Kesalahan saat melakukan reverse geocoding:', error);
+                document.getElementById('alamat-spesifik').textContent = 'Kesalahan saat mengambil alamat spesifik.';
+            });
+        }
+        
+  // Fungsi untuk konfirmasi absen dan kirim data
+function confirmAbsen() {
+    
+    // Set lokasi pengguna ke dalam form
+    document.getElementById('latitude').value = latitude;
+    document.getElementById('longitude').value = longitude;
+    
+    // Buat FormData dari form
+    const formData = new FormData(absenForm);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Token CSRF
+    
+    // Kirim data ke server menggunakan fetch
+    fetch('/user/absen_masuk', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        },
+        body: formData
+    })
+    .then(response => response.json()) // Mengonversi respons menjadi JSON
+    .then(response => {
+        // Cek apakah respons sukses
+        if (response.success) {
+            // Ambil informasi yang diperlukan untuk membuat pesan
+            var userName = response.userName; // Nama pengguna dari respons
+            var checkInTime = response.checkInTime; // Jam absen dari respons
+            var latitude = response.latitude; // Latitude dari respons
+            var longitude = response.longitude; // Longitude dari respons
+            var phone = response.adminPhone; // Nomor HP admin dari respons
+
+            // Buat pesan untuk WhatsApp
+            var message = `${userName}, absen hari ini jam ${checkInTime}.`;
+            var waLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)} Lokasi saya: https://www.google.com/maps?q=${latitude},${longitude}`;
+
+            // Tampilkan modal
+            const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'), {
+                backdrop: 'static',
+                keyboard: false
+            });
+            confirmationModal.show();
+
+            // Set link WhatsApp ke elemen di modal
+            document.getElementById('waLink').setAttribute('href', waLink);
+        }
+    })
+    .catch(error => {
+        // Tangani error jika pengiriman gagal
+        console.error('Error:', error);
+    });
+
+    // Event listener untuk tombol "siap" di modal yang akan mengarahkan ke home
+    document.getElementById('button_siap').addEventListener('click', function() {
+        window.location.href = '/home';
+    });
+}
+
 </script>
+
 </body>
 @endsection

@@ -28,7 +28,7 @@
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .navbar-bottom a {

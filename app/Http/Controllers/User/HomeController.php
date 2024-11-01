@@ -21,6 +21,7 @@ class HomeController extends Controller
 
         $user = Auth::user();
         $userId = auth()->id(); // Mendapatkan ID pengguna yang sedang login
+        $perizinan = Perizinan::where('user_id', $userId)->orderBy('created_at', 'desc')->first();
        
             // Memeriksa apakah sudah absen hari ini
             $absenToday = Kehadiran::where('user_id', $userId)
@@ -121,13 +122,40 @@ class HomeController extends Controller
 
         return view('user.home.home', 
         compact('user', 'greeting', 'absenToday', 'absenpulangToday', 'jamKerjaFormatted', 'totalJamFormatted',
-        'hadirCount', 'izinCount', 'sakitCount', 'terlambatCount', 'kehadiranTerbaru'));
+        'hadirCount', 'izinCount', 'sakitCount', 'terlambatCount', 'kehadiranTerbaru', 'perizinan'));
     }
 
     public function absen_masuk() {
 
-        return view('user.home.absen_masuk');
+        $today = Carbon::today();
+        $userId = auth()->id(); // Ambil ID pengguna yang sedang login
 
+        // // Cek apakah data absen untuk hari ini sudah ada
+        // $existingAbsen = Kehadiran::where('user_id', $userId)
+        //     ->whereDate('created_at', $today)
+        //     ->first();
+
+        // if ($existingAbsen) {
+        //     // Jika sudah ada, arahkan ke halaman lain atau tampilkan pesan
+        //     return redirect()->route('home')->with('message', 'Anda sudah absen hari ini.');
+        // }
+
+       // Ambil data pengguna yang sedang login
+        $user = Auth::user(); // Mengambil data pengguna yang sedang login
+
+        // Ambil data kehadiran hari ini
+        $today = \Carbon\Carbon::today(); // Mengambil tanggal hari ini
+        $attendance = Kehadiran::where('user_id', $user->id) // Ambil kehadiran berdasarkan ID pengguna
+            ->whereDate('created_at', $today)
+            ->first(); // Ambil kehadiran pertama untuk hari ini
+
+        // Mengambil nomor HP admin
+        $admin = User::where('role', 'admin')->first(); // Ambil admin pertama
+        $phone = $admin ? $admin->no_hp : 'default_phone_number'; // Ambil nomor HP admin
+
+        // Kembalikan view dengan data yang diperlukan
+        return view('user.home.absen_masuk', compact('user', 'attendance', 'phone'));
+    
     }
 
     public function absen_masuk_store(Request $request) {
@@ -138,7 +166,7 @@ class HomeController extends Controller
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ]);
-
+        
         $userId = Auth::id();
         $userid = auth()->user()->id;
 
@@ -175,8 +203,22 @@ class HomeController extends Controller
             'status' => $status, // Menyimpan status kehadiran
         ]);
 
+        \Log::info("Data diterima: ", $request->all());
+
+        // Ambil data admin pertama yang ditemukan
+        $admin = User::where('role', 'admin')->first();
+
         // Redirect atau return response
-        return redirect('/home')->with('success', 'Data absen berhasil dikirim!');
+        // return redirect('/home')->with('success', 'Data absen berhasil dikirim!');
+        // return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'userName' => $userId->name,
+            // 'checkInTime' => $attendance->check_in_time,
+            // 'latitude' => $attendance->latitude,
+            // 'longitude' => $attendance->longitude,
+            'adminPhone' => $admin->no_hp,
+        ]);
 
     }
 
@@ -261,6 +303,5 @@ class HomeController extends Controller
             return redirect('/home')->with('error', 'Anda belum melakukan absen masuk hari ini.');
         }
     }
-
 
 }
