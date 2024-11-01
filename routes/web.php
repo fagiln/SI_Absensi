@@ -94,8 +94,8 @@ Route::middleware(['auth', 'verified', 'user.role:admin'])->group(function () {
         Route::get('rekap-presensi/export', [RekapPresensiController::class, 'export'])->name('rekap-presensi.export');
         Route::get('rekap-presensi/print', [RekapPresensiController::class, 'print'])->name('rekap-presensi.print');
 
-        Route::put('edit/{id}',  [AdminController::class, 'update'])->name('edit');
-
+        Route::put('edit/{id}',  [AdminController::class, 'update'])->name('update');
+        Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('edit');
     });
 });
 

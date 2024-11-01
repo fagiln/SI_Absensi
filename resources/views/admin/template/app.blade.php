@@ -100,6 +100,14 @@
                         <div class="modal-body">
                             {{-- <input type="hidden" name="id" id="editId"> --}}
                             <div class="form-group">
+                                <label for="adminNo">No tujuan pengiriman Absen</label>
+                                <input type="text" class="form-control" name="admin_no" id="adminNo"
+                                    placeholder="Masukkan No Whatsapp">
+                                @error('admin_no')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
                                 <label for="adminPassword">Password</label>
                                 <input type="password" class="form-control" name="admin_password" id="adminPassword"
                                     placeholder="Ubah Password (default 123456)">
@@ -113,8 +121,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-custom"
-                                onclick="return confirm('apakah anda yakin ingin merubah password?')">Edit</button>
+                            <button type="submit" class="btn btn-custom">Edit</button>
                         </div>
                     </form>
                 </div>
@@ -232,13 +239,14 @@
             <!-- Main content -->
             <div class="p-3">
                 @if (session('status'))
-                <div class="mt-3">
-                    <div id="success-alert" class="alert alert-success d-flex justify-content-between fade show" role="alert">
-                        {{ session('status') }}
-        
+                    <div class="mt-3">
+                        <div id="success-alert" class="alert alert-success d-flex justify-content-between fade show"
+                            role="alert">
+                            {{ session('status') }}
+
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
                 @yield('content')
             </div>
             <!-- /.content -->
@@ -346,12 +354,17 @@
 
 
 
-        $(document).ready(function() {
+        $(document).on('click', 'a[data-toggle="modal"]', function() {
             var userId = $(this).data('id');
+            var url = '/admin/' + userId + '/edit';
             var updateUrl = '/admin/edit/' + userId;
             // Request AJAX untuk mendapatkan data karyawan berdasarkan ID
+            $.get(url, function(data) {
+                console.log(data);
 
-            $('#formEditAdmin').attr('action', updateUrl);
+                $('#adminNo').val(data.no_hp);
+                $('#formEditAdmin').attr('action', updateUrl);
+            })
         });
 
         $(document).ready(function() {
@@ -363,14 +376,14 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-                var alert = document.getElementById('success-alert');
-                if (alert) {
-                    setTimeout(function() {
-                        var bootstrapAlert = new bootstrap.Alert(alert);
-                        bootstrapAlert.close();
-                    }, 3000); // waktu dalam milidetik (5000 ms = 5 detik)
-                }
-            });
+            var alert = document.getElementById('success-alert');
+            if (alert) {
+                setTimeout(function() {
+                    var bootstrapAlert = new bootstrap.Alert(alert);
+                    bootstrapAlert.close();
+                }, 3000); // waktu dalam milidetik (5000 ms = 5 detik)
+            }
+        });
     </script>
     @stack('scripts')
 
