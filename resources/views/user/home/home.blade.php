@@ -343,7 +343,7 @@
                             <h4 class="mt-3">Oops!</h4>
 
                             <!-- Pesan -->
-                            <p class="text-muted">Sepertinya Anda belum absen masuk. Silakan lakukan absen pagi terlebih dahulu.</p>
+                            <p class="text-muted">Sepertinya Anda belum melakukan absen masuk. Silakan lakukan absen pagi terlebih dahulu.</p>
 
                             <!-- Tombol untuk menutup modal -->
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>

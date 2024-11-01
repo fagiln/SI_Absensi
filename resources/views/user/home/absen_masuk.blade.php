@@ -129,11 +129,6 @@
                         <div class="modal-footer justify-content-center">
                             <button id="button_siap" type="button" class="btn btn-primary btn-custom mx-2" data-bs-dismiss="modal">Siap</button>
                             <a id="waLink" href="#" target="_blank" class="btn btn-success">Kirim Pesan WhatsApp</a>
-                            {{-- @if($waLink)
-                                <a href="{{ $waLink }}" target="_blank">
-                                    <button type="button" class="btn btn-success btn-custom">Whatsapp Send</button>
-                                </a>
-                            @endif --}}
                         </div>
                     </div>
                 </div>
@@ -473,61 +468,61 @@
         }
         
   // Fungsi untuk konfirmasi absen dan kirim data
-function confirmAbsen() {
-    
-    // Set lokasi pengguna ke dalam form
-    document.getElementById('latitude').value = latitude;
-    document.getElementById('longitude').value = longitude;
-    
-    // Buat FormData dari form
-    const formData = new FormData(absenForm);
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Token CSRF
-    
-    // Kirim data ke server menggunakan fetch
-    fetch('/user/absen_masuk', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': csrfToken,
-            'Accept': 'application/json'
-        },
-        body: formData
-    })
-    .then(response => response.json()) // Mengonversi respons menjadi JSON
-    .then(response => {
-        // Cek apakah respons sukses
-        if (response.success) {
-            // Ambil informasi yang diperlukan untuk membuat pesan
-            var userName = response.userName; // Nama pengguna dari respons
-            var checkInTime = response.checkInTime; // Jam absen dari respons
-            var latitude = response.latitude; // Latitude dari respons
-            var longitude = response.longitude; // Longitude dari respons
-            var phone = response.adminPhone; // Nomor HP admin dari respons
+    function confirmAbsen() {
+        
+        // Set lokasi pengguna ke dalam form
+        document.getElementById('latitude').value = latitude;
+        document.getElementById('longitude').value = longitude;
+        
+        // Buat FormData dari form
+        const formData = new FormData(absenForm);
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Token CSRF
+        
+        // Kirim data ke server menggunakan fetch
+        fetch('/user/absen_masuk', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: formData
+        })
+        .then(response => response.json()) // Mengonversi respons menjadi JSON
+        .then(response => {
+            // Cek apakah respons sukses
+            if (response.success) {
+                // Ambil informasi yang diperlukan untuk membuat pesan
+                var userName = response.userName; // Nama pengguna dari respons
+                var checkInTime = response.checkInTime; // Jam absen dari respons
+                var latitude = response.latitude; // Latitude dari respons
+                var longitude = response.longitude; // Longitude dari respons
+                var phone = response.adminPhone; // Nomor HP admin dari respons
 
-            // Buat pesan untuk WhatsApp
-            var message = `${userName}, absen hari ini ${checkInTime}.`;
-            var waLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)} Lokasi saya: https://www.google.com/maps?q=${latitude},${longitude}`;
+                // Buat pesan untuk WhatsApp
+                var message = `${userName}, absen masuk hari ini ${checkInTime}.`;
+                var waLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)} Lokasi saya: https://www.google.com/maps?q=${latitude},${longitude}`;
 
-            // Tampilkan modal
-            const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'), {
-                backdrop: 'static',
-                keyboard: false
-            });
-            confirmationModal.show();
+                // Tampilkan modal
+                const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'), {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                confirmationModal.show();
 
-            // Set link WhatsApp ke elemen di modal
-            document.getElementById('waLink').setAttribute('href', waLink);
-        }
-    })
-    .catch(error => {
-        // Tangani error jika pengiriman gagal
-        console.error('Error:', error);
-    });
+                // Set link WhatsApp ke elemen di modal
+                document.getElementById('waLink').setAttribute('href', waLink);
+            }
+        })
+        .catch(error => {
+            // Tangani error jika pengiriman gagal
+            console.error('Error:', error);
+        });
 
-    // Event listener untuk tombol "siap" di modal yang akan mengarahkan ke home
-    document.getElementById('button_siap').addEventListener('click', function() {
-        window.location.href = '/home';
-    });
-}
+        // Event listener untuk tombol "siap" di modal yang akan mengarahkan ke home
+        document.getElementById('button_siap').addEventListener('click', function() {
+            window.location.href = '/home';
+        });
+    }
 
 </script>
 

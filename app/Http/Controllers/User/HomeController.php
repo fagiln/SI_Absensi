@@ -240,18 +240,16 @@ class HomeController extends Controller
             // Jika belum absen masuk, alihkan kembali dengan pesan error
             return redirect()->back()->with('error', 'Anda belum melakukan absen masuk hari ini.');
         } 
-        
-        // $today = Carbon::today();
 
-        // // Cek apakah data absen untuk hari ini sudah ada
-        // $existingAbsen = Kehadiran::where('user_id', $userId)
-        //     ->whereDate('updated_at', $today)
-        //     ->first();
+        // Cek apakah data absen untuk hari ini sudah ada
+        $existingAbsen = Kehadiran::where('user_id', $userId)
+            ->whereDate('check_out_time', Carbon::now()->format('Y-m-d'))
+            ->exists();
 
-        // if ($existingAbsen) {
-        //     // Jika sudah ada, arahkan ke halaman lain atau tampilkan pesan
-        //     return redirect()->route('home')->with('message', 'Anda sudah absen hari ini.');
-        // }
+        if ($existingAbsen) {
+            // Jika sudah ada, arahkan ke halaman lain atau tampilkan pesan
+            return redirect()->route('home')->with('message', 'Anda sudah absen hari ini.');
+        }
 
         return view('user.home.absen_pulang', compact('absenToday'));
         
@@ -286,16 +284,29 @@ class HomeController extends Controller
                     ->whereDate('check_in_time', $today) // Mengecek data berdasarkan absen masuk hari ini
                     ->first();
 
+        $currentCheckOutTime = Carbon::now();
+
         if ($kehadiran) {
             // Update absen pulang pada baris yang sama
             $kehadiran->update([
                 'check_out_photo' => $imageName,
                 'check_out_latitude' => $latitude,
                 'check_out_longitude' => $longitude,
-                'check_out_time' => Carbon::now(),
+                'check_out_time' => $currentCheckOutTime,
             ]);
 
-            return redirect('/home')->with('success', 'Data absen pulang berhasil dikirim!');
+            $admin = User::where('role', 'admin')->first();
+            $username = Auth::user()->name;
+
+            // return redirect('/home')->with('success', 'Data absen pulang berhasil dikirim!');
+            return response()->json([
+                'success' => true,
+                'userName' => $username,
+                'checkOutTime' => Carbon::parse($currentCheckOutTime)->format('d F Y \J\a\m H:i'),
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'adminPhone' => $admin->no_hp,
+            ]);
         } else {
             // Jika tidak ada absen masuk, kembalikan pesan error
             return redirect('/home')->with('error', 'Anda belum melakukan absen masuk hari ini.');
