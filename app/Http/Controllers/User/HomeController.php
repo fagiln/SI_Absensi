@@ -130,31 +130,18 @@ class HomeController extends Controller
         $today = Carbon::today();
         $userId = auth()->id(); // Ambil ID pengguna yang sedang login
 
-        // // Cek apakah data absen untuk hari ini sudah ada
-        // $existingAbsen = Kehadiran::where('user_id', $userId)
-        //     ->whereDate('created_at', $today)
-        //     ->first();
-
-        // if ($existingAbsen) {
-        //     // Jika sudah ada, arahkan ke halaman lain atau tampilkan pesan
-        //     return redirect()->route('home')->with('message', 'Anda sudah absen hari ini.');
-        // }
-
-       // Ambil data pengguna yang sedang login
-        $user = Auth::user(); // Mengambil data pengguna yang sedang login
-
-        // Ambil data kehadiran hari ini
-        $today = \Carbon\Carbon::today(); // Mengambil tanggal hari ini
-        $attendance = Kehadiran::where('user_id', $user->id) // Ambil kehadiran berdasarkan ID pengguna
+        // Cek apakah data absen untuk hari ini sudah ada
+        $existingAbsen = Kehadiran::where('user_id', $userId)
             ->whereDate('created_at', $today)
-            ->first(); // Ambil kehadiran pertama untuk hari ini
+            ->first();
 
-        // Mengambil nomor HP admin
-        $admin = User::where('role', 'admin')->first(); // Ambil admin pertama
-        $phone = $admin ? $admin->no_hp : 'default_phone_number'; // Ambil nomor HP admin
+        if ($existingAbsen) {
+            // Jika sudah ada, arahkan ke halaman lain atau tampilkan pesan
+            return redirect()->route('home')->with('message', 'Anda sudah absen hari ini.');
+        }
 
         // Kembalikan view dengan data yang diperlukan
-        return view('user.home.absen_masuk', compact('user', 'attendance', 'phone'));
+        return view('user.home.absen_masuk');
     
     }
 
@@ -207,16 +194,16 @@ class HomeController extends Controller
 
         // Ambil data admin pertama yang ditemukan
         $admin = User::where('role', 'admin')->first();
+        $username = Auth::user()->name;
 
         // Redirect atau return response
         // return redirect('/home')->with('success', 'Data absen berhasil dikirim!');
-        // return response()->json(['success' => true]);
         return response()->json([
             'success' => true,
-            'userName' => $userId->name,
-            // 'checkInTime' => $attendance->check_in_time,
-            // 'latitude' => $attendance->latitude,
-            // 'longitude' => $attendance->longitude,
+            'userName' => $username,
+            'checkInTime' => Carbon::parse($currentCheckInTime)->format('d F Y \J\a\m H:i'),
+            'latitude' => $latitude,
+            'longitude' => $longitude,
             'adminPhone' => $admin->no_hp,
         ]);
 
@@ -252,11 +239,22 @@ class HomeController extends Controller
         if (!$absenToday) {
             // Jika belum absen masuk, alihkan kembali dengan pesan error
             return redirect()->back()->with('error', 'Anda belum melakukan absen masuk hari ini.');
-        }
-        // dd($absenToday); 
+        } 
+        
+        // $today = Carbon::today();
+
+        // // Cek apakah data absen untuk hari ini sudah ada
+        // $existingAbsen = Kehadiran::where('user_id', $userId)
+        //     ->whereDate('updated_at', $today)
+        //     ->first();
+
+        // if ($existingAbsen) {
+        //     // Jika sudah ada, arahkan ke halaman lain atau tampilkan pesan
+        //     return redirect()->route('home')->with('message', 'Anda sudah absen hari ini.');
+        // }
 
         return view('user.home.absen_pulang', compact('absenToday'));
-
+        
     }
 
     public function absen_pulang_store(Request $request) {
