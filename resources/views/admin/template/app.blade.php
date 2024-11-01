@@ -360,7 +360,6 @@
             var updateUrl = '/admin/edit/' + userId;
             // Request AJAX untuk mendapatkan data karyawan berdasarkan ID
             $.get(url, function(data) {
-                console.log(data);
 
                 $('#adminNo').val(data.no_hp);
                 $('#formEditAdmin').attr('action', updateUrl);
