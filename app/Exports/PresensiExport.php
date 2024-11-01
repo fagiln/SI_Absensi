@@ -37,7 +37,7 @@ class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTi
                 'work_date' => $item->work_date,
                 'check_in_time' => Carbon::parse($item->check_in_time)->format('H:i:s'),
                 'check_out_time' =>$item->check_out_time == null ? '-' :  Carbon::parse($item->check_out_time)->format('H:i:s'),
-                'work_hours' => $workHours,
+                'work_hours' => $item->check_out_time == null ? '-':  $workHours,
                 'status' => $item->status,
             ];
         });
