@@ -36,8 +36,8 @@ class DatabaseSeeder extends Seeder
         
         User::create([
             'nik' => '0000001',
-            'name' => 'Fagil Nuril Akbar',
-            'username' => 'fagil',
+            'name' => 'Admin',
+            'username' => 'admin',
             'jabatan' => 'Owner',
             'email' => 'fagil@test.com',
             'role' => 'admin',
@@ -58,20 +58,20 @@ class DatabaseSeeder extends Seeder
         //     'password' => Hash::make('user123')
 
         // ]);  
-        $faker = Faker::create();
-        User::create([
-            'nik' => $faker->unique()->numerify('######'),
-            'name' => $faker->name,
-            'username' => 'user4',
-            'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
-            'email' => $faker->unique()->safeEmail,
-            'no_hp' => $faker->phoneNumber,
-            'no_hp' => $faker->phoneNumber,
-            'role' => 'user',
-            'department_id' => $faker->randomElement([1, 2]),
-            'password' => Hash::make('user123')
+        // $faker = Faker::create();
+        // User::create([
+        //     'nik' => $faker->unique()->numerify('######'),
+        //     'name' => $faker->name,
+        //     'username' => 'user4',
+        //     'jabatan' => $faker->randomElement(['CEO', 'Manager', 'Supervisor', 'Staff', 'Engineer']),
+        //     'email' => $faker->unique()->safeEmail,
+        //     'no_hp' => $faker->phoneNumber,
+        //     'no_hp' => $faker->phoneNumber,
+        //     'role' => 'user',
+        //     'department_id' => $faker->randomElement([1, 2]),
+        //     'password' => Hash::make('user123')
 
-        ]);
+        // ]);
     }
 
     // faker data 
