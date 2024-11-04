@@ -1,3 +1,4 @@
+
 @extends('user.layouts.app')
 
 @section('content')
@@ -86,54 +87,62 @@
         }
 
         /* Style untuk modal gambar */
-    .modal {
-        display: none; /* Tersembunyi secara default */
-        position: fixed; /* Modal tetap pada tempatnya */
-        z-index: 1; /* Di atas konten lainnya */
-        padding-top: 100px; /* Jarak dari atas layar */
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto; /* Jika konten melampaui ukuran modal */
-        background-color: rgb(0,0,0); /* Background hitam */
-        background-color: rgba(0,0,0,0.9); /* Hitam dengan opacity */
-    }
-
-    /* Gambar dalam modal */
-    .modal-content {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-    }
-
-    /* Close button */
-    .close {
-        position: absolute;
-        top: 15px;
-        right: 35px;
-        color: #fff;
-        font-size: 40px;
-        font-weight: bold;
-        transition: 0.3s;
-        cursor: pointer;
-    }
-
-    /* Style untuk hover pada close button */
-    .close:hover,
-    .close:focus {
-        color: #bbb;
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    /* Responsif */
-    @media only screen and (max-width: 700px) {
-        .modal-content {
+        .modal {
+            display: none; /* Tersembunyi secara default */
+            position: fixed; /* Modal tetap pada tempatnya */
+            z-index: 1; /* Di atas konten lainnya */
+            padding-top: 100px; /* Jarak dari atas layar */
+            left: 0;
+            top: 0;
             width: 100%;
+            height: 100%;
+            overflow: auto; /* Jika konten melampaui ukuran modal */
+            background-color: rgb(0,0,0); /* Background hitam */
+            background-color: rgba(0,0,0,0.9); /* Hitam dengan opacity */
         }
-    }
+
+        /* Gambar dalam modal */
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        /* Close button */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        /* Style untuk hover pada close button */
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Responsif */
+        @media only screen and (max-width: 700px) {
+            .modal-content {
+                width: 100%;
+            }
+        }
+
+        .button-submit{
+            height: 35px; 
+            width: 100px;
+            align-content: flex-start;
+            color: white;
+            background-color: #CC0200;
+        }
 
         /* Data table */
         table {
@@ -278,15 +287,41 @@
                 </div>                                
 
                 <div style="margin-top: 20px;"></div>
-                <div class="inline" style="display: flex; justify-content: space-between;">
-                    <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button>
-                    <button type="submit" style="height: 35px; width: 100px; color: white; background-color: crimson; border-radius: 6px;">Ajukan</button>
+                <div class="inline" style="text-align: right; width:100%;">
+                    {{-- <button type="reset" style="height: 35px; width: 100px; color: white; background-color: orange; border-radius: 6px;">Batal</button> --}}
+
+                    <button type="submit" class="btn button-submit" 
+                    {{-- id="btnAjukan" data-bs-toggle="modal" data-bs-target="#berhasilModal"  --}}
+                    @if($AjukanUlang) disabled @endif>Ajukan</button>
                 </div>
             </from>   
 
         </div>
 
     </div>
+
+    <!-- Modal -->
+    {{-- <div class="d-flex justify-content-center">
+        <div class="modal fade" id="berhasilModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="max-width: 400px; width: 100%">
+                    <div class="modal-body text-center p-4">
+                        <!-- Gambar emoji absen -->
+                        <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Absen Berhasil" width="100" height="100"> 
+
+                        <!-- Judul modal -->
+                        <h4 class="mt-3">Oops!</h4>
+
+                        <!-- Pesan -->
+                        <p class="text-muted">Sepertinya Anda belum absen masuk. Silakan lakukan absen pagi terlebih dahulu.</p>
+
+                        <!-- Tombol untuk menutup modal -->
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
    
     {{-- Bagian Tabel --}}
 
@@ -385,7 +420,7 @@
 </script>
 {{-- untuk periode tanggal --}}
 <script>
-     document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const startDateInput = document.getElementById('start_date');
         const endDateInput = document.getElementById('end_date');
 
@@ -407,6 +442,25 @@
 
             // Set minimum tanggal akhir (end_date) sesuai dengan start_date yang dipilih
             endDateInput.min = startDateValue;
+
+            // Jika end_date sebelumnya lebih kecil dari start_date yang baru dipilih, reset end_date
+            if (endDateInput.value && endDateInput.value < startDateValue) {
+                endDateInput.value = ""; // Reset nilai end_date
+                alert("Tanggal awal cuti tidak boleh lebih besar dari tanggal akhir cuti.");
+            }
+        });
+
+        // Event listener untuk end_date
+        endDateInput.addEventListener('change', function () {
+            const startDateValue = startDateInput.value;
+            const endDateValue = endDateInput.value;
+
+            // Validasi jika end_date lebih kecil dari start_date
+            if (endDateValue < startDateValue) {
+                // Reset end_date dan tampilkan pesan peringatan
+                endDateInput.value = "";
+                alert("Tanggal awal cuti tidak boleh lebih besar dari tanggal akhir cuti.");
+            }
         });
     });
 </script>

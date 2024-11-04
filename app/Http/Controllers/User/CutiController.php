@@ -21,8 +21,21 @@ class CutiController extends Controller
                                     ->orderBy('created_at', 'desc') // Urutkan dari terbaru
                                     ->get();
 
-        // Kirim data ke view
-        return view('user.cuti', compact('pengajuanCuti'));
+        $pengajuanHariIni = Perizinan::where('user_id', auth()->id())
+                                    ->whereDate('created_at', Carbon::today())
+                                    ->get(); // Mengambil satu data terbaru jika ada
+                            
+        $AjukanUlang = false; // Default, boleh ajukan ulang
+                            
+        foreach ($pengajuanHariIni as $pengajuan) {
+            if ($pengajuan->status != 'ditolak') {
+                // Jika ada yang tidak ditolak, user tidak boleh ajukan ulang
+                $AjukanUlang = true;
+                break; // Keluar dari loop, tidak perlu cek lebih lanjut
+            }
+        }
+                            
+        return view('user.cuti.cuti', compact('pengajuanCuti', 'AjukanUlang', 'pengajuanHariIni'));
     }
 
     public function create_cuti(Request $request){
@@ -67,23 +80,30 @@ class CutiController extends Controller
         // Jika ada file yang diupload
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads'), $filename); // Pastikan direktori ini ada dan dapat ditulisi
-            $cuti->bukti_path = 'uploads/' . $filename; // Menyimpan path file ke database
+            // Tentukan path penyimpanan di public/storage/perizinan
+        $destinationPath = public_path('storage/perizinan');
+        $createdAt =  now()->format('YmdHiHi');
+        $filename = $userId . '_' . $createdAt . '.' . $file->getClientOriginalExtension();
+        // Nama file dengan user ID dan timestamp
+
+        // Pindahkan file ke direktori public/storage/perizinan
+        $file->move($destinationPath, $filename);
+
+        // Simpan hanya nama file ke database, tanpa path 'uploads'
+        $cuti->bukti_path = $filename;// Menyimpan path file ke database
         }
 
         $cuti->save(); // Simpan data ke database
 
         // Redirect atau kembali dengan pesan sukses
-        return redirect()->back() // Ganti dengan route yang sesuai
-            ->with('success', 'Pengajuan cuti berhasil diajukan.');
+        return redirect()->back()->with('success', 'Pengajuan cuti berhasil diajukan.');
     }
     
     public function showdetail($id){
         
         $cuti = Perizinan::findOrFail($id);
         
-        return view('user.cuti-detail', compact('cuti'));
+        return view('user.cuti.cuti-detail', compact('cuti'));
 
     }
 }

@@ -25,12 +25,14 @@ class KaryawanController extends Controller
             'nik' => 'required|unique:users,nik|digits_between:6,20|numeric',
             'username' => 'required|unique:users,username|max:10',
             'department_id' => 'required',
+            'jabatan' => 'required',
             'password' => 'required|string|min:6',
         ], [
             'nik.required' => 'NIK wajib diisi.',
+            'jabatan.required' => 'Jabatan wajib diisi.',
             'nik.unique' => 'NIK ini sudah terdaftar.',
-            'nik.digits_between' => 'NIK harus terdiri dari 6 hingga 20 angka.',
             'nik.numeric' => 'NIK harus berupa angka.',
+            'nik.digits_between' => 'NIK harus terdiri dari 6 hingga 20 digit angka.',
 
             'username.required' => 'Username wajib diisi.',
             'username.unique' => 'Username ini sudah digunakan.',

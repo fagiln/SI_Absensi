@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
-    <title>@yield('title', 'User Menu')</title>
+    <title>@yield('title', 'User Home')</title>
 
      <!-- Bootstrap CSS -->
      <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.css') }}">
@@ -14,6 +14,8 @@
      <!-- Font Awesome CDN -->
      <link rel="stylesheet" href="{{ asset('asset/fontawesome/css/all.min.css') }}">
      {{-- <link rel="stylesheet" href="{{ asset('datatables/datatables.bundle.css') }}"> --}}
+
+     <link rel="icon" href="{{ asset('img/logo.png') }}" type="image/png">
     
     <style>
         .navbar-bottom {
@@ -26,7 +28,7 @@
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
-            z-index: 1000;
+            z-index: 100;
         }
 
         .navbar-bottom a {
@@ -54,6 +56,23 @@
             text-align: center; /* Pusatkan teks */
             display: block; /* Pastikan teks berada di bawah ikon */
         }
+
+        /* box notif */
+        /* .a {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+    
+        }
+        .span {
+            text-align: center;
+            width: 120px;
+        } */
+        /* .attendance-item img {
+            width: 50px;
+            height: 50px;
+        } */
+
     </style>
 </head>
 <body>
@@ -100,6 +119,7 @@
                 <span>Riwayat</span>
             </a>
             <a href="{{ route('notif') }}" class="nav-item {{ Route::is('notif') ? 'active' : '' }}">
+                {{-- <span class="badge-number">{{ session('hadirCount', 0) }}</span> --}}
                 <i class="far fa-bell"></i>
                 <span>Notif</span>
             </a>

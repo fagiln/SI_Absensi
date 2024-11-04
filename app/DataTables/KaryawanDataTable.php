@@ -43,7 +43,10 @@ class KaryawanDataTable extends DataTable
                 return $user->departemen->nama_departemen;
             })
             ->editColumn('avatar', function (User $user) {
-                return '<img src="' . asset('storage/photos/' . $user->id . $user->username.'.png') . '" style="width:100px; height:100px;   object-fit: cover;">';
+                if ($user->avatar == null) {
+                    return '-';
+                }
+                return '<img src="' . asset('storage/photos/' . $user->id . $user->username . '.png') . '" style="width:100px; height:100px;   object-fit: cover;">';
             })
             ->rawColumns(['action', 'avatar'])
             ->setRowId('id');

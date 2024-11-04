@@ -75,7 +75,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="#" data-toggle="modal"data-id="{{ Auth::user()->id }}"
+                        data-target="#modalAdmin">
                         Welcome, Admin {{ Auth::user()->username }}!
                     </a>
                 </li>
@@ -83,7 +84,49 @@
 
         </nav>
         <!-- /.navbar -->
+        <div class="modal fade" id="modalAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Admin</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form id="formEditAdmin" action="" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="modal-body">
+                            {{-- <input type="hidden" name="id" id="editId"> --}}
+                            <div class="form-group">
+                                <label for="adminNo">No tujuan pengiriman Absen</label>
+                                <input type="text" class="form-control" name="admin_no" id="adminNo"
+                                    placeholder="Masukkan No Whatsapp">
+                                @error('admin_no')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="adminPassword">Password</label>
+                                <input type="password" class="form-control" name="admin_password" id="adminPassword"
+                                    placeholder="Ubah Password (default 123456)">
+                                @error('admin_password')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
 
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-custom">Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-light-primary elevation-4">
             <!-- Brand Logo -->
@@ -195,6 +238,15 @@
 
             <!-- Main content -->
             <div class="p-3">
+                @if (session('status'))
+                    <div class="mt-3">
+                        <div id="success-alert" class="alert alert-success d-flex justify-content-between fade show"
+                            role="alert">
+                            {{ session('status') }}
+
+                        </div>
+                    </div>
+                @endif
                 @yield('content')
             </div>
             <!-- /.content -->
@@ -203,7 +255,7 @@
         <footer class="main-footer">
             <span class="text d-none d-sm-inline-block"><strong>This </strong>was made by &#10084; </span>
             <div class="float-right d-none d-sm-inline-block">
-                <b>Sistem Informasi Absensi PT. Multi Power Abadi</b> 
+                <b>Sistem Informasi Absensi PT. Multi Power Abadi</b>
             </div>
         </footer>
     </div>
@@ -298,6 +350,38 @@
                 // Perbarui ikon setelah tema berubah
                 updateThemeIcon();
             });
+        });
+
+
+
+        $(document).on('click', 'a[data-toggle="modal"]', function() {
+            var userId = $(this).data('id');
+            var url = '/admin/' + userId + '/edit';
+            var updateUrl = '/admin/edit/' + userId;
+            // Request AJAX untuk mendapatkan data karyawan berdasarkan ID
+            $.get(url, function(data) {
+
+                $('#adminNo').val(data.no_hp);
+                $('#formEditAdmin').attr('action', updateUrl);
+            })
+        });
+
+        $(document).ready(function() {
+
+            // Check if there are validation errors and show modal
+            @if ($errors->has('admin_password'))
+                $('#modalAdmin').modal('show');
+            @endif
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var alert = document.getElementById('success-alert');
+            if (alert) {
+                setTimeout(function() {
+                    var bootstrapAlert = new bootstrap.Alert(alert);
+                    bootstrapAlert.close();
+                }, 3000); // waktu dalam milidetik (5000 ms = 5 detik)
+            }
         });
     </script>
     @stack('scripts')

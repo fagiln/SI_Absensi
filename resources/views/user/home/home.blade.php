@@ -37,6 +37,8 @@
             color: red;
         }
 
+        /* absen */
+        /* absen */
         .button-container {
             margin-top: 30px;
             display: flex;
@@ -57,7 +59,6 @@
             color: #CC0200;
             width:40%;
             justify-content: center;
-            
         }
 
         .btn-masuk:hover {
@@ -73,7 +74,9 @@
         }
 
         .btn-pulang:hover {
-            background-color: darkred;
+            border: 2px solid red;
+            background-color: white;
+            color:  #CC0200;
         }
 
         .icon {
@@ -83,7 +86,44 @@
         .icon:hover{
             color:whte;
         }
+        /* Media Query untuk Laptop (di bawah 1024px) */
+        @media (max-width: 768px) {
+            /* .button-container {
+                display: flex;
+                justify-content: space-around;
+            } */
+            
+            .button-container .btn {
+                display: flex;
+                align-items: center;
+                font-size: 16px; /* Perkecil ukuran font */
+                padding: 10px 20px; /* Perkecil padding */
+            }
+            
+            .btn-masuk, .btn-pulang {
+                width: 40%; /* Lebar tombol lebih fleksibel pada layar laptop yang lebih kecil */
+            }
+        }
 
+        /* Media Query untuk Handphone (di bawah 768px) */
+        @media (max-width: 344px) {
+            /* .button-container {
+                flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
+                /* align-items: center; */
+            /* } */
+
+            .button-container .btn {
+                font-size: 14px; /* Perkecil ukuran font untuk handphone */
+                padding: 10px 20px; /* Sesuaikan padding */
+                /* width: 80%; Tombol melebar hampir penuh pada layar handphone */
+            }
+            
+            .btn-masuk, .btn-pulang {
+                width: 40%; /* Lebar tombol hampir penuh pada handphone */
+            }
+        }
+
+        /* container worktime balance */
         .work-time-card {
             background-color: white;
             border: 1px solid #e0e0e0;
@@ -133,15 +173,78 @@
             display: flex;
             justify-content: space-around;
             margin: 20px;
-    
         }
+
+
         .attendance-item {
             text-align: center;
             width: 120px;
         }
+
+
         .attendance-item img {
             width: 50px;
             height: 50px;
+        }
+
+        /* Media query untuk tablet atau layar yang lebih kecil (di bawah 1024px) */
+        @media (max-width: 768px) {
+            .attendance-item {
+                width: 100px; /* perkecil width untuk layar lebih kecil */
+            }
+            
+            .attendance-item img {
+                width: 38px; /* perkecil gambar */
+                height: 38px;
+            }
+        }
+
+        /* Media query untuk handphone (di bawah 768px) */
+        @media (max-width: 360px) {
+            .attendance-box {
+                flex-direction: row; /* ubah arah tampilan dari horizontal ke vertikal */
+                align-items: center; /* pusatkan item */
+            }
+
+            .attendance-item {
+                width: 70px; /* lebih kecil lagi untuk hp */
+                margin-bottom: 10px; /* beri jarak antar item */
+            }
+            
+            .attendance-item img {
+                width: 27px; /* perkecil gambar lebih jauh */
+                height: 27px;
+            }
+        }
+
+        /* Media query untuk tablet atau layar yang lebih kecil (di bawah 1024px) */
+        @media (max-width: 768px) {
+            .attendance-item {
+                width: 100px; /* perkecil width untuk layar lebih kecil */
+            }
+            
+            .attendance-item img {
+                width: 38px; /* perkecil gambar */
+                height: 38px;
+            }
+        }
+
+        /* Media query untuk handphone (di bawah 768px) */
+        @media (max-width: 360px) {
+            .attendance-box {
+                flex-direction: row; /* ubah arah tampilan dari horizontal ke vertikal */
+                align-items: center; /* pusatkan item */
+            }
+
+            .attendance-item {
+                width: 70px; /* lebih kecil lagi untuk hp */
+                margin-bottom: 10px; /* beri jarak antar item */
+            }
+            
+            .attendance-item img {
+                width: 27px; /* perkecil gambar lebih jauh */
+                height: 27px;
+            }
         }
 
         /*  */
@@ -196,6 +299,7 @@
 </head>
 <body>
     <div class="container">
+      
         <!-- Location Display -->
         <div class="location">
             <span class="location-icon">📍</span>
@@ -206,18 +310,61 @@
         <div class="greeting">
             Selamat {{ $greeting }}, <br><span>{{ $user->name }}</span>
         </div>
-
         <!-- Action Buttons -->
+
         <div class="button-container">
-            <button class="btn btn-masuk" onclick="window.location='{{ route('absen_masuk') }}'">
-                <span class="fas fa-camera" style="margin-right: 10px"></span> 
-                MASUK
+
+            <button class="btn btn-masuk" onclick="window.location='{{ route('absen_masuk') }}'"
+                @if($absenToday) disabled @endif>
+                <span class="fas fa-camera" style="margin-right: 10px"></span>
+                @if($absenToday)
+                    Sudah absen
+                @else
+                    MASUK
+                @endif
             </button>
-            <button class="btn btn-pulang" data-bs-toggle="modal" data-bs-target="#absenModal">
-                <span class="fas fa-camera" style="margin-right: 10px"></span> 
-                PULANG
+            <button class="btn btn-pulang" onclick="window.location='{{ route('absen_pulang') }}'"
+                @if($absenpulangToday) disabled @endif>
+                <span class="fas fa-camera" style="margin-right: 10px"></span>
+                @if($absenpulangToday)
+                    Sudah absen
+                @else
+                    Pulang
+                @endif
             </button>
-        </div>
+
+        </div>        
+            </button>
+
+        </div>        
+    {{-- {{ dd(session()->all()) }} --}}
+    
+        {{-- @php
+            $phone = '6287855913391';
+            $groupId = 'HytBaylsca85e8kKc8obpR'; // Ganti dengan nomor tujuan
+            $messages = [
+                "Halo, malkis coklat kayak e enak. Aku {$user->name} minta dong. {$perizinan->keterangan}",
+                "Hai, malkis coklatnya enak banget! Aku {$user->name}, bisa minta?",
+                "Selamat siang! Aku {$user->name}. Boleh minta malkis coklatnya?",
+                "Kabar baik? Aku {$user->name}, minta malkis coklat dong. {$perizinan->keterangan}",
+                "Apa kabar? Ini {$user->name}, mau minta malkis coklat yang enak!",
+                "Halo! Aku {$user->name}, pengen malkis coklat, ya?",
+                "Selamat datang! Aku {$user->name}, bisa tolong minta malkis coklat?",
+                "Hey! Malkis coklatnya bikin ngiler. Aku {$user->name}, minta dong!",
+                "Malkis coklat itu enak! Ini {$user->name}, minta ya. {$perizinan->keterangan}",
+                "Mau nanya, malkis coklatnya ada? Aku {$user->name}, bisa minta?",
+            ];// Ganti dengan pesan yang diinginkan
+            
+            $randomMessage = $messages[array_rand($messages)]; 
+
+            $latitude = '-7.123456'; // Ganti dengan latitude yang sesuai
+            $longitude = '112.123456';
+
+            $waLink = "https://wa.me/{$phone}?text=" . urlencode($randomMessage) . " Lokasi saya: https://www.google.com/maps?q={$latitude},{$longitude}";
+
+            // $waLink = "https://chat.whatsapp.com/{$groupId}?text=" . urlencode($message) . " Lokasi saya: https://www.google.com/maps?q={$latitude},{$longitude}";
+            // $waLink = "https://wa.me/{$phone}?text=" . urlencode($message);
+        @endphp --}}
 
         <!-- Bootstrap Modal pop-up konfimasi -->
         <div class="d-flex justify-content-center">
@@ -226,22 +373,36 @@
                     <div class="modal-content" style="width: 60%">
                         <div class="modal-body text-center">
                             <!-- Gambar emoji absen berhasil -->
-                            <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Absen Berhasil" width="150" height="100"> 
+                            <img src="{{ asset('img/Emoji_galau.svg') }}" alt="Belum Absen" width="150" height="100"> 
 
                             <!-- Judul modal -->
-                            <h4 class="mt-3">Alhamdulillah Absen Berhasil!!</h4>
+                            <h4 class="mt-3">Oops!</h4>
 
                             <!-- Pesan -->
-                            <p class="text-muted">Selamat pagi best, semangat ya kerjanya!</p>
+                            <p class="text-muted">Sepertinya Anda belum melakukan absen masuk. Silakan lakukan absen pagi terlebih dahulu.</p>
 
                             <!-- Tombol untuk menutup modal -->
                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
+                            {{-- <div class="d-grid gap-2 d-md-block">
+                            <a href="{{ $waLink }}" target="_blank">
+                                <button type="button" class="btn btn-success">Whatsapp send</button>
+                            </a>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        @if(session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var modal = new bootstrap.Modal(document.getElementById('absenModal'));
+                modal.show();
+            });
+        </script>
+        @endif
+        
         <br>
         <div class="work-time-card">
             <div class="info">
@@ -252,66 +413,63 @@
                 <div class="details">
                     <div>
                         <span>Hari ini</span>
-                        <p>4 Jam</p>
+                        <p style="font-size: 17px">{{ $jamKerjaFormatted }} </p>
                     </div>
                     <div>
                         <span>Total semua jam kerja</span>
-                        <p>160 Jam</p>
+                        <p style="font-size: 17px">{{ $totalJamFormatted }}</p>
                     </div>
                 </div>
             </div>
         </div>
+        
         <br>
         <h5>Rekap Presensi</h5>
+        <div style="margin-top: 20px"></div>
+        <div style="margin-top: 20px"></div>
         <div class="attendance-box">
             <div class="attendance-item">
                 <img src="{{ asset('img/hadir.svg') }}" alt="Hadir">
-                <span class="badge-number">10</span>
+                <span class="badge-number">{{ $hadirCount }}</span>
                 <p>Hadir</p> 
             </div>
             <div class="attendance-item">
                 <img src="{{ asset('img/izin.svg') }}" alt="Izin">
-                <span class="badge-number">20</span>
+                <span class="badge-number">{{ $izinCount }}</span>
                 <p>Izin</p>
             </div>
             <div class="attendance-item">
                 <img src="{{ asset('img/sakit.svg') }}" alt="Sakit">
-                <span class="badge-number">124</span>
+                <span class="badge-number">{{ $sakitCount }}</span>
                 <p>Sakit</p>
             </div>
             <div class="attendance-item">
                 <img src="{{ asset('img/terlambat.svg') }}" alt="Terlambat">
-                <span class="badge-number">1</span>
+                <span class="badge-number">{{ $terlambatCount }}</span>
                 <p>Terlambat</p>
             </div>
-        </div>
+        </div>        
 
         <h5>Terbaru</h5>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
-        <div class="terbaru-container">
-            <div class="date">01 Oktober 2024</div>
-            <div class="time">Masuk & Pulang</div>
-            <div class="time">8 Jam</div>
-            <div class="time">08:00 - 17:00</div>
-        </div>
+            @foreach($kehadiranTerbaru as $kehadiran)
+                <div class="terbaru-container">
+                    <div class="date">{{ \Carbon\Carbon::parse($kehadiran->work_date)->format('d F Y') }}</div>
+                    <div class="time">Masuk & Pulang</div>
+
+                    @if($kehadiran->check_in_time && $kehadiran->check_out_time)
+                        @php
+                            $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time);
+                            $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time);
+                            $totalJamKerja = $checkOut->diffInHours($checkIn);
+                        @endphp
+                        <div class="time">{{ $totalJamKerja }} Jam</div>
+                        <div class="time">{{ $checkIn->format('H:i') }} - {{ $checkOut->format('H:i') }}</div>
+                    @else
+                        <div class="time">Belum absen pulang</div>
+                    @endif
+                </div>
+            @endforeach
     </div>
+    <div style="margin-bottom: 70px"></div>
 </body>
-</html>
 @endsection

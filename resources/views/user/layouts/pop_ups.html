@@ -1,0 +1,355 @@
+<div id="thankyouModal" class="modal">
+    <div class="modal-content card">
+      <span class="close">&times;</span>
+      <h2>Terima kasih telah berfoto!</h2>
+      <img src="{{ asset('img/Emoji_berhasil.svg') }}" alt="Emoticon" class="emoticon" />
+      <p>Foto kamu telah berhasil diambil.</p>
+    </div>
+</div>
+
+<!-- Tambahkan CSS di dalam style tag -->
+<style>
+    /* Style for the popup-container */
+    #popup-container {
+        display: none; /* Awalnya sembunyikan pop-up */
+        position: fixed; /* Agar selalu berada di atas konten */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Latar belakang transparan */
+        justify-content: center; /* Tengah secara horizontal */
+        align-items: center; /* Tengah secara vertikal */
+        z-index: 1000; /* Pastikan berada di atas semua elemen */
+    }
+
+    /* Style for the modal content */
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 500px;
+        margin: auto;
+        position: relative;
+        text-align: center;
+    }
+
+    /* Close button style */
+    .close {
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    /* Optional: Style for the button */
+    .btn-pulang {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-pulang:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<!-- -- kamera --
+<script>
+    // File: camera.js
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('photo-canvas');
+    const photo = document.getElementById('photo');
+    const takePhotoButton = document.getElementById('take-photo');
+
+    // Fungsi untuk mengaktifkan kamera
+    function enableCamera() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.classList.remove('d-none');
+            })
+            .catch(err => {
+                console.error('Kesalahan mengakses kamera: ', err);
+            });
+    }
+
+    // Fungsi untuk mengambil foto
+    function takePhoto() {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const dataUrl = canvas.toDataURL('image/png');
+        photo.src = dataUrl;
+        photo.classList.remove('d-none');
+        video.classList.add('d-none');
+        canvas.classList.add('d-none');
+
+        alert("Absen berhasil!");
+
+        // Tanyakan apakah ingin mengambil foto lagi
+        const takeAnotherPhoto = confirm("Apakah Anda ingin mengambil foto lagi?");
+        if (takeAnotherPhoto) {
+            // Tampilkan kembali kamera dan sembunyikan hasil foto
+            video.classList.remove('d-none');
+            photo.classList.add('d-none');
+        } else {
+            alert("Terima kasih, Anda telah selesai.");
+        }
+    }
+
+    // Event listener
+    takePhotoButton.addEventListener('click', takePhoto);
+
+    // Jalankan kamera saat halaman dimuat
+    window.addEventListener('load', enableCamera);
+
+</script>
+-- lokasi --
+<script>
+    const userLocation = document.getElementById('user-location');
+    const alamatSpesifik = document.getElementById('alamat-spesifik');
+    let latitude, longitude;
+
+    // Fungsi untuk mendapatkan lokasi pengguna
+    // Fungsi untuk mendapatkan lokasi pengguna
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+                    // userLocation.textContent = `Latitude: ${latitude}, Longitude: ${longitude}`;
+
+                    tampilkanPeta(latitude, longitude);
+                    reverseGeocode(latitude, longitude);
+                },
+                function(error) {
+                    // Menangani error dengan lebih jelas
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            userLocation.textContent = 'Izin lokasi ditolak oleh pengguna.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            userLocation.textContent = 'Informasi lokasi tidak tersedia.';
+                            break;
+                        case error.TIMEOUT:
+                            userLocation.textContent = 'Permintaan lokasi habis waktu.';
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            userLocation.textContent = 'Terjadi kesalahan yang tidak diketahui.';
+                            break;
+                    }
+                }
+            );
+        } else {
+            userLocation.textContent = 'Geolocation tidak didukung oleh browser ini.';
+        }
+    }
+
+    // Fungsi untuk menampilkan peta Leaflet
+    function tampilkanPeta(lat, lng) {
+        const leafletMap = L.map('peta').setView([lat, lng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(leafletMap);
+
+        L.marker([lat, lng]).addTo(leafletMap)
+            .bindPopup("Lokasi Anda")
+            .openPopup();
+    }
+
+    // Fungsi untuk reverse geocoding menggunakan Nominatim
+    function reverseGeocode(lat, lng) {
+        const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.display_name) {
+                    alamatSpesifik.textContent = `Alamat: ${data.display_name}`;
+                } else {
+                    alamatSpesifik.textContent = 'Tidak dapat menemukan alamat spesifik.';
+                }
+            })
+            .catch(error => {
+                console.error('Kesalahan saat melakukan reverse geocoding:', error);
+                alamatSpesifik.textContent = 'Kesalahan saat mengambil alamat spesifik.';
+            });
+    }
+
+    // Jalankan pengambilan lokasi saat halaman dimuat
+    window.addEventListener('load', getLocation);
+</script>
+<script>
+    const video = document.getElementById('camera');
+    const canvas = document.getElementById('photo-canvas');
+    const photo = document.getElementById('photo');
+    const takePhotoButton = document.getElementById('take-photo');
+    const cancelPhotoButton = document.getElementById('cancel-photo');
+    const absenForm = document.getElementById('absen-form');
+    let latitude, longitude;
+
+    // Fungsi untuk mengaktifkan kamera
+    function enableCamera() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+                video.classList.remove('d-none');
+
+                video.style.transform = 'scaleX(-1)';
+            })
+            .catch(err => {
+                console.error('Kesalahan mengakses kamera: ', err);
+            });
+    }
+
+    // Fungsi untuk mengambil foto
+    function takePhoto() {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        // Membalikkan gambar (mirror) jika menggunakan kamera depan
+        context.save(); // Menyimpan state canvas
+        context.translate(canvas.width, 0); // Geser posisi gambar
+        context.scale(-1, 1); // Balikkan gambar horizontal
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        context.restore(); // Kembalikan state canvas
+
+        const dataUrl = canvas.toDataURL('image/png');
+        photo.src = dataUrl;
+        photo.classList.remove('d-none');
+        video.classList.add('d-none');
+        canvas.classList.add('d-none');
+
+        // Set data foto ke dalam form untuk dikirim ke server
+        document.getElementById('photo-data').value = dataUrl;
+
+         // Ubah tombol absen menjadi tombol konfirmasi dan foto ulang
+    takePhotoButton.classList.add('d-none'); // Sembunyikan tombol absen
+    cancelPhotoButton.classList.remove('d-none'); // Tampilkan tombol batal
+    takePhotoButton.textContent = 'Konfirmasi';
+    takePhotoButton.id = 'confirm-absen';
+    
+    // Tambahkan tombol "Ambil Ulang Foto"
+    const retakePhotoButton = document.createElement('button');
+    retakePhotoButton.id = 'retake-photo';
+    retakePhotoButton.classList.add('absen-button', 'mt-3');
+    retakePhotoButton.textContent = 'Ambil Ulang Foto';
+    document.querySelector('.col-md-12').appendChild(retakePhotoButton);
+
+    // Event listener untuk konfirmasi foto
+    document.getElementById('confirm-absen').addEventListener('click', confirmAbsen);
+
+    // Event listener untuk mengambil foto ulang
+    retakePhotoButton.addEventListener('click', function() {
+        // Tampilkan kembali kamera dan sembunyikan hasil foto
+        video.classList.remove('d-none');
+        photo.classList.add('d-none'); // Sembunyikan foto
+        cancelPhotoButton.classList.add('d-none'); // Sembunyikan tombol batal
+        takePhotoButton.classList.remove('d-none'); // Tampilkan tombol absen
+        retakePhotoButton.remove(); // Hapus tombol foto ulang
+    });
+    }
+
+    // Fungsi untuk konfirmasi absen dan kirim data
+    function confirmAbsen() {
+    // Tampilkan modal konfirmasi
+    const confirmationModal = new bootstrap.Modal(document.getElementById('absenModal'));
+    confirmationModal.show();
+    
+            setTimeout(function() {
+            // Tambahkan event listener untuk tombol konfirmasi di modal
+            // document.getElementById('confirm-submit').onclick = function() {
+                // Set lokasi pengguna ke dalam form
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+
+                // Kirim form absen ke server
+                document.getElementById('absen-form').submit();
+                
+                window.location.href = '/home';
+            
+            }, 3000)
+    }
+
+    // Event listener untuk mengambil foto
+    takePhotoButton.addEventListener('click', takePhoto);
+
+        // Tambahkan logika untuk tombol batal
+    cancelPhotoButton.addEventListener('click', function() {
+        // Tampilkan kembali kamera dan sembunyikan hasil foto
+        video.classList.remove('d-none');
+        photo.classList.add('d-none');
+        canvas.classList.add('d-none'); // Sembunyikan canvas
+        cancelPhotoButton.classList.add('d-none'); // Sembunyikan tombol batal
+        takePhotoButton.classList.remove('d-none'); // Tampilkan tombol absen
+    });
+    
+    // Jalankan kamera saat halaman dimuat
+    window.addEventListener('load', enableCamera);
+    
+    // Lokasi pengguna
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    latitude = position.coords.latitude;
+                    longitude = position.coords.longitude;
+
+                    tampilkanPeta(latitude, longitude);
+                    reverseGeocode(latitude, longitude);
+                },
+                function(error) {
+                    alert("Gagal mendapatkan lokasi.");
+                }
+            );
+        } else {
+            alert("Geolocation tidak didukung oleh browser ini.");
+        }
+    }
+
+    function tampilkanPeta(lat, lng) {
+        const leafletMap = L.map('peta').setView([lat, lng], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(leafletMap);
+
+        L.marker([lat, lng]).addTo(leafletMap)
+            .bindPopup("Lokasi Anda")
+            .openPopup();
+    }
+
+    function reverseGeocode(lat, lng) {
+        const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.display_name) {
+                    document.getElementById('alamat-spesifik').textContent = `Alamat: ${data.display_name}`;
+                } else {
+                    document.getElementById('alamat-spesifik').textContent = 'Tidak dapat menemukan alamat spesifik.';
+                }
+            })
+            .catch(error => {
+                console.error('Kesalahan saat melakukan reverse geocoding:', error);
+                document.getElementById('alamat-spesifik').textContent = 'Kesalahan saat mengambil alamat spesifik.';
+            });
+    }
+
+    // Jalankan pengambilan lokasi saat halaman dimuat
+    window.addEventListener('load', getLocation);
+</script> -->

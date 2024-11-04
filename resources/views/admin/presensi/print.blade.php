@@ -8,7 +8,7 @@
 
     <title>Laporan Presensi Karyawan</title>
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {{-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
     <style>
         @media print {
             .page-break {
@@ -76,7 +76,6 @@
                 <tr>
                     <th>No</th>
                     <th>Tanggal Kerja</th>
-                    <th>NIK</th>
                     <th>Jam Datang</th>
                     <th>Foto Datang</th>
                     <th>Jam Pulang</th>
@@ -90,22 +89,66 @@
                     $no = 1;
                 @endphp
                 @foreach ($presensi as $item)
-                    @php
+                    {{-- @php
                         $checkInTime = \Carbon\Carbon::parse($item->check_in_time);
                         $checkOutTime = \Carbon\Carbon::parse($item->check_out_time);
-                        $workDuration = $checkOutTime->diffInHours($checkInTime);
 
+                        // Menghitung durasi kerja dalam menit
+                        $workDurationInMinutes = $checkOutTime->diffInMinutes($checkInTime);
+
+                        // Mengonversi menit menjadi jam dan menit
+                        $hours = floor($workDurationInMinutes / 60);
+                        $minutes = $workDurationInMinutes % 60;
+
+                    @endphp --}}
+                    @php
+                        $checkInTime = \Carbon\Carbon::parse($item->check_in_time);
+                        
+                        // Cek apakah check_out_time tidak null
+                        if ($item->check_out_time) {
+                            $checkOutTime = \Carbon\Carbon::parse($item->check_out_time);
+                            
+                            // Menghitung durasi kerja dalam menit
+                            $workDurationInMinutes = $checkOutTime->diffInMinutes($checkInTime);
+
+                            // Mengonversi menit menjadi jam dan menit
+                            $hours = floor($workDurationInMinutes / 60);
+                            $minutes = $workDurationInMinutes % 60;
+
+                            // Menampilkan hasil
+                            $workDuration = "{$hours} jam {$minutes} menit";
+                        } else {
+                            // Jika check_out_time null
+                            $workDuration = "Tidak absen pulang";
+                        }
                     @endphp
                     <tr>
                         <td>{{ $no++ }}</td>
                         <td>{{ $item->work_date }}</td>
-                        <td>{{ $item->user->nik }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->check_in_time)->translatedFormat('H:i') }}</td>
-                        <td><img src="{{ asset($item->check_in_photo) }}" alt="Foto Datang" width="50"></td>
-                        <td>{{ \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') }}</td>
-                        <td><img src="{{ asset($item->check_out_photo) }}" alt="Foto Pulang" width="50"></td>
+                        <td>
+                            @if ($item->check_in_photo == null)
+                                <p>belum foto</p>
+                            @else
+                                <img src="{{ asset('storage/kehadiran/' . $item->check_in_photo) }}" alt="Foto Datang"
+                                    width="50">
+                            @endif
+                        </td>
+                        {{-- <td>{{ \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') }}</td> --}}
+                        <td>
+                            {{ $item->check_out_time ? \Carbon\Carbon::parse($item->check_out_time)->translatedFormat('H:i') : 'Belum absen pulang' }}
+                        </td>
+                        <td>
+                            @if ($item->check_out_photo == null)
+                                <p>belum foto</p>
+                            @else
+                                <img src="{{ asset('storage/kehadiran/' . $item->check_out_photo) }}" alt="Foto Pulang"
+                                    width="50">
+                            @endif
+                        </td>
                         <td>{{ $item->status }}</td>
-                        <td>{{ $workDuration }} Jam</td>
+                        {{-- <td>{{ $hours }} Jam {{ $minutes }} Menit</td> --}}
+                        <td>{{ $workDuration }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -119,14 +162,18 @@
         <div class="signature-container ">
             <div class="text-center">
                 <p>Mario Mariyadi</p>
-                <br><br><br>
+                <br>
+                <img src="{{ asset('img/ttd.png') }}" alt="Tanda Tangan Direktur" style="height: 100px">
+                <br>
                 <p>(...............................)</p>
                 <p class="font-italic">Direktur</p>
             </div>
             <div class="text-center">
                 <p>Iqbal</p>
-                <br><br><br>
+                <br>
+                <div style="height: 100px;"></div>
                 <p>(...............................)</p>
+                <br>
                 <p class="font-italic">Admin</p>
             </div>
         </div>

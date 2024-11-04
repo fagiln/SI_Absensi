@@ -54,10 +54,18 @@ class MonitoringDataTable extends DataTable
             ->editColumn('check_in_time', function (Kehadiran $kehadiran) {
                 return Carbon::parse($kehadiran->check_in_time)->translatedFormat('H:i');
             })->editColumn('check_out_time', function (Kehadiran $kehadiran) {
+                if ($kehadiran->check_out_time == null) {
+                    return null;
+                }
                 return Carbon::parse($kehadiran->check_out_time)->translatedFormat('H:i');
             })
             ->editColumn('check_in_photo', function (Kehadiran $kehadiran) {
-                return '<img src="' . asset('storage/' . $kehadiran->check_in_photo) . '" style="width:100px; height:100px; object-fit:cover">';
+                return '<img src="' . asset('storage/kehadiran/' . $kehadiran->check_in_photo) . ' " style="width:100px; height:100px; object-fit:cover">';
+            })->editColumn('check_out_photo', function (Kehadiran $kehadiran) {
+                if ($kehadiran->check_out_photo == null) {
+                    return 'belum foto pulang';
+                }
+                return '<img src="' . asset('storage/kehadiran/' . $kehadiran->check_out_photo) . ' " style="width:100px; height:100px; object-fit:cover">';
             })
             ->editColumn('status', function (Kehadiran $kehadiran) {
                 if ($kehadiran->status == 'hadir') {
@@ -73,7 +81,7 @@ class MonitoringDataTable extends DataTable
                 return $workDuration;
             })
             ->setRowId('id')
-            ->rawColumns(['check_in_photo', 'status']);
+            ->rawColumns(['check_in_photo', 'check_out_photo', 'status']);
     }
 
 

@@ -47,11 +47,9 @@ class PerizinanSeeder extends Seeder
     // }
 
     public function run()
-    {
-        // Ambil semua user
-        $users = User::take(10)->get();
-        $reasons = ['sakit', 'izin']; // Daftar alasan sesuai dengan enum yang ada
-        $statuses = ['pending', 'diterima', 'ditolak']; // Daftar status sesuai dengan enum yang ada
+{ 
+    // Mengambil user dengan id 2
+    $user2 = User::find(2); // menggunakan find untuk mendapatkan user dengan id
 
 
         foreach ($users as $user) {
@@ -64,14 +62,37 @@ class PerizinanSeeder extends Seeder
                 'bukti_path' => 'path/to/bukti_' . $user->id . '.jpg', // Sesuaikan path ini dengan lokasi bukti yang disimpan
                 'status' => $statuses[array_rand($statuses)], // Ambil status secara acak dari array
                 'created_at' => now(), // Tanggal sekarang
+       
             ]);
         }
-    }
-    private function generateRandomReason()
-    {
-        $reasons = ['sakit', 'kegiatan keluarga', 'pernikahan', 'dinas luar', 'acara penting'];
-        return $reasons[array_rand($reasons)];
-    }
 
-    // Fungsi untuk menghasilkan alasan acak
+    $reasons = ['sakit', 'izin']; // Daftar alasan sesuai dengan enum yang ada
+    $statuses = ['pending', 'diterima', 'ditolak']; // Daftar status sesuai dengan enum yang ada
+
+    Perizinan::create([
+        'user_id' => $user2->id, // Menggunakan id user yang benar
+        'start_date' => Carbon::now()->subDays(rand(1, 10))->toDateString(),
+        'end_date' => Carbon::now()->toDateString(),
+        'reason' => $reasons[array_rand($reasons)], // Ambil alasan secara acak dari array
+        'keterangan' => 'Mengajukan izin karena ' . $this->generateRandomReason(), // Keterangan yang berbeda
+        'keterangan_ditolak' => 'Kerja dulu gais ada ' . $this->generateRandomReason2(),
+        'bukti_path' => 'path/to/bukti_' . $user2->id . '.jpg', // Sesuaikan path ini dengan lokasi bukti yang disimpan
+        'status' => $statuses[array_rand($statuses)], // Ambil status secara acak dari array
+        'created_at' => now(), // Tanggal sekarang
+    ]);
+}
+
+// Fungsi untuk menghasilkan alasan acak
+private function generateRandomReason()
+{
+    $reasons = ['sakit', 'kegiatan keluarga', 'pernikahan', 'dinas luar', 'acara penting'];
+    return $reasons[array_rand($reasons)];
+}
+
+private function generateRandomReason2()
+{
+    $reasons = ['rapat', 'darurat client', 'bansos nihhh', 'dinas luar', 'acara penting'];
+    return $reasons[array_rand($reasons)];
+}
+
 }
