@@ -1,14 +1,11 @@
 @extends('user.layouts.app')
 
 @section('content')
-<head>
-    <title>Notifikasi</title>
-    <style>
-        /* Custom CSS untuk notifikasi */
-<head>
-    <title>Notifikasi</title>
-    <style>
-        /* Custom CSS untuk notifikasi */
+
+    <head>
+        <title>Notifikasi</title>
+        <style>
+            /* Custom CSS untuk notifikasi */
 
             .terbaru-container {
                 width: 100%;
