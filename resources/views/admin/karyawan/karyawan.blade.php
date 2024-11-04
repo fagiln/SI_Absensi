@@ -2,14 +2,13 @@
 @section('title', 'Karyawan')
 @section('content')
 
- 
+
     <a href="" class="btn btn-custom mb-3" data-toggle="modal" data-target="#modal">
         <i class="fas fa-plus fs-2 mr-1"></i>
         Tambah Data
     </a>
     <!-- Modal Add -->
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -95,7 +94,8 @@
 
                         <div class="form-group">
                             <label for="editNik">NIK</label>
-                            <input type="text" class="form-control" name="edit_nik" id="editNik" value="{{old('edit_nik')}} "  placeholder="Masukkan NIK">
+                            <input type="text" class="form-control" name="edit_nik" id="editNik"
+                                value="{{ old('edit_nik') }} " placeholder="Masukkan NIK">
                             @error('edit_nik')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -103,7 +103,8 @@
 
                         <div class="form-group">
                             <label for="editJabatan">Jabatan</label>
-                            <input type="text" class="form-control" name="edit_jabatan" id="editJabatan" value="{{old('edit_jabatan')}}" p placeholder="Masukkan Jabatan">
+                            <input type="text" class="form-control" name="edit_jabatan" id="editJabatan"
+                                value="{{ old('edit_jabatan') }}" p placeholder="Masukkan Jabatan">
                             @error('edit_jabatan')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -118,7 +119,8 @@
                         </div> --}}
                         <div class="form-group">
                             <label for="editPassword">Password</label>
-                            <input type="password" class="form-control" name="edit_password" id="editPassword" placeholder="Masukkan Password (kosongkan jika tidak perlu)">
+                            <input type="password" class="form-control" name="edit_password" id="editPassword"
+                                placeholder="Masukkan Password (kosongkan jika tidak perlu)">
                             @error('edit_password')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -146,13 +148,12 @@
             $(document).ready(function() {
 
                 // Check if there are validation errors and show modal
-                @if ($errors->has('nik') || $errors->has('username') || $errors->has('departemen') || $errors->has('password'))
+                @if ($errors->has('nik') || $errors->has('username') || $errors->has('department_id') || $errors->has('password'))
+                    ;
                     $('#modal').modal('show');
-                // @elseif ($errors->has('edit_nik') || $errors->has('edit_jabatan') || $errors->has('edit_password'))
-                //     $('#modalEdit').modal('show');
                 @endif
             });
-       
+
 
             $(document).on('click', 'button[data-action="delete"]', function() {
                 var url = $(this).data('url');
