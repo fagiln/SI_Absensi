@@ -21,7 +21,6 @@ class NotifController extends Controller
             ->get();
 
         // Mengambil data terbaru dari model Perizinan
-        // Mengambil data terbaru dari model Perizinan
         $perizinanTerbaru = Perizinan::where('user_id', $userId)
             ->select('reason', 'created_at', 'status', 'updated_at')
             ->orderBy('updated_at', 'desc')
@@ -29,31 +28,24 @@ class NotifController extends Controller
             ->get();
 
         // Menggabungkan kedua koleksi dengan penyesuaian format tampilan
-        // Menggabungkan kedua koleksi dengan penyesuaian format tampilan
         $dataGabungan = $kehadiranTerbaru->map(function ($item) {
             return [
                 'type' => 'Kehadiran',
                 'message' => $item->status,
                 'status' => '', // Kehadiran mungkin tidak memerlukan status tambahan
-                'status' => '', // Kehadiran mungkin tidak memerlukan status tambahan
                 'created_at' => $item->created_at,
-                'updated_at' => $item->updated_at,
                 'updated_at' => $item->updated_at,
             ];
         })->merge($perizinanTerbaru->map(function ($item) {
             return [
                 'type' => 'Perizinan',
-                'type' => 'Perizinan',
                 'message' => $item->reason,
                 'status' => $item->status, // Menampilkan status terbaru
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
-                'updated_at' => $item->updated_at,
             ];
         }));
 
-        // Urutkan data gabungan berdasarkan kolom 'updated_at'
-        $dataGabungan = $dataGabungan->sortByDesc('updated_at');
         // Urutkan data gabungan berdasarkan kolom 'updated_at'
         $dataGabungan = $dataGabungan->sortByDesc('updated_at');
 
