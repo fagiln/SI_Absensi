@@ -109,38 +109,6 @@
     </div>
 <div style="margin-bottom: 70px"></div>
 
-@php
-    // Ambil data absensi hari ini
-    $today = \Carbon\Carbon::today(); // Mengambil tanggal hari ini
-    $attendance = App\Models\Kehadiran::where('user_id', $user->id) // Ambil absensi berdasarkan user
-        ->whereDate('created_at', $today)
-        ->first(); // Ambil absensi pertama hari ini
-
-    // Pastikan ada absensi untuk hari ini
-    if ($attendance) {
-        $latitude = $attendance->latitude; // Ambil latitude dari absensi
-        $longitude = $attendance->longitude; // Ambil longitude dari absensi
-        
-        // Mengambil nomor HP admin
-        $admin = App\Models\User::where('role', 'admin')->first(); // Ambil admin pertama
-        $phone = $admin ? $admin->no_hp : 'default_phone_number'; // Pastikan ada admin dan ambil nomor HP admin
-        
-        // Pesan yang ingin dikirim
-        $messages = [
-            "{$user->name}, absen hari ini jam {$attendance->check_in_time}.", // Ganti $kehadiran dengan $attendance
-        ];
-
-        // Ambil pesan pertama dari array messages
-        $message = $messages[0];
-
-        // Buat link WhatsApp
-        $waLink = "https://wa.me/{$phone}?text=" . urlencode($message) . " Lokasi saya: https://www.google.com/maps?q={$latitude},{$longitude}";
-    } else {
-        $waLink = ''; // Atau tangani jika tidak ada absensi untuk hari ini
-    }
-@endphp
-
-
     <!-- Bootstrap Modal pop-up konfimasi -->
     <div class="d-flex justify-content-center">
         <div class="modal fade" id="absenModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
