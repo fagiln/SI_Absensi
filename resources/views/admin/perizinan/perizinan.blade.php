@@ -148,7 +148,6 @@
                         $hasJpeg = file_exists(public_path($jpegPath));
                         $hasPdf = file_exists(public_path($pdfPath));
                     @endphp
-
                     @if ($hasPng)
                         <img id="buktiImage" src="{{ asset($pngPath) }}" alt="Bukti Izin" class="img-fluid">
                     @elseif($hasJpg)

@@ -82,7 +82,7 @@ class CutiController extends Controller
             $file = $request->file('file');
             // Tentukan path penyimpanan di public/storage/perizinan
         $destinationPath = public_path('storage/perizinan');
-        $createdAt =  now()->format('YmdHiHi');
+        $createdAt =  now()->format('YmdHi');
         $filename = $userId . '_' . $createdAt . '.' . $file->getClientOriginalExtension();
         // Nama file dengan user ID dan timestamp
 
