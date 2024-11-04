@@ -162,14 +162,18 @@
         <div class="signature-container ">
             <div class="text-center">
                 <p>Mario Mariyadi</p>
-                <br><br><br>
+                <br>
+                <img src="{{ asset('img/ttd.png') }}" alt="Tanda Tangan Direktur" style="height: 100px">
+                <br>
                 <p>(...............................)</p>
                 <p class="font-italic">Direktur</p>
             </div>
             <div class="text-center">
                 <p>Iqbal</p>
-                <br><br><br>
+                <br>
+                <div style="height: 100px;"></div>
                 <p>(...............................)</p>
+                <br>
                 <p class="font-italic">Admin</p>
             </div>
         </div>
