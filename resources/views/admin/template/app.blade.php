@@ -77,7 +77,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-toggle="modal"data-id="{{ Auth::user()->id }}"
                         data-target="#modalAdmin">
-                        Welcome, Admin {{ Auth::user()->username }}!
+                        Selamat datang , {{ Auth::user()->username }}!
                     </a>
                 </li>
             </ul>
