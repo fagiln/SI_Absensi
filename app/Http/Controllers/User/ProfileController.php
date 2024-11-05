@@ -22,46 +22,50 @@ class ProfileController extends Controller
         return view('user.profile', compact('user'));
     }
         
-    public function update_foto(Request $request){
-        
+    public function update_foto(Request $request)
+    {
         // Validasi file
         $request->validate([
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         // Temukan user berdasarkan ID
         $user = Auth::user();
-
+    
         if (!$user) {
             return response()->json(['success' => false, 'message' => 'User not found'], 404);
         }
-
+    
         // Cek dan hapus foto lama jika ada
         if ($user->avatar) {
-            // Cek apakah foto ada di storage
-            if (Storage::exists('public/photos/' . $user->avatar)) {
-                // Hapus file lama
-                Storage::delete('public/photos/' . $user->avatar);
+            $oldFilePath = public_path('storage/photos/' . $user->avatar);
+            if (file_exists($oldFilePath)) {
+                unlink($oldFilePath); // Hapus file lama
             }
         }
-
+    
         // Simpan foto baru
         if ($request->hasFile('photo')) {
-            // Menghasilkan nama file unik
-            $imageName = $user->id . $user->username . '.' . $request->photo->extension();
-
-            // Simpan file baru di storage
-            $request->photo->storeAs('public/photos', $imageName);
-
+            // Menghasilkan nama file unik dengan ID user dan timestamp
+            // $createdAt = now()->format('YmdHi');
+            $imageName = $user->id . '_' . $user->username . '.png';
+    
+            // Tentukan path penyimpanan di public/storage/photos
+            $destinationPath = public_path('storage/photos');
+    
+            // Pindahkan file ke direktori public/storage/photos
+            $request->photo->move($destinationPath, $imageName);
+    
             // Update avatar di database dengan nama file baru
             $user->avatar = $imageName;
             $user->save(); // Simpan perubahan ke database
-
+    
             return response()->json(['success' => true, 'avatar' => asset('storage/photos/' . $imageName)]);
         }
-
+    
         return response()->json(['success' => false, 'message' => 'No file uploaded'], 400);
     }
+    
 
     public function update_dataprofile(Request $request){
 
