@@ -66,7 +66,7 @@
             }
 
             .btn-pulang {
-                border: 2px solid ;
+                border: 2px solid;
                 background-color: #CC0200;
                 color: white;
                 width: 40%;
@@ -90,9 +90,9 @@
             /* Media Query untuk Laptop (di bawah 1024px) */
             @media (max-width: 768px) {
                 /* .button-container {
-                        display: flex;
-                        justify-content: space-around;
-                    } */
+                            display: flex;
+                            justify-content: space-around;
+                        } */
 
                 .button-container .btn {
                     display: flex;
@@ -113,7 +113,7 @@
             /* Media Query untuk Handphone (di bawah 768px) */
             @media (max-width: 344px) {
                 /* .button-container {
-                        flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
+                            flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
                 /* align-items: center; */
                 /* } */
 
@@ -296,9 +296,14 @@
         <div class="container">
 
             <!-- Location Display -->
-            <div class="location">
-                <span class="location-icon">📍</span>
-                <span>Pt Multi Power Abadi, Surabaya</span>
+            <div class="d-flex justify-content-between align-items-center">
+
+                <img src="{{ asset('img/logo.png') }}" alt="" style="width: 70px">
+                <div class="location">
+
+                    <span class="location-icon">📍</span>
+                    <span>Pt Multi Power Abadi, Surabaya</span>
+                </div>
             </div>
 
             <!-- Greeting Section -->
