@@ -100,7 +100,8 @@
                         <div class="modal-body">
                             {{-- <input type="hidden" name="id" id="editId"> --}}
                             <div class="form-group">
-                                <label for="adminNo">No tujuan pengiriman Absen</label>
+                                <label for="adminNo">No tujuan pengiriman Absen (62xxxx
+                                    )</label>
                                 <input type="text" class="form-control" name="admin_no" id="adminNo"
                                     placeholder="Masukkan No Whatsapp">
                                 @error('admin_no')
