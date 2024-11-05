@@ -44,7 +44,8 @@
     @php
         \Carbon\Carbon::setLocale('id');
         $daysInMonth = \Carbon\Carbon::create($year, $month)->daysInMonth;
-        $no = 1; // Memulai penomoran dari 1
+        $no = 1;
+        $nomor = 1; // Memulai penomoran dari 1
         // Ambil semua data pengguna
         $allUsers = \App\Models\User::where('role', 'user')->get();
     @endphp
@@ -117,7 +118,7 @@
                     $userPresensi = $presensi->where('user_id', $user->id);
                 @endphp
                 <tr>
-                    <td>{{ $no++ }}</td>
+                    <td>{{ $nomor++ }}</td>
                     <td>{{ $user->nik }}</td>
                     <td>{{ $user->name }}</td>
                     @for ($day = 16; $day <= $daysInMonth; $day++)
