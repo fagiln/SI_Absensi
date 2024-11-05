@@ -98,12 +98,14 @@ class HomeController extends Controller
 
         $izinCount = Perizinan::where('user_id', $userId)
                                 ->where('reason', 'izin')
+                                ->where('status', 'diterima')
                                 ->whereMonth('start_date', Carbon::now()->month)
                                 ->whereYear('start_date', Carbon::now()->year)
                                 ->count();
 
         $sakitCount = Perizinan::where('user_id', $userId)
         ->where('reason', 'sakit')
+        ->where('status', 'diterima')
         ->whereMonth('start_date', Carbon::now()->month)
         ->whereYear('start_date', Carbon::now()->year)
         ->count();
