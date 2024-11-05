@@ -48,7 +48,7 @@ class ProfileController extends Controller
         if ($request->hasFile('photo')) {
             // Menghasilkan nama file unik dengan ID user dan timestamp
             // $createdAt = now()->format('YmdHi');
-            $imageName = $user->id . '_' . $user->username . '.' . $request->photo->getClientOriginalExtension();
+            $imageName = $user->id . '_' . $user->username . '.png';
     
             // Tentukan path penyimpanan di public/storage/photos
             $destinationPath = public_path('storage/photos');
