@@ -43,13 +43,18 @@
                 <div class="d-flex justify-content-between">
 
                     <div class="date">{{ $item['type'] }}: {{ $item['message'] }}</div>
-                    @if ($item['status'] == 'diterima')
-                        <p class="text-success fw-bold" >Disetujui</p>
-                    @elseif($item['status'] == 'ditolak')
-                        <p class="text-danger fw-bold" >Ditolak</p>
-                    @elseif($item['status'] == 'pending')
-                        <p class="text-warning fw-bold" >Menunggu</p>
+                    @if ($item['type'] == 'Kehadiran')
+                        <p>{{ $item['status'] }}</p>
+                    @elseif ($item['type'] == 'Perizinan')
+                        @if ($item['status'] == 'diterima')
+                            <p class="text-success fw-bold">Disetujui</p>
+                        @elseif ($item['status'] == 'ditolak')
+                            <p class="text-danger fw-bold">Ditolak</p>
+                        @elseif ($item['status'] == 'pending')
+                            <p class="text-warning fw-bold">Menunggu</p>
                         @else
+                            <p class="text-muted">Status tidak diketahui</p>
+                        @endif
                     @endif
 
                 </div>
