@@ -17,7 +17,7 @@
                 background-color: #f8d7da;
                 padding: 5px 15px;
                 border-radius: 20px;
-                font-size: 14px;
+                font-size: 11px;
                 display: inline-flex;
                 align-items: center;
             }
