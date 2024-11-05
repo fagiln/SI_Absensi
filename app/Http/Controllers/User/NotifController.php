@@ -27,6 +27,9 @@ class NotifController extends Controller
             ->limit(3)
             ->get();
 
+        $kehadiranTerbaru = collect($kehadiranTerbaru);
+        $perizinanTerbaru = collect($perizinanTerbaru);
+
         // Menggabungkan kedua koleksi dengan penyesuaian format tampilan
         $dataGabungan = $kehadiranTerbaru->map(function ($item) {
             return [
