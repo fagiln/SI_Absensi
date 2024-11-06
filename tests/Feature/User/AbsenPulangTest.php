@@ -9,6 +9,13 @@ use Tests\TestCase;
 
 class AbsenPulangTest extends TestCase
 {
+    public function test_akses_home_tanpa_login()
+    {
+        $response=$this->get(route('home'));
+        $response->assertRedirect(route('login'));
+    }
+
+    // akses home setelah login
     public function test_akses_home_setelah_login()
     {
         $response=$this->post('/',[
@@ -22,7 +29,7 @@ class AbsenPulangTest extends TestCase
         $response->assertSee('Lokasi Anda Saat Ini:');
     }
 
-
+    // absen pulang 
     public function test_absen_pulang()
     {
         $response=$this->post('/',[
