@@ -70,24 +70,24 @@ class NotifController extends Controller
             ->orderBy('updated_at', 'desc')
             ->limit(3)
             ->get();
-    
+
         // Mengambil data terbaru dari model Perizinan
         $perizinanTerbaru = Perizinan::where('user_id', $userId)
             ->select('reason', 'created_at', 'status', 'updated_at')
             ->orderBy('updated_at', 'desc')
             ->limit(3)
             ->get();
-    
+
         $perizinanTerbaru = collect($perizinanTerbaru);
-    
+
         // Mengelompokkan kehadiran berdasarkan tanggal
         $kehadiranKelompok = $kehadiranTerbaru->groupBy(function ($item) {
             return Carbon::parse($item->updated_at)->toDateString(); // Mengambil hanya tanggal
         });
-    
+
         // Menggabungkan data kehadiran dan perizinan
         $dataGabungan = collect();
-    
+
         // Proses setiap grup kehadiran
         foreach ($kehadiranKelompok as $tanggal => $kehadiranGroup) {
             foreach ($kehadiranGroup as $index => $item) {
@@ -96,13 +96,13 @@ class NotifController extends Controller
                 $dataGabungan->push([
                     'type' => 'Kehadiran',
                     'message' => $item->status,
-                    'status' => $status,
+                    'status' => $status == null ? "" : $status,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                 ]);
             }
         }
-    
+
         // Menambahkan data perizinan ke dalam data gabungan
         foreach ($perizinanTerbaru as $item) {
             $dataGabungan->push([
@@ -113,13 +113,10 @@ class NotifController extends Controller
                 'updated_at' => $item->updated_at,
             ]);
         }
-    
+
         // Urutkan data gabungan berdasarkan kolom 'updated_at'
         $dataGabungan = $dataGabungan->sortByDesc('updated_at');
-    
+
         return view('user.notif', compact('dataGabungan'));
     }
-    
-
-
 }

@@ -67,10 +67,18 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                $cutiGrouped = \App\Models\Perizinan::whereMonth('start_date', '<=', $month)
+                    ->whereMonth('end_date', '>=', $month)
+                    ->where('status', 'diterima')
+                    ->get()
+                    ->groupBy('user_id');
+            @endphp
+
             @foreach ($allUsers as $user)
                 @php
-                    // Filter presensi hanya untuk user ini
                     $userPresensi = $presensi->where('user_id', $user->id);
+                    $userCuti = $cutiGrouped->get($user->id) ?? collect();
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
@@ -78,21 +86,27 @@
                     <td>{{ $user->name }}</td>
                     @for ($day = 1; $day <= 15; $day++)
                         @php
-                            $presensiOnDay = $userPresensi->firstWhere(
-                                'work_date',
-                                \Carbon\Carbon::create($year, $month, $day)->toDateString(),
-                            );
+                            $currentDate = \Carbon\Carbon::create($year, $month, $day)->toDateString();
+                            $presensiOnDay = $userPresensi->firstWhere('work_date', $currentDate);
+                            $isWeekend = \Carbon\Carbon::create($year, $month, $day)->translatedFormat('l');
+                            $isCuti = $userCuti->contains(function ($cuti) use ($currentDate) {
+                                return $currentDate >= $cuti->start_date && $currentDate <= $cuti->end_date;
+                            });
                         @endphp
                         <td>
                             @if ($presensiOnDay)
                                 {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
-                                {{-- {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }} --}}
                                 {{ $presensiOnDay->check_out_time ? \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') : 'Tidak absen pulang' }}
+                            @elseif ($isCuti)
+                                Cuti
+                            @elseif ($isWeekend == 'Sabtu' || $isWeekend == 'Minggu')
+                                Libur
                             @endif
                         </td>
                     @endfor
                 </tr>
             @endforeach
+
         </tbody>
     </table>
 
@@ -116,6 +130,7 @@
             @foreach ($allUsers as $user)
                 @php
                     $userPresensi = $presensi->where('user_id', $user->id);
+                    $userCuti = $cutiGrouped->get($user->id) ?? collect();
                 @endphp
                 <tr>
                     <td>{{ $nomor++ }}</td>
@@ -123,16 +138,21 @@
                     <td>{{ $user->name }}</td>
                     @for ($day = 16; $day <= $daysInMonth; $day++)
                         @php
-                            $presensiOnDay = $userPresensi->firstWhere(
-                                'work_date',
-                                \Carbon\Carbon::create($year, $month, $day)->toDateString(),
-                            );
+                            $currentDate = \Carbon\Carbon::create($year, $month, $day)->toDateString();
+                            $presensiOnDay = $userPresensi->firstWhere('work_date', $currentDate);
+                            $isWeekend = \Carbon\Carbon::create($year, $month, $day)->translatedFormat('l');
+                            $isCuti = $userCuti->contains(function ($cuti) use ($currentDate) {
+                                return $currentDate >= $cuti->start_date && $currentDate <= $cuti->end_date;
+                            });
                         @endphp
                         <td>
-                            @if ($presensiOnDay)
+                            @if ($isCuti)
+                                Cuti
+                            @elseif ($presensiOnDay)
                                 {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
-                                {{-- {{ \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') }} --}}
                                 {{ $presensiOnDay->check_out_time ? \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') : 'Tidak absen pulang' }}
+                            @elseif ($isWeekend == 'Sabtu' || $isWeekend == 'Minggu')
+                                Libur
                             @endif
                         </td>
                     @endfor
