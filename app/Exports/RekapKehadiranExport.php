@@ -17,25 +17,26 @@ class RekapKehadiranExport implements FromCollection, WithHeadings, WithEvents
     protected $month;
     protected $year;
     protected $karyawan;
-
-    public function __construct($presensi, $month, $year, $karyawan)
+protected $perizinan;
+    public function __construct($presensi, $month, $year, $karyawan, $perizinan )
     {
         $this->presensi = $presensi;
         $this->month = $month;
         $this->year = $year;
         $this->karyawan = $karyawan;
+        $this->perizinan = $perizinan;
     }
-
     public function collection()
     {
         $data = [];
         $daysInMonth = Carbon::create($this->year, $this->month)->daysInMonth;
         $no = 1;
     
-        // Iterasi setiap karyawan
         foreach ($this->karyawan as $user) {
-            // Ambil presensi berdasarkan user_id untuk bulan dan tahun yang diminta
             $userPresensi = $this->presensi->where('user_id', $user->id);
+            
+            // Ambil data izin cuti untuk karyawan ini dari koleksi $perizinan
+            $izinCuti = $this->perizinan->where('user_id', $user->id);
     
             $rowData = [
                 'no' => $no++,
@@ -43,12 +44,28 @@ class RekapKehadiranExport implements FromCollection, WithHeadings, WithEvents
                 'name' => $user->name,
             ];
     
-            // Mengisi data presensi untuk setiap hari di bulan tersebut
             for ($day = 1; $day <= $daysInMonth; $day++) {
-                $presensiOnDay = $userPresensi->firstWhere('work_date', Carbon::create($this->year, $this->month, $day)->toDateString());
-                $rowData["day{$day}"] = $presensiOnDay ?
-                    Carbon::parse($presensiOnDay->check_in_time)->format('H:i') . ' - ' . Carbon::parse($presensiOnDay->check_out_time)->format('H:i')
-                    : '';
+                $currentDate = Carbon::create($this->year, $this->month, $day)->toDateString();
+                $isWeekend = Carbon::create($this->year, $this->month, $day)->translatedFormat('l');
+
+                // Cek izin cuti
+                $isCuti = $izinCuti->first(function ($izin) use ($currentDate) {
+                    return $currentDate >= $izin->start_date && $currentDate <= $izin->end_date;
+                });
+    
+                if ($isCuti) {
+                    $rowData["day{$day}"] = 'Izin Cuti';
+                } 
+                elseif($isWeekend == 'Sabtu' || $isWeekend == 'Minggu'){
+                    $rowData["day{$day}"] = 'Libur';
+
+                }
+                else {
+                    $presensiOnDay = $userPresensi->firstWhere('work_date', $currentDate);
+                    $rowData["day{$day}"] = $presensiOnDay
+                        ? Carbon::parse($presensiOnDay->check_in_time)->format('H:i') . ' - ' . Carbon::parse($presensiOnDay->check_out_time)->format('H:i')
+                        : '';
+                }
             }
     
             $data[] = $rowData;
@@ -57,6 +74,7 @@ class RekapKehadiranExport implements FromCollection, WithHeadings, WithEvents
         return collect($data);
     }
     
+
 
     public function headings(): array
     {
@@ -89,7 +107,7 @@ class RekapKehadiranExport implements FromCollection, WithHeadings, WithEvents
                 $event->sheet->setCellValue('A3', 'Tahun: ' . $this->year);
                 // Format tanggal
                 $rowCount = $this->karyawan->count() + 2 + $startRow + 5; // Menambah baris untuk header
-                $cellRange = 'A6:AH' . ($this->karyawan->count() + $startRow +5);
+                $cellRange = 'A6:AH' . ($this->karyawan->count() + $startRow + 5);
                 $event->sheet->getStyle($cellRange)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
