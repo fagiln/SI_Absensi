@@ -60,14 +60,15 @@ class NotifController extends Controller
     {
         $userId = auth()->id();
         
-        $absen = Kehadiran::where('user_id', $userId)
-                            ->whereDate('created_at', Carbon::today()) // Memfilter berdasarkan tanggal hari ini
-                            ->first();
+        // $absen = Kehadiran::where('user_id', $userId)
+        //                     ->whereDate('created_at', Carbon::today()) // Memfilter berdasarkan tanggal hari ini
+        //                     ->first();
 
         // Mengambil data terbaru dari model Kehadiran
         $kehadiranTerbaru = Kehadiran::where('user_id', $userId)
             ->select('status', 'created_at', 'updated_at')
             ->orderBy('updated_at', 'desc')
+            ->limit(3)
             ->get();
     
         // Mengambil data terbaru dari model Perizinan
@@ -81,7 +82,7 @@ class NotifController extends Controller
     
         // Mengelompokkan kehadiran berdasarkan tanggal
         $kehadiranKelompok = $kehadiranTerbaru->groupBy(function ($item) {
-            return Carbon::parse($item->updated_at); // Mengambil hanya tanggal
+            return Carbon::parse($item->updated_at)->toDateString(); // Mengambil hanya tanggal
         });
     
         // Menggabungkan data kehadiran dan perizinan
@@ -91,7 +92,7 @@ class NotifController extends Controller
         foreach ($kehadiranKelompok as $tanggal => $kehadiranGroup) {
             foreach ($kehadiranGroup as $index => $item) {
                 // dd($absen->created_at,$absen->updated_at);
-                $status = $absen->created_at == $absen->updated_at ? 'Absen Masuk' : 'Absen Pulang'; // Absen masuk untuk yang pertama dan pulang untuk yang kedua
+                $status = $item->created_at == $item->updated_at ? 'Absen Masuk' : 'Absen Pulang'; // Absen masuk untuk yang pertama dan pulang untuk yang kedua
                 $dataGabungan->push([
                     'type' => 'Kehadiran',
                     'message' => $item->status,
