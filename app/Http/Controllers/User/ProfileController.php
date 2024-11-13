@@ -60,7 +60,7 @@ class ProfileController extends Controller
             $user->avatar = $imageName;
             $user->save(); // Simpan perubahan ke database
     
-            return response()->json(['success' => true, 'avatar' => asset('storage/photos/' . $imageName)]);
+            return response()->json(['success' => true, 'avatar' => asset('storage/photos/' . $imageName) . '?' . time()]);
         }
     
         return response()->json(['success' => false, 'message' => 'No file uploaded'], 400);

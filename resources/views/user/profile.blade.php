@@ -123,7 +123,7 @@
 
         <p class="fs-10">NIK</p>
         <div class="input-group mb-3">
-            <input type="number" class="form-control" 
+            <input type="text" class="form-control" 
             {{-- placeholder="{{ $user->nik }}"  --}}
             value="{{ $user->nik }}"
             aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" readonly>
@@ -152,7 +152,7 @@
                 <div class="text-danger">{{ $message }}</div>
         @enderror
         <div class="input-group mb-3">
-            <input id="no_hp" name="no_hp" type="number" class="form-control" 
+            <input id="no_hp" name="no_hp" type="text" class="form-control" 
             placeholder="{{ $user->no_hp }}, Pastikan No. Hp. benar" 
             aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
         </div>
