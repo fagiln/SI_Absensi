@@ -6,6 +6,7 @@ use App\Exports\PresensiExport;
 use App\Exports\RekapKehadiranExport;
 use App\Http\Controllers\Controller;
 use App\Models\Kehadiran;
+use App\Models\Perizinan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -29,8 +30,11 @@ class RekapPresensiController extends Controller
             })
             ->get();
         $karyawan = User::where('role', 'user')->get(); // Ambil semua data karyawan
-    
-        return Excel::download(new RekapKehadiranExport($presensi, $month, $year, $karyawan)," Rekap_Presensi_{$month}_{$year}.xlsx");
+        $perizinan = Perizinan::whereMonth('start_date', '<=', $month)
+        ->whereMonth('end_date', '>=', $month)
+        ->where('status', 'diterima')
+        ->get(); // Sesuaikan dengan model izin cuti Anda    
+        return Excel::download(new RekapKehadiranExport($presensi, $month, $year, $karyawan, $perizinan )," Rekap_Presensi_{$month}_{$year}.xlsx");
     }
 
 
