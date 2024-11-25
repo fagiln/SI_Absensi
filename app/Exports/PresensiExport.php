@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTitle, WithEvents
 {
@@ -79,9 +80,21 @@ class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTi
             AfterSheet::class => function (AfterSheet $event) {
                 $dataTableStartRow = 1; // Tabel akan dimulai dari baris 10
                 $numberOfRows = 11;
+
+
                 // Berikan jarak 2 baris sebelum tabel
                 $event->sheet->insertNewRowBefore($dataTableStartRow, $numberOfRows);
                 $event->sheet->mergeCells('A1:A4');
+                $drawing = new Drawing();
+                $drawing->setName('Logo');
+                $drawing->setDescription('This is the logo');
+                $drawing->setPath(public_path('img/logo.png')); // Pastikan path sudah benar
+                $drawing->setHeight(70);
+                $drawing->setWidth(70);
+                $drawing->setCoordinates('A1');
+                $drawing->setOffsetY(20); // Geser vertikal (atur agar di tengah)
+                $drawing->setWorksheet($event->sheet->getDelegate());
+             
                 // Menulis judul laporan presensi di baris 1
                 $event->sheet->mergeCells('B1:F1');
                 $event->sheet->setCellValue('B1', 'LAPORAN PRESENSI KARYAWAN');

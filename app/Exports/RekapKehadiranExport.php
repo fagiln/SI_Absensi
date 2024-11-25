@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class RekapKehadiranExport implements FromCollection, WithHeadings, WithEvents
 {
@@ -105,6 +106,16 @@ protected $perizinan;
                 $event->sheet->getStyle('A6:AI6')->getFont()->setBold(true); // Menebalkan header
 
                 $event->sheet->mergeCells('A1:A4'); // Merge untuk judul
+                $drawing = new Drawing();
+                $drawing->setName('Logo');
+                $drawing->setDescription('This is the logo');
+                $drawing->setPath(public_path('img/logo.png')); // Pastikan path sudah benar
+                $drawing->setHeight(70);
+                $drawing->setWidth(70);
+                $drawing->setCoordinates('A1');
+                $drawing->setOffsetY(20); // Geser vertikal (atur agar di tengah)
+                $drawing->setWorksheet($event->sheet->getDelegate());
+             
                 $event->sheet->mergeCells('B1:F1'); // Merge untuk judul
                 $event->sheet->setCellValue('B1', 'REKAP PRESENSI KARYAWAN');
                 $event->sheet->getStyle('B1')->getFont()->setBold(true)->setSize(sizeInPoints: 11);
