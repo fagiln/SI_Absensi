@@ -47,27 +47,30 @@ protected $perizinan;
             for ($day = 1; $day <= $daysInMonth; $day++) {
                 $currentDate = Carbon::create($this->year, $this->month, $day)->toDateString();
                 $isWeekend = Carbon::create($this->year, $this->month, $day)->translatedFormat('l');
-
+            
                 // Cek izin cuti
                 $isCuti = $izinCuti->first(function ($izin) use ($currentDate) {
                     return $currentDate >= $izin->start_date && $currentDate <= $izin->end_date;
                 });
-    
-                if ($isCuti) {
-                    $rowData["day{$day}"] = 'Izin Cuti';
-                } 
-                elseif($isWeekend == 'Sabtu' || $isWeekend == 'Minggu'){
+            
+                // Cek absensi terlebih dahulu
+                $presensiOnDay = $userPresensi->firstWhere('work_date', $currentDate);
+                if ($presensiOnDay) {
+                    // Jika ada presensi
+                    $rowData["day{$day}"] = Carbon::parse($presensiOnDay->check_in_time)->format('H:i') . ' - ' . 
+                        ($presensiOnDay->check_out_time ? Carbon::parse($presensiOnDay->check_out_time)->format('H:i') : 'Tidak absen pulang');
+                } elseif ($isWeekend == 'Sabtu' || $isWeekend == 'Minggu') {
+                    // Jika hari libur (akhir pekan)
                     $rowData["day{$day}"] = 'Libur';
-
-                }
-                else {
-                    $presensiOnDay = $userPresensi->firstWhere('work_date', $currentDate);
-                    $rowData["day{$day}"] = $presensiOnDay
-                        ? Carbon::parse($presensiOnDay->check_in_time)->format('H:i') . ' - ' . Carbon::parse($presensiOnDay->check_out_time)->format('H:i')
-                        : '';
+                } elseif ($isCuti) {
+                    // Jika hari cuti
+                    $rowData["day{$day}"] = 'Izin Cuti';
+                } else {
+                    // Hari kerja tanpa presensi
+                    $rowData["day{$day}"] = '';
                 }
             }
-    
+            
             $data[] = $rowData;
         }
     
@@ -96,18 +99,29 @@ protected $perizinan;
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $startRow = 1;
-                $event->sheet->insertNewRowBefore($startRow, 5);
+                $numberOfRows = 5;
+                $event->sheet->insertNewRowBefore($startRow, $numberOfRows);
                 $event->sheet->getStyle('A1:Z1')->getFont()->setBold(true); // Menebalkan header
                 $event->sheet->getStyle('A6:AI6')->getFont()->setBold(true); // Menebalkan header
-                $event->sheet->mergeCells('A1:C1'); // Merge untuk judul
-                $event->sheet->setCellValue('A1', 'Rekap Presensi Karyawan');
-                $event->sheet->mergeCells('A2:C2');
-                $event->sheet->setCellValue('A2', 'Bulan: ' . Carbon::create($this->year, $this->month)->translatedFormat('F'));
-                $event->sheet->mergeCells('A3:C3');
-                $event->sheet->setCellValue('A3', 'Tahun: ' . $this->year);
+
+                $event->sheet->mergeCells('A1:A4'); // Merge untuk judul
+                $event->sheet->mergeCells('B1:F1'); // Merge untuk judul
+                $event->sheet->setCellValue('B1', 'REKAP PRESENSI KARYAWAN');
+                $event->sheet->getStyle('B1')->getFont()->setBold(true)->setSize(sizeInPoints: 11);
+
+                $event->sheet->mergeCells('B2:F2');
+                $event->sheet->setCellValue('B2', 'PT. MULTI POWER ABADI');
+                $event->sheet->getStyle('B2')->getFont()->setBold(true)->setSize(sizeInPoints: 11);
+
+                $event->sheet->mergeCells('B3:F3');
+                $event->sheet->setCellValue('B3', 'Jl.Gn.Anyar Tambak IV No.50, Gn. Anyar Tambak, Kec. Gn. Anyar, Surabaya, Jawa Timur 60294');
+                $event->sheet->getStyle('B3')->getFont()->setItalic(true)->setSize(sizeInPoints: 11);
+                $event->sheet->mergeCells('B4:F4');
+                $event->sheet->setCellValue('B4', 'Bulan: ' . Carbon::create()->month($this->month)->translatedFormat('F') . ' ' . $this->year);
+                $event->sheet->getStyle('B4')->getAlignment();
                 // Format tanggal
-                $rowCount = $this->karyawan->count() + 2 + $startRow + 5; // Menambah baris untuk header
-                $cellRange = 'A6:AH' . ($this->karyawan->count() + $startRow + 5);
+                $rowCount = $this->karyawan->count() + 2 + $startRow + $numberOfRows; // Menambah baris untuk header
+                $cellRange = 'A6:AH' . ($this->karyawan->count() + $startRow + $numberOfRows);
                 $event->sheet->getStyle($cellRange)->applyFromArray([
                     'borders' => [
                         'allBorders' => [

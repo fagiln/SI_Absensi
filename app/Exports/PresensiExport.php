@@ -28,16 +28,20 @@ class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTi
 
     public function collection()
     {
-        return $this->presensi->map(function ($item) {
+
+        $no = 1;
+
+        return $this->presensi->map(function ($item) use (&$no) {
             $checkIn = Carbon::parse($item->check_in_time);
             $checkOut = Carbon::parse($item->check_out_time);
             $workHours = $checkOut->diff($checkIn)->format('%H:%I');
 
             return [
+                'no' => $no++,
                 'work_date' => $item->work_date,
                 'check_in_time' => Carbon::parse($item->check_in_time)->format('H:i:s'),
-                'check_out_time' =>$item->check_out_time == null ? '-' :  Carbon::parse($item->check_out_time)->format('H:i:s'),
-                'work_hours' => $item->check_out_time == null ? '-':  $workHours,
+                'check_out_time' => $item->check_out_time == null ? '-' :  Carbon::parse($item->check_out_time)->format('H:i:s'),
+                'work_hours' => $item->check_out_time == null ? '-' :  $workHours,
                 'status' => $item->status,
             ];
         });
@@ -46,6 +50,7 @@ class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTi
     public function headings(): array
     {
         return [
+            'No',
             'Tanggal Kerja',
             'Jam Datang',
             'Jam Pulang',
@@ -73,57 +78,68 @@ class PresensiExport implements FromCollection, WithHeadings, WithStyles, WithTi
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $dataTableStartRow = 1; // Tabel akan dimulai dari baris 10
-
+                $numberOfRows = 11;
                 // Berikan jarak 2 baris sebelum tabel
-                $event->sheet->insertNewRowBefore($dataTableStartRow, 8);
-
+                $event->sheet->insertNewRowBefore($dataTableStartRow, $numberOfRows);
+                $event->sheet->mergeCells('A1:A4');
                 // Menulis judul laporan presensi di baris 1
-                $event->sheet->mergeCells('A1:E1');
-                $event->sheet->setCellValue('A1', 'Laporan Presensi Karyawan');
-                $event->sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-                $event->sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+                $event->sheet->mergeCells('B1:F1');
+                $event->sheet->setCellValue('B1', 'LAPORAN PRESENSI KARYAWAN');
+                $event->sheet->getStyle('B1')->getFont()->setBold(true)->setSize(11);
+                $event->sheet->getStyle('B1')->getAlignment();
+                $event->sheet->mergeCells('B2:F2');
+                $event->sheet->setCellValue('B2', 'PT. MULTI POWER ABADI');
+                $event->sheet->getStyle('B2')->getFont()->setBold(true)->setSize(11);
+                $event->sheet->getStyle('B2')->getAlignment();
+                $event->sheet->mergeCells('B3:F3');
+                $event->sheet->setCellValue('B3', 'Jl.Gn.Anyar Tambak IV No.50, Gn. Anyar Tambak, Kec. Gn. Anyar, Surabaya, Jawa Timur 60294');
+                $event->sheet->getStyle('B3')->getFont()->setItalic(true)->setSize(11);
+                $event->sheet->getStyle('B3')->getAlignment();
 
                 // Menulis data diri karyawan mulai dari baris 2 sampai 7
-                $event->sheet->mergeCells('A2:E2');
-                $event->sheet->setCellValue('A2', 'Bulan: ' . Carbon::create()->month($this->month)->translatedFormat('F') . ' ' . $this->year);
-                $event->sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
-
-                $event->sheet->mergeCells('A3:E3');
-                $event->sheet->setCellValue('A3', 'NIK: ' . $this->karyawan->nik);
-
-                $event->sheet->mergeCells('A4:E4');
-                $event->sheet->setCellValue('A4', 'Nama: ' . $this->karyawan->name);
-
-                $event->sheet->mergeCells('A5:E5');
-                $event->sheet->setCellValue('A5', 'Jabatan: ' . $this->karyawan->jabatan);
+                $event->sheet->mergeCells('B4:F4');
+                $event->sheet->setCellValue('B4', 'Bulan: ' . Carbon::create()->month($this->month)->translatedFormat('F') . ' ' . $this->year);
+                $event->sheet->getStyle('B4')->getAlignment();
 
                 $event->sheet->mergeCells('A6:E6');
-                $event->sheet->setCellValue('A6', 'Departemen: ' . $this->karyawan->departemen->nama_departemen);
+                $event->sheet->setCellValue('A6', 'NIK: ' . $this->karyawan->nik);
 
                 $event->sheet->mergeCells('A7:E7');
-                $event->sheet->setCellValue('A7', 'No. Hp: ' . $this->karyawan->no_hp);
+                $event->sheet->setCellValue('A7', 'Nama: ' . $this->karyawan->name);
+
+                $event->sheet->mergeCells('A8:E8');
+                $event->sheet->setCellValue('A8', 'Jabatan: ' . $this->karyawan->jabatan);
+
+                $event->sheet->mergeCells('A9:E9');
+                $event->sheet->setCellValue('A9', 'Departemen: ' . $this->karyawan->departemen->nama_departemen);
+
+                $event->sheet->mergeCells('A10:E10');
+                $event->sheet->setCellValue('A10', 'No. Hp: ' . $this->karyawan->no_hp);
 
                 // Menambahkan jarak 2 baris kosong sebelum tabel data dimulai (baris 9 dan 10 kosong)
 
                 // Menambahkan tempat tanda tangan setelah tabel
-                $rowCount = $this->presensi->count() + $dataTableStartRow + 8;
-                 // Menambah 1 untuk baris header
-                 $cellRange = 'A9:E' . ($this->presensi->count() + $dataTableStartRow +8);
-                 $event->sheet->getStyle($cellRange)->applyFromArray([
-                     'borders' => [
-                         'allBorders' => [
-                             'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                             'color' => ['argb' => '000000'], // Warna hitam
-                         ],
-                     ],
-                 ]);
+                $rowCount = $this->presensi->count() + $dataTableStartRow + $numberOfRows;
+                // Menambah 1 untuk baris header
+                $cellRange = 'A12:F' . ($this->presensi->count() + $dataTableStartRow + $numberOfRows);
+                $event->sheet->getStyle($cellRange)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'], // Warna hitam
+                        ],
+                    ],
+                ]);
                 $event->sheet->setCellValue('A' . ($rowCount + 2), 'Surabaya, ' . Carbon::now()->translatedFormat('d F Y'));
                 $event->sheet->setCellValue('A' . ($rowCount + 6), '(____________________)');
                 $event->sheet->setCellValue('A' . ($rowCount + 7), 'Mario Mariyadi');
                 $event->sheet->setCellValue('A' . ($rowCount + 8), 'Direktur');
+                $event->sheet->setCellValue('D' . ($rowCount + 6), '(____________________)');
+                $event->sheet->setCellValue('D' . ($rowCount + 7), 'Iqbal Firmansyah');
+                $event->sheet->setCellValue('D' . ($rowCount + 8), 'Sekretaris');
 
                 $event->sheet->getStyle('A1:F' . ($rowCount + 8))->getFont()->setName('Times New Roman');
-             },
+            },
         ];
     }
 }

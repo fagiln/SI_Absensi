@@ -31,7 +31,9 @@
     <div class="container mt-5">
         <div class="text-center mb-4">
             <img src="{{ asset('img/logo.png') }}" alt="Logo Perusahaan" width="150" class="mb-3">
-            <h4>Laporan Presensi Karyawan</h4>
+            <h4 class="font-weight-bold">LAPORAN PRESENSI KARYAWAN</h4>
+            <h4 class="font-weight-bold">PT. MULTI POWER ABADI</h4>
+            <p class="font-italic">Jl.Gn.Anyar Tambak IV No.50, Gn. Anyar Tambak, Kec. Gn. Anyar, Surabaya, Jawa Timur 60294</p>
             <p>Bulan: {{ \Carbon\Carbon::create()->month($month)->translatedFormat('F') }} {{ $year }}</p>
         </div>
 

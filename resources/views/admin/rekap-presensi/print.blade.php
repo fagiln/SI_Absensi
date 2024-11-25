@@ -34,7 +34,10 @@
 
     <div class="text-center mb-4">
         <img src="{{ asset('img/logo.png') }}" alt="Logo Perusahaan" width="150">
-        <h4 class="font-weight-bold">Rekap Presensi Karyawan</h4>
+        <h4 class="font-weight-bold">REKAP PRESENSI KARYAWAN</h4>
+        <h4 class="font-weight-bold">PT. MULTI POWER ABADI</h4>
+        <p class="font-italic">Jl.Gn.Anyar Tambak IV No.50, Gn. Anyar Tambak, Kec. Gn. Anyar, Surabaya, Jawa Timur 60294
+        </p>
         <p>Bulan: {{ \Carbon\Carbon::create()->month($month)->translatedFormat('F') }}</p>
         <p>Tahun: {{ $year }}</p>
     </div>
@@ -97,10 +100,10 @@
                             @if ($presensiOnDay)
                                 {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
                                 {{ $presensiOnDay->check_out_time ? \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') : 'Tidak absen pulang' }}
-                            @elseif ($isCuti)
-                                Cuti
                             @elseif ($isWeekend == 'Sabtu' || $isWeekend == 'Minggu')
                                 Libur
+                            @elseif ($isCuti)
+                                Cuti
                             @endif
                         </td>
                     @endfor
@@ -146,13 +149,13 @@
                             });
                         @endphp
                         <td>
-                            @if ($isCuti)
-                                Cuti
-                            @elseif ($presensiOnDay)
+                            @if ($presensiOnDay)
                                 {{ \Carbon\Carbon::parse($presensiOnDay->check_in_time)->format('H:i') }} -
                                 {{ $presensiOnDay->check_out_time ? \Carbon\Carbon::parse($presensiOnDay->check_out_time)->format('H:i') : 'Tidak absen pulang' }}
                             @elseif ($isWeekend == 'Sabtu' || $isWeekend == 'Minggu')
                                 Libur
+                            @elseif ($isCuti)
+                                Cuti
                             @endif
                         </td>
                     @endfor
