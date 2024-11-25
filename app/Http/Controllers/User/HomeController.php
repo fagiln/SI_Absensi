@@ -164,7 +164,6 @@ class HomeController extends Controller
 
     public function absen_masuk_store(Request $request)
     {
-
         // Validasi data yang diterima
         $request->validate([
             'photo-data' => 'required|string',
@@ -180,6 +179,17 @@ class HomeController extends Controller
         $photoData = $request->input('photo-data');
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
+
+        // Periksa apakah pengguna sudah melakukan absensi pada hari ini
+        $existingAbsence = Kehadiran::where('user_id', $userId)
+                                    ->whereDate('work_date', Carbon::today())
+                                    ->first();
+
+        if ($existingAbsence) {
+            return response()->json([
+                'success' => false,
+            ], 403);
+        }
 
         // Mengubah foto dari base64 menjadi file
         $image = str_replace('data:image/png;base64,', '', $photoData);
@@ -224,7 +234,6 @@ class HomeController extends Controller
         $username = Auth::user()->name;
 
         // Redirect atau return response
-        // return redirect('/home')->with('success', 'Data absen berhasil dikirim!');
         return response()->json([
             'success' => true,
             'userName' => $username,
@@ -234,6 +243,7 @@ class HomeController extends Controller
             'adminPhone' => $admin->no_hp,
         ]);
     }
+
 
     // Fungsi untuk menyimpan foto
     private function savePhoto($photoData)
