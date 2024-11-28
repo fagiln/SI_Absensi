@@ -208,7 +208,7 @@ class HomeController extends Controller
         file_put_contents($destinationPath . '/' . $imageName, base64_decode($image));
 
         // Waktu check-in yang ditentukan (contoh: 08:10)
-        $scheduledCheckInTime = Carbon::createFromTime(8, 10);
+        $scheduledCheckInTime = Carbon::createFromTime(8, 5, 59);
 
         // Mendapatkan waktu sekarang
         $currentCheckInTime = Carbon::now();
