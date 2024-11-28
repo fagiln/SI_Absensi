@@ -208,11 +208,10 @@
                     `${url}?created_at=${date}&start_date=${start_date}&status=${status}`)
                 .load();
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterDateInput = document.getElementById('filter_date');
-            const today = new Date().toISOString().split('T')[
-                0]; // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
-            filterDateInput.value = today;
+        $(document).ready(function() {
+            const today = new Date().toISOString().split('T')[0];
+            $('#filter_date').val(today); // Mengatur nilai dengan tanggal hari ini
+            reloadDataTable(); // Memuat data berdasarkan filter default
         });
 
 
