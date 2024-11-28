@@ -26,7 +26,8 @@
                 </div>
                 <div class="col-md-4">
                     <label for="user_id" class="mt-3 mt-md-0">Nama Karyawan:</label>
-                    <select name="user_id" id="user_id" class="form-control select2" style="padding-bottom: 3px; width: 100%">
+                    <select name="user_id" id="user_id" class="form-control select2"
+                        style="padding-bottom: 3px; width: 100%">
                         <option value="">Pilih Karyawan</option>
                         @foreach ($karyawan as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -78,7 +79,7 @@
             });
             $(document).ready(function() {
                 $('#user_id').select2({
-                
+
                     placeholder: 'Cari Karyawan',
                     allowClear: true,
                     ajax: {
@@ -118,6 +119,15 @@
                         @endforeach
                     ]
                 });
+            });
+
+            $(document).ready(function() {
+                const year = new Date().getFullYear();
+                $('#year').val(year);
+            })
+            $(document).ready(function() {
+                const currentMonth = new Date().getMonth() + 1; 
+                $('#month').val(currentMonth);
             });
         </script>
     @endpush
