@@ -77,8 +77,12 @@ class MonitoringDataTable extends DataTable
             ->addColumn('Jml Jam Kerja', function (Kehadiran $kehadiran) {
                 $checkInTime = Carbon::parse($kehadiran->check_in_time);
                 $checkOutTime = Carbon::parse($kehadiran->check_out_time);
-                $workDuration = $checkOutTime->diffInHours($checkInTime);
-                return $workDuration;
+                if ($kehadiran->check_out_time != null) {
+                    $workDuration = $checkOutTime->diffInHours($checkInTime);
+                    return $workDuration;
+                } else {
+                    return '-';
+                }
             })
             ->setRowId('id')
             ->rawColumns(['check_in_photo', 'check_out_photo', 'status']);
