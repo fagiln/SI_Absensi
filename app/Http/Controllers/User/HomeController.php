@@ -123,6 +123,8 @@ class HomeController extends Controller
             ->limit(5) // Menampilkan 5 data terbaru, bisa disesuaikan
             ->get();
 
+        $kehadiranKaryawan = Kehadiran::whereDate('work_date', Carbon::now())->get();
+
         return view(
             'user.home.home',
             compact(
@@ -137,7 +139,8 @@ class HomeController extends Controller
                 'sakitCount',
                 'terlambatCount',
                 'kehadiranTerbaru',
-                'perizinan'
+                'perizinan',
+                'kehadiranKaryawan'
             )
         );
     }

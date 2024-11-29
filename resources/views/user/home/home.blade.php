@@ -487,22 +487,40 @@
             
             <div id="leaderboard" class="section" style="display: none; margin-top: 10px;">
                 {{-- <h5>Leaderboard</h5> --}}
-                @foreach ($kehadiranTerbaru as $kehadiran)
-                    <div class="leaderboard-container">
-                        {{-- <div class="name">{{ $userAbsen->name }}</div>
-                        @if ($userAbsen->check_in_time && $userAbsen->check_out_time)
-                            @php
-                                $checkIn = \Carbon\Carbon::parse($userAbsen->check_in_time);
-                                $checkOut = \Carbon\Carbon::parse($userAbsen->check_out_time);
-                                $totalJamKerja = $checkOut->diffInHours($checkIn);
-                            @endphp
-                            <div class="time">{{ $totalJamKerja }} Jam</div>
-                            <div class="time">{{ $checkIn->format('H:i') }} - {{ $checkOut->format('H:i') }}</div>
-                        @elseif ($userAbsen->check_in_time)
-                            <div class="time">Belum absen pulang</div>
-                        @else
-                            <div class="time">Belum absen masuk</div>
-                        @endif --}}
+                @foreach ($kehadiranKaryawan as $kehadiran)
+                    <div class="terbaru-container">
+                        <div class="row" style="padding: 10px"> 
+                            <div class="row">
+                                <div>
+                                    <img 
+                                        src="{{ $kehadiran->user->avatar 
+                                                ? asset('storage/photos/' . $kehadiran->user->id . '_' . $kehadiran->user->username . '.png') 
+                                                : asset('img/user.jpg') }}" 
+                                        style="width: 50px; height: 50px; border-radius: 100%; object-fit: cover;">
+                                </div>
+                                <div>
+
+                                    <div class="name">{{ $kehadiran->user->name }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="">
+                                @if ($kehadiran->check_in_time && $kehadiran->check_out_time)
+                                    @php
+                                        $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time)->format('H:i');
+                                        $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time)->format('H:i');
+                                    @endphp
+                                    <div class="time">{{ $checkIn }} - {{ $checkOut }}</div>
+                                @elseif ($kehadiran->check_in_time)
+                                    @php
+                                        $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time)->format('H:i');
+                                    @endphp
+                                    <div class="time">{{ $checkIn }} - Belum absen pulang</div>
+                                @else
+                                    <div class="time">Belum absen masuk</div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 @endforeach
             </div>
