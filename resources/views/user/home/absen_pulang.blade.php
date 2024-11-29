@@ -127,7 +127,7 @@
 
                         <!-- Tombol untuk menutup modal -->
                         <div class="modal-footer justify-content-center">
-                            <button id="button_siap" type="button" class="btn btn-primary btn-custom mx-2" data-bs-dismiss="modal">Siap</button>
+                            {{-- <button id="button_siap" type="button" class="btn btn-primary btn-custom mx-2" data-bs-dismiss="modal">Siap</button> --}}
                             <a id="waLink" href="#" target="_blank" class="btn btn-success">Kirim Pesan WhatsApp</a>
                         </div>
                     </div>
@@ -371,10 +371,10 @@
             console.error('Error:', error);
         });
 
-        // Event listener untuk tombol "siap" di modal yang akan mengarahkan ke home
-        document.getElementById('button_siap').addEventListener('click', function() {
-            window.location.href = '/home';
-        });
+        // // Event listener untuk tombol "siap" di modal yang akan mengarahkan ke home
+        // document.getElementById('button_siap').addEventListener('click', function() {
+        //     window.location.href = '/home';
+        // });
     }
 
 </script>
