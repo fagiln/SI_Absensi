@@ -494,7 +494,7 @@
                                 <div>
                                     <img 
                                         src="{{ $kehadiran->user->avatar 
-                                                ? asset('storage/photos/' . $kehadiran->user->id . '_' . $kehadiran->user->username . '.png') 
+                                                ? asset('storage/photos/' . $kehadiran->user->id . '_' . $kehadiran->user->username . '.png') .'?' . time() 
                                                 : asset('img/user.jpg') }}" 
                                         style="width: 50px; height: 50px; border-radius: 100%; object-fit: cover;">
                                 </div>
