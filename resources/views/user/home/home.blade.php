@@ -90,9 +90,9 @@
             /* Media Query untuk Laptop (di bawah 1024px) */
             @media (max-width: 768px) {
                 /* .button-container {
-                            display: flex;
-                            justify-content: space-around;
-                        } */
+                                                            display: flex;
+                                                            justify-content: space-around;
+                                                        } */
 
                 .button-container .btn {
                     display: flex;
@@ -113,7 +113,7 @@
             /* Media Query untuk Handphone (di bawah 768px) */
             @media (max-width: 344px) {
                 /* .button-container {
-                            flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
+                                                            flex-direction: row; /* Ubah ke tampilan kolom untuk handphone */
                 /* align-items: center; */
                 /* } */
 
@@ -253,42 +253,47 @@
 
             /* Untuk Terbaru dan Leaderboard */
             .row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Membagi menjadi 2 kolom sama besar */
-    gap: 10px; /* Jarak antar tombol */
-    justify-content: center;
-}
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                /* Membagi menjadi 2 kolom sama besar */
+                gap: 10px;
+                /* Jarak antar tombol */
+                justify-content: center;
+            }
 
-.row button {
-    padding: 5px;
-    border: 1px solid #ccc;
-    background: #f9f9f9;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-    text-align: center;
-}
-
-.row button:hover {
-    background: #e0e0e0;
-    color: #333;
-}
-
-.row button.active {
-    background: #6c757d;
-    color: #fff;
-    border-color: #6c757d;
-}
+            .row button {
+                padding: 5px;
+                border: 1px solid #ccc;
+                background: #f9f9f9;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s, color 0.3s;
+                text-align: center;
+            }
 
             .row button:hover {
-                background: #e0e0e0; /* Warna hover saat tidak dipilih (light) */
+                background: #e0e0e0;
                 color: #333;
             }
 
             .row button.active {
-                background: #6c757d; /* Warna sekunder saat tombol aktif */
+                background: #6c757d;
                 color: #fff;
-                border-color: #6c757d; /* Sesuaikan dengan warna sekunder */
+                border-color: #6c757d;
+            }
+
+            .row button:hover {
+                background: #e0e0e0;
+                /* Warna hover saat tidak dipilih (light) */
+                color: #333;
+            }
+
+            .row button.active {
+                background: #6c757d;
+                /* Warna sekunder saat tombol aktif */
+                color: #fff;
+                border-color: #6c757d;
+                /* Sesuaikan dengan warna sekunder */
             }
 
             .tab-content {
@@ -463,7 +468,7 @@
                 <button class="active" id="btnTerbaru" onclick="showSection('terbaru', this)">Terbaru</button>
                 <button id="btnLeaderboard" onclick="showSection('leaderboard', this)">Leaderboard</button>
             </div>
-            
+
             <div id="terbaru" class="section" style="display: block; margin-top: 10px">
                 {{-- <h5>Terbaru</h5> --}}
                 @foreach ($kehadiranTerbaru as $kehadiran)
@@ -484,67 +489,74 @@
                     </div>
                 @endforeach
             </div>
-            
+
             <div id="leaderboard" class="section" style="display: none; margin-top: 10px;">
                 {{-- <h5>Leaderboard</h5> --}}
-                @foreach ($kehadiranKaryawan as $kehadiran)
-                    <div class="terbaru-container">
-                        <div class="row" style="padding: 10px"> 
-                            <div class="row">
-                                <div>
-                                    <img 
-                                        src="{{ $kehadiran->user->avatar 
-                                                ? asset('storage/photos/' . $kehadiran->user->id . '_' . $kehadiran->user->username . '.png') .'?' . time() 
-                                                : asset('img/user.jpg') }}" 
-                                        style="width: 50px; height: 50px; border-radius: 100%; object-fit: cover;">
-                                </div>
-                                <div>
+                @if ($kehadiranKaryawan->isNotEmpty())
+                    @foreach ($kehadiranKaryawan as $kehadiran)
+                        <div class="terbaru-container">
+                            <div class="row" style="padding: 10px">
+                                <div class="row">
+                                    <div>
+                                        <img src="{{ $kehadiran->user->avatar
+                                            ? asset('storage/photos/' . $kehadiran->user->id . '_' . $kehadiran->user->username . '.png') . '?' . time()
+                                            : asset('img/user.jpg') }}"
+                                            style="width: 50px; height: 50px; border-radius: 100%; object-fit: cover;">
+                                    </div>
+                                    <div>
 
-                                    <div class="name">{{ $kehadiran->user->name }}</div>
+                                        <div class="name">{{ $kehadiran->user->name }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="">
-                                @if ($kehadiran->check_in_time && $kehadiran->check_out_time)
-                                    @php
-                                        $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time)->format('H:i');
-                                        $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time)->format('H:i');
-                                    @endphp
-                                    <div class="time">{{ $checkIn }} - {{ $checkOut }}</div>
-                                @elseif ($kehadiran->check_in_time)
-                                    @php
-                                        $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time)->format('H:i');
-                                    @endphp
-                                    <div class="time">{{ $checkIn }} - Belum absen pulang</div>
-                                @else
-                                    <div class="time">Belum absen masuk</div>
-                                @endif
+
+                                <div class="">
+                                    @if ($kehadiran->check_in_time && $kehadiran->check_out_time)
+                                        @php
+                                            $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time)->format('H:i');
+                                            $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time)->format(
+                                                'H:i',
+                                            );
+                                        @endphp
+                                        <div class="time">{{ $checkIn }} - {{ $checkOut }}</div>
+                                    @elseif ($kehadiran->check_in_time)
+                                        @php
+                                            $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time)->format('H:i');
+                                        @endphp
+                                        <div class="time">{{ $checkIn }} - Belum absen pulang</div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @else
+                <div class="terbaru-container">
+
+                    <div class="text-center">Belum ada Karyawan Absen</div>
+                </div>
+                @endif
             </div>
-            
-            
+        </div>
+
+
         </div>
         <div style="margin-bottom: 70px"></div>
-    
+
         <script>
             function showSection(sectionId, button) {
-            // Hapus kelas 'active' dari semua tombol
-            const buttons = document.querySelectorAll('.row button');
-            buttons.forEach(btn => btn.classList.remove('active'));
+                // Hapus kelas 'active' dari semua tombol
+                const buttons = document.querySelectorAll('.row button');
+                buttons.forEach(btn => btn.classList.remove('active'));
 
-            // Tambahkan kelas 'active' pada tombol yang dipilih
-            button.classList.add('active');
+                // Tambahkan kelas 'active' pada tombol yang dipilih
+                button.classList.add('active');
 
-            // Logika untuk menampilkan/menyembunyikan konten (opsional)
-            const sections = document.querySelectorAll('.section'); // Sesuaikan dengan kontainer Anda
-            sections.forEach(section => {
-                section.style.display = section.id === sectionId ? 'block' : 'none';
-            });
+                // Logika untuk menampilkan/menyembunyikan konten (opsional)
+                const sections = document.querySelectorAll('.section'); // Sesuaikan dengan kontainer Anda
+                sections.forEach(section => {
+                    section.style.display = section.id === sectionId ? 'block' : 'none';
+                });
             }
-        </script>        
-    
+        </script>
+
     </body>
 @endsection
