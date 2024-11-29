@@ -22,7 +22,7 @@ class KaryawanController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'nik' => 'required|unique:users,nik|digits_between:6,20|numeric',
+            'nik' => 'required|unique:users,nik|digits_between:5,20|numeric',
             'username' => 'required|unique:users,username|max:10',
             'department_id' => 'required',
             'jabatan' => 'required',
@@ -32,7 +32,7 @@ class KaryawanController extends Controller
             'jabatan.required' => 'Jabatan wajib diisi.',
             'nik.unique' => 'NIK ini sudah terdaftar.',
             'nik.numeric' => 'NIK harus berupa angka.',
-            'nik.digits_between' => 'NIK harus terdiri dari 6 hingga 20 digit angka.',
+            'nik.digits_between' => 'NIK harus terdiri dari 5 hingga 20 digit angka.',
 
             'username.required' => 'Username wajib diisi.',
             'username.unique' => 'Username ini sudah digunakan.',
@@ -75,7 +75,7 @@ class KaryawanController extends Controller
     {
         $user = User::find($id);
         $request->validate([
-            'edit_nik' => 'required|digits_between:6,20|numeric',
+            'edit_nik' => 'required|digits_between:5,20|numeric',
             'edit_jabatan' => 'required|string',
             'edit_password' => 'nullable|min:6',
         ], [
@@ -86,7 +86,7 @@ class KaryawanController extends Controller
             'edit_jabatan.required' => 'Jabatan wajib diisi.',
             'edit_jabatan.string' => 'Jabatan harus berupa teks yang valid.',
 
-            'edit_password.min' => 'Password harus minimal 6 karakter jika diisi.',
+            'edit_password.min' => 'Password harus minimal 5 karakter jika diisi.',
         ]);
         $data = [
             'nik' =>   $request->edit_nik,
