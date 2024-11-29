@@ -251,6 +251,50 @@
                 font-size: 0.8em;
             }
 
+            /* Untuk Terbaru dan Leaderboard */
+            .row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Membagi menjadi 2 kolom sama besar */
+    gap: 10px; /* Jarak antar tombol */
+    justify-content: center;
+}
+
+.row button {
+    padding: 5px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+}
+
+.row button:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.row button.active {
+    background: #6c757d;
+    color: #fff;
+    border-color: #6c757d;
+}
+
+            .row button:hover {
+                background: #e0e0e0; /* Warna hover saat tidak dipilih (light) */
+                color: #333;
+            }
+
+            .row button.active {
+                background: #6c757d; /* Warna sekunder saat tombol aktif */
+                color: #fff;
+                border-color: #6c757d; /* Sesuaikan dengan warna sekunder */
+            }
+
+            .tab-content {
+                display: none;
+            }
+
             .terbaru-container {
                 width: 100%;
                 margin: 20px auto;
@@ -415,47 +459,74 @@
                 </div>
             </div>
 
-            <h5>Terbaru</h5>
-            @foreach ($kehadiranTerbaru as $kehadiran)
-                <div class="terbaru-container">
-                    <div class="date">{{ \Carbon\Carbon::parse($kehadiran->work_date)->format('d F Y') }}</div>
-                    <div class="time">Masuk & Pulang</div>
-
-                    @if ($kehadiran->check_in_time && $kehadiran->check_out_time)
-                        @php
-                            $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time);
-                            $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time);
-                            $totalJamKerja = $checkOut->diffInHours($checkIn);
-                        @endphp
-                        <div class="time">{{ $totalJamKerja }} Jam</div>
-                        <div class="time">{{ $checkIn->format('H:i') }} - {{ $checkOut->format('H:i') }}</div>
-                    @else
-                        <div class="time">Belum absen pulang</div>
-                    @endif
-                </div>
-            @endforeach
-
-            <h5>Leaderboard</h5>
-            @foreach ($userAbsens as $userAbsen)
-                <div class="terbaru-container">
-                    <div class="date">{{ \Carbon\Carbon::parse($kehadiran->work_date)->format('d F Y') }}</div>
-                    <div class="time">Masuk & Pulang</div>
-
-                    @if ($kehadiran->check_in_time && $kehadiran->check_out_time)
-                        @php
-                            $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time);
-                            $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time);
-                            $totalJamKerja = $checkOut->diffInHours($checkIn);
-                        @endphp
-                        <div class="time">{{ $totalJamKerja }} Jam</div>
-                        <div class="time">{{ $checkIn->format('H:i') }} - {{ $checkOut->format('H:i') }}</div>
-                    @else
-                        <div class="time">Belum absen pulang</div>
-                    @endif
-                </div>
-            @endforeach
+            <div class="row">
+                <button class="active" id="btnTerbaru" onclick="showSection('terbaru', this)">Terbaru</button>
+                <button id="btnLeaderboard" onclick="showSection('leaderboard', this)">Leaderboard</button>
+            </div>
+            
+            <div id="terbaru" class="section" style="display: block; margin-top: 10px">
+                {{-- <h5>Terbaru</h5> --}}
+                @foreach ($kehadiranTerbaru as $kehadiran)
+                    <div class="terbaru-container">
+                        <div class="date">{{ \Carbon\Carbon::parse($kehadiran->work_date)->format('d F Y') }}</div>
+                        <div class="time">Masuk & Pulang</div>
+                        @if ($kehadiran->check_in_time && $kehadiran->check_out_time)
+                            @php
+                                $checkIn = \Carbon\Carbon::parse($kehadiran->check_in_time);
+                                $checkOut = \Carbon\Carbon::parse($kehadiran->check_out_time);
+                                $totalJamKerja = $checkOut->diffInHours($checkIn);
+                            @endphp
+                            <div class="time">{{ $totalJamKerja }} Jam</div>
+                            <div class="time">{{ $checkIn->format('H:i') }} - {{ $checkOut->format('H:i') }}</div>
+                        @else
+                            <div class="time">Belum absen pulang</div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+            
+            <div id="leaderboard" class="section" style="display: none; margin-top: 10px;">
+                {{-- <h5>Leaderboard</h5> --}}
+                @foreach ($kehadiranTerbaru as $kehadiran)
+                    <div class="leaderboard-container">
+                        {{-- <div class="name">{{ $userAbsen->name }}</div>
+                        @if ($userAbsen->check_in_time && $userAbsen->check_out_time)
+                            @php
+                                $checkIn = \Carbon\Carbon::parse($userAbsen->check_in_time);
+                                $checkOut = \Carbon\Carbon::parse($userAbsen->check_out_time);
+                                $totalJamKerja = $checkOut->diffInHours($checkIn);
+                            @endphp
+                            <div class="time">{{ $totalJamKerja }} Jam</div>
+                            <div class="time">{{ $checkIn->format('H:i') }} - {{ $checkOut->format('H:i') }}</div>
+                        @elseif ($userAbsen->check_in_time)
+                            <div class="time">Belum absen pulang</div>
+                        @else
+                            <div class="time">Belum absen masuk</div>
+                        @endif --}}
+                    </div>
+                @endforeach
+            </div>
+            
             
         </div>
         <div style="margin-bottom: 70px"></div>
+    
+        <script>
+            function showSection(sectionId, button) {
+            // Hapus kelas 'active' dari semua tombol
+            const buttons = document.querySelectorAll('.row button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Tambahkan kelas 'active' pada tombol yang dipilih
+            button.classList.add('active');
+
+            // Logika untuk menampilkan/menyembunyikan konten (opsional)
+            const sections = document.querySelectorAll('.section'); // Sesuaikan dengan kontainer Anda
+            sections.forEach(section => {
+                section.style.display = section.id === sectionId ? 'block' : 'none';
+            });
+            }
+        </script>        
+    
     </body>
 @endsection
