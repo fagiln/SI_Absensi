@@ -1,40 +1,49 @@
 @extends('admin.template.app')
 @section('title', 'Rekap Presensi')
 @section('content')
-<div class="container">
+    <div class="container">
 
-    <form action="{{ route('admin.rekap-presensi.export') }}" method="GET">
-        @csrf
-        <div class="row">
-            <div class="col-md-4">
-                <label for="month">Bulan:</label>
-                <select name="month" id="month" class="form-control">
-                    @foreach (range(1, 12) as $m)
-                        <option value="{{ $m }}">{{ \Carbon\Carbon::create()->month($m)->format('F') }}
-                        </option>
-                    @endforeach
-                </select>
+        <form action="{{ route('admin.rekap-presensi.export') }}" method="GET">
+            @csrf
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="month">Bulan:</label>
+                    <select name="month" id="month" class="form-control">
+                        @foreach (range(1, 12) as $m)
+                            <option value="{{ $m }}">{{ \Carbon\Carbon::create()->month($m)->format('F') }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="year" class="mt-3 mt-md-0">Tahun:</label>
+                    <select name="year" id="year" class="form-control ">
+                        @foreach (range(now()->year - 5, now()->year) as $y)
+                            <option value="{{ $y }}">{{ $y }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label for="year" class="mt-3 mt-md-0">Tahun:</label>
-                <select name="year" id="year" class="form-control ">
-                    @foreach (range(now()->year - 5, now()->year) as $y)
-                        <option value="{{ $y }}">{{ $y }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
 
-        <div class="mt-3 d-flex justify-content-between justify-content-md-start  ">
-            <button type="submit" id="exportButton" class="btn btn-success mr-md-3"><i class="fas fa-download"></i> Cetak
-                ke Excel</button>
-            <a href="#" id="printButton" class="btn btn-secondary"><i class="fas fa-print"></i> Print Rekap</a>
-        </div>
-    </form>
-</div>
+            <div class="mt-3 d-flex justify-content-between justify-content-md-start  ">
+                <button type="submit" id="exportButton" class="btn btn-success mr-md-3"><i class="fas fa-download"></i>
+                    Cetak
+                    ke Excel</button>
+                <a href="#" id="printButton" class="btn btn-secondary"><i class="fas fa-print"></i> Print Rekap</a>
+            </div>
+        </form>
+    </div>
 
     @push('scripts')
         <script>
+            $(document).ready(function() {
+                const year = new Date().getFullYear();
+                $('#year').val(year);
+            })
+            $(document).ready(function() {
+                const currentMonth = new Date().getMonth() + 1;
+                $('#month').val(currentMonth);
+            });
             document.getElementById('printButton').addEventListener('click', function(e) {
                 e.preventDefault();
 

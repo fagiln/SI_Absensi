@@ -61,7 +61,7 @@ class PerizinanDataTable extends DataTable
      */
     public function query(Perizinan $model): QueryBuilder
     {
-        $filterDate = request('created_at', \Carbon\Carbon::today()->toDateString());
+        $filterDate = request('created_at');
         $startDate = request('start_date');
         $filterStatus = request('status');
         return $model->newQuery()

@@ -165,7 +165,7 @@
             <div class="text-center">
                 <p>Mario Mariyadi</p>
                 <br>
-                <img src="{{ asset('img/ttd.png') }}" alt="Tanda Tangan Direktur" style="height: 100px">
+                <img src="{{ asset('img/ttd_direktur.png') }}" alt="Tanda Tangan Direktur" style="height: 100px">
                 <br>
                 <p>(...............................)</p>
                 <p class="font-italic">Direktur</p>
