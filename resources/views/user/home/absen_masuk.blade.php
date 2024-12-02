@@ -233,7 +233,7 @@
                     video.classList.remove('d-none');
                     photo.classList.add('d-none');
                     takePhotoButton.classList.remove('d-none');
-                    takePhotoButton.textContent = 'Absen';
+                    takePhotoButton.textContent = 'Absen Masuk';
                     buttonContainer.remove();
                 });
             }
