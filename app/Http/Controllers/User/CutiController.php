@@ -70,6 +70,18 @@ class CutiController extends Controller
         // dd(Auth::id());
         $userId = Auth::id();
 
+        // Cek apakah sudah ada pengajuan serupa yang belum diproses (status pending atau approved)
+        $validasiCuti = Perizinan::where('user_id', $userId)
+            ->where('reason', $request->filter_izin)
+            ->where('start_date', $request->start_date)
+            ->where('end_date', $request->end_date)
+            ->whereIn('status', ['pending', 'diterima']) // Tambahkan filter status
+            ->first();
+
+        if ($validasiCuti) {
+            return redirect()->back();
+        }
+
         $cuti = new Perizinan();
         $cuti->user_id = $userId;
         $cuti->reason = $request->filter_izin;
