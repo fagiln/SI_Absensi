@@ -79,7 +79,7 @@ class CutiController extends Controller
             ->first();
 
         if ($validasiCuti) {
-            return redirect()->back()->with('success');
+            return redirect()->back();
         }
 
         $cuti = new Perizinan();
