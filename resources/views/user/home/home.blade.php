@@ -423,7 +423,7 @@
                 <div class="info">
                     <h3>
                         <i class="fas fa-city" style="color: crimson"></i>
-                        Total Jam Kerja
+                        Total Jam Kerja Bulan Ini
                     </h3>
                     <div class="details">
                         <div>
