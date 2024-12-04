@@ -293,7 +293,7 @@
 
                 <div style="margin-top: 20px;"></div>
                 <div class="inline" style="text-align: right; width:100%;">
-                    <button type="submit" id="submit-button" class="btn button-submit" id="btn-ajukan-cuti" 
+                    <button type="submit" class="btn button-submit" id="btn-ajukan-cuti" 
                     @if($AjukanUlang) disabled @endif
                     >Ajukan</button>
                 </div>
@@ -541,15 +541,15 @@
     document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('form-ajukan-cuti');
     const btnAjukan = document.getElementById('btn-ajukan-cuti');
-
-        form.addEventListener('submit', function (e) {
-            // Validasi form manual untuk memastikan semua input telah terisi
-            const filterIzin = document.getElementById('filter_izin').value;
-            const startDate = document.getElementById('start_date').value;
-            const endDate = document.getElementById('end_date').value;
-            const alasan = document.getElementById('alasan_text').value;
-            const file_image = document.getElementById('upload_image').files.length;
-
+    form.addEventListener('submit', function (e) {
+        // Validasi form manual untuk memastikan semua input telah terisi
+        const filterIzin = document.getElementById('filter_izin').value;
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+        const alasan = document.getElementById('alasan_text').value;
+        const file_image = document.getElementById('upload_image').files.length;
+        console.log('text_terbaca')
+        
             if (!filterIzin || !startDate || !endDate || !alasan || file_image === 0) {
                 // Jika ada input yang kosong, cegah pengiriman form dan tampilkan pesan
                 e.preventDefault();
