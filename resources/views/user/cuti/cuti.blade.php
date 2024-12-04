@@ -548,7 +548,6 @@
         const endDate = document.getElementById('end_date').value;
         const alasan = document.getElementById('alasan_text').value;
         const file_image = document.getElementById('upload_image').files.length;
-        console.log('text_terbaca')
         
             if (!filterIzin || !startDate || !endDate || !alasan || file_image === 0) {
                 // Jika ada input yang kosong, cegah pengiriman form dan tampilkan pesan
