@@ -66,7 +66,11 @@ class HomeController extends Controller
 
             // Format untuk menampilkan hanya jam
             $jamKerjaFormatted = $jamKerja . ' Jam';
-        } else {
+        } 
+        elseif(!$kehadiran){
+            $jamKerjaFormatted = 'Belum Absen Masuk';
+        }
+        else {
             $jamKerjaFormatted = 'Belum Absen Pulang';
         }
 
