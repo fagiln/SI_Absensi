@@ -77,6 +77,7 @@ class KaryawanController extends Controller
         $request->validate([
             'edit_nik' => 'required|digits_between:5,20|numeric',
             'edit_jabatan' => 'required|string',
+            'edit_department_id' => 'required',
             'edit_password' => 'nullable|min:6',
         ], [
             'edit_nik.required' => 'NIK wajib diisi.',
@@ -85,12 +86,14 @@ class KaryawanController extends Controller
 
             'edit_jabatan.required' => 'Jabatan wajib diisi.',
             'edit_jabatan.string' => 'Jabatan harus berupa teks yang valid.',
+            'edit_department_id.required' => 'Departemen wajib diisi.',
 
             'edit_password.min' => 'Password harus minimal 5 karakter jika diisi.',
         ]);
         $data = [
             'nik' =>   $request->edit_nik,
             'jabatan' => $request->edit_jabatan,
+            'department_id' => $request->edit_department_id,
         ];
         if ($request->filled('edit_password')) {
             $data['password'] = Hash::make($request->edit_password);

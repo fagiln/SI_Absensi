@@ -45,14 +45,14 @@
                                     <option value="{{ $item->id }}">{{ $item->nama_departemen }}</option>
                                 @endforeach
                             </select>
-                            @error('departemen')
+                            @error('departement_id')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="mt-3 d-flex flex-column">
                             <label for="jabatan">Jabatan</label>
                             <input class=" form-control" type="text" id="jabatan" name="jabatan"
-                                placeholder="Masukkan Jabatan" value="{{ old('jabatam') }}">
+                                placeholder="Masukkan Jabatan" value="{{ old('jabatan') }}">
                             @error('jabatan')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -100,7 +100,19 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
+                        <div class="form-group">
+                            <label for="departement_id">Departemen</label>
+                            <select class=" form-control" name="edit_department_id" id="editDepartment_id"
+                                placeholder="Masukkan Departemen">
+                                <option value="">Pilih Departemen</option>
+                                @foreach ($departemen as $item)
+                                    <option value="{{ $item->id }}">{{ $item->nama_departemen }}</option>
+                                @endforeach
+                            </select>
+                            @error('edit_departement_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="form-group">
                             <label for="editJabatan">Jabatan</label>
                             <input type="text" class="form-control" name="edit_jabatan" id="editJabatan"
@@ -109,14 +121,6 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
-                        {{-- <div class="form-group">
-                            <label for="editDepartemen">Departemen</label>
-                            <select name="department_id" class="form-control" id="editDepartemen">
-                                <!-- Options dinamis dari backend -->
-
-                            </select>
-                        </div> --}}
                         <div class="form-group">
                             <label for="editPassword">Password</label>
                             <input type="password" class="form-control" name="edit_password" id="editPassword"
@@ -189,6 +193,7 @@
                     $('#editId').val(userId);
                     $('#editNik').val(data.nik);
                     $('#editJabatan').val(data.jabatan);
+                    $('#editDepartment_id').val(data.department_id);
 
                     $('#formEditKaryawan').attr('action', updateUrl);
                 });
