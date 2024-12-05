@@ -160,7 +160,7 @@
                     </div>
 
                     <div class="d-grid gap-2 col-6 mx-auto">
-                        <button class="btn btn-danger" type="submit">Submit</button>
+                        <button class="btn btn-danger" type="submit">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -191,7 +191,7 @@
                     </div>
 
                     <div class="d-grid gap-2 col-6 mx-auto">
-                        <button class="btn btn-danger" type="submit">Submit</button>
+                        <button class="btn btn-danger" type="submit">Simpan</button>
                     </div>
                 </form>
             </div>

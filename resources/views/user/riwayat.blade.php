@@ -78,11 +78,11 @@
         <label for="daterange">Periode:</label>
           <div class="row">  
             <div class="col-md-4">
-                <label for="start_date">Start Date:</label>
+                <label for="start_date">Tanggal Awal :</label>
                 <input class="date-input" type="date" name="start_date" id="start_date" value="{{ request()->start_date ?? $startDate->toDateString() }}" required>
             </div>
             <div class="col-md-4 mt-2 mt-md-0">
-                <label for="end_date">End Date:</label>
+                <label for="end_date">Tanggal Akhri:</label>
                 <input class="date-input" type="date" name="end_date" id="end_date" value="{{ request()->end_date ?? $endDate->toDateString() }}" required>
             </div>
           </div>
