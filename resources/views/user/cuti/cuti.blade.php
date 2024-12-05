@@ -269,7 +269,10 @@
                 <div style="margin-top: 20px;"></div>
 
                 <!-- Unggah Berkas -->
-                <p style="font-weight: bold; margin: 0; padding: 0;">Unggah Berkas</p>
+                <div class="inline">
+                    <p style="font-weight: bold; margin: 0; padding: 0;">Unggah Berkas</p>
+                    <p class="inline" style="color: crimson">*</p>
+                </div>  
                 <p style="margin: 0; padding: 0; font-size: 14px;">Silahkan unggah berkas dalam bentuk foto atau pdf</p>
                 
                 @if($errors->has('file'))

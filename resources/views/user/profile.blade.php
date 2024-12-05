@@ -173,7 +173,7 @@
                     @csrf
                     <p style="font-size: 15px; font-weight: bold;">Silahkan ganti password</p>
 
-                    <p class="fs-10">Kata Sandi</p>
+                    <p class="fs-10">Password Baru</p>
                     @error('new_password')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -183,7 +183,7 @@
                             aria-describedby="inputGroup-sizing-default">
                     </div>
 
-                    <p class="fs-10">Isi Ulang Kata Sandi</p>
+                    <p class="fs-10">Isi Ulang Password Baru</p>
                     <div class="input-group mb-3">
                         <input id="new_password_confirmation" name="new_password_confirmation" type="password"
                             class="form-control" placeholder="Silahkan isi konfirmasi password" hi

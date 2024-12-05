@@ -351,7 +351,7 @@
                 <div class="location">
 
                     <span class="location-icon">📍</span>
-                    <span>Pt Multi Power Abadi, Surabaya</span>
+                    <span>PT Multi Power Abadi, Surabaya</span>
                 </div>
             </div>
 
