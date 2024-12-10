@@ -82,7 +82,7 @@
                 <input class="date-input" type="date" name="start_date" id="start_date" value="{{ request()->start_date ?? $startDate->toDateString() }}" required>
             </div>
             <div class="col-md-4 mt-2 mt-md-0">
-                <label for="end_date">Tanggal Akhri:</label>
+                <label for="end_date">Tanggal Akhir :</label>
                 <input class="date-input" type="date" name="end_date" id="end_date" value="{{ request()->end_date ?? $endDate->toDateString() }}" required>
             </div>
           </div>
