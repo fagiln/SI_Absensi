@@ -113,7 +113,7 @@
                     @enderror
                     <div class="input-group mb-3">
                         <input id="name" name="name" type="text" class="form-control"
-                            placeholder="{{ $user->name }}" aria-label="Sizing example input"
+                            placeholder="{{ $user->name ? $user->name : 'Silahkan isi nama lengkap' }}" aria-label="Sizing example input"
                             aria-describedby="inputGroup-sizing-default">
                     </div>
 
@@ -123,7 +123,7 @@
                     @enderror
                     <div class="input-group mb-3">
                         <input id="username" name="username" type="text" class="form-control"
-                            placeholder="{{ $user->username }}" hi aria-label="Sizing example input"
+                            placeholder="{{ $user->username ? $user->username : 'Silahkan isi username' }}" hi aria-label="Sizing example input"
                             aria-describedby="inputGroup-sizing-default">
                     </div>
 
@@ -145,7 +145,7 @@
                     @enderror
                     <div class="input-group mb-3">
                         <input id="email" name="email" type="text" class="form-control"
-                            placeholder="{{ $user->email }}" aria-label="Sizing example input"
+                            placeholder="{{ $user->email ? $user->email : 'Silahkan isi email' }}" aria-label="Sizing example input"
                             aria-describedby="inputGroup-sizing-default">
                     </div>
 
@@ -155,7 +155,7 @@
                     @enderror
                     <div class="input-group mb-3">
                         <input id="no_hp" name="no_hp" type="text" class="form-control"
-                            placeholder="{{ $user->no_hp }}, Pastikan No. Hp. benar" aria-label="Sizing example input"
+                            placeholder="{{ $user->no_hp ? $user->no_hp : 'Silahkan isi No. Hp. dengan benar' }}" aria-label="Sizing example input"
                             aria-describedby="inputGroup-sizing-default">
                     </div>
 
