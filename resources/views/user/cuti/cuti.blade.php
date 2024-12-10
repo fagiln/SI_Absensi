@@ -330,67 +330,10 @@
                                 <p class="text-muted">Pengajuan berhasil. Silahkan tunggu konfimasi dari admin atau segera
                                     hubungi admin</p>
 
-<<<<<<< HEAD
-                <!-- Unggah Berkas -->
-                <div class="inline">
-                    <p style="font-weight: bold; margin: 0; padding: 0;">Unggah Berkas</p>
-                    <p class="inline" style="color: crimson">*</p>
-                </div>  
-                <p style="margin: 0; padding: 0; font-size: 14px;">Silahkan unggah berkas dalam bentuk foto atau pdf</p>
-                
-                @if($errors->has('file'))
-                        <span class="text-danger">{{ $errors->first('file') }}</span>
-                @endif
-                
-                <div class="upload-container" style="text-align: center; padding: 10px;">
-                    <input name="file" type="file" id="upload_image" accept="image/*,application/pdf" style="display: block; margin-bottom: 10px;">
-                    
-                    <div class="image-preview" id="imagePreview" style="border: 1px solid #ddd; width: 300px; height: 300px; display: flex; justify-content: center; align-items: center;">
-                        <p>No file chosen</p>
-                    </div>
-                </div>
-                
-                <!-- Modal untuk tampilan gambar besar -->
-                <div id="imageModal" class="modalfoto">
-                    <span class="close">&times;</span>
-                    <img class="modal-content" id="modalImage">
-                    <div id="caption"></div>
-                </div>                                
-
-                <div style="margin-top: 20px;"></div>
-                <div class="inline" style="text-align: right; width:100%;">
-                    <button type="submit" class="btn button-submit" id="btn-ajukan-cuti" 
-                    @if($AjukanUlang) disabled @endif
-                    >Ajukan</button>
-                </div>
-            </form> 
-        </div>
-
-    </div>
-
-<!-- Modal -->
-    <div class="d-flex justify-content-center">
-        <div class="modal fade" id="berhasilModal" tabindex="-1" aria-labelledby="absenModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style="max-width: 400px; width: 100%">
-                    <div class="modal-body text-center p-4">
-                        <!-- Gambar emoji absen -->
-                        <img src="{{ asset('img/Emoji_berhasil.svg') }}" alt="Absen Berhasil" width="100" height="100"> 
-
-                        <!-- Judul modal -->
-                        <h4 class="mt-3">Yeyy!</h4>
-
-                        <!-- Pesan -->
-                        <p class="text-muted">Pengajuan berhasil. Silahkan tunggu konfimasi dari admin atau segera hubungi admin</p>
-
-                        <!-- Tombol untuk menutup modal -->
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
-=======
                                 <!-- Tombol untuk menutup modal -->
                                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Siap</button>
                             </div>
                         </div>
->>>>>>> 05d7650715c0732cc7909cd8d8c9365099462bc0
                     </div>
                 </div>
             </div>
