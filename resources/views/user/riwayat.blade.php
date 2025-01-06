@@ -152,22 +152,14 @@
 
 <script>
 
-    console.log('resah')
+    // console.log('text')
     document.addEventListener("DOMContentLoaded", function () {
         const startDateInput = document.getElementById("start_date");
         const endDateInput = document.getElementById("end_date");
         const filterForm = document.getElementById("filterForm");
 
-        // // Fungsi untuk mendapatkan awal dan akhir bulan
-        // function getDefaultDates() {
-        //     const now = new Date();
-        //     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
-        //     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
-        //     return { startOfMonth, endOfMonth };
-        // }
-
          // Fungsi untuk mendapatkan awal dan akhir bulan
-    function getDefaultDates() {
+        function getDefaultDates() {
         const now = new Date();
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // Tanggal 1 bulan ini
         const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Tanggal terakhir bulan ini
