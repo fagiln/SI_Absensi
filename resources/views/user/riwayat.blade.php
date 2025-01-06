@@ -149,42 +149,57 @@
 </div>
 <div style="margin-bottom: 70px"></div>
 </body>
-{{-- <script>
-    console.log('test');
-</script> --}}
 
 <script>
- 
+
+    console.log('resah')
     document.addEventListener("DOMContentLoaded", function () {
         const startDateInput = document.getElementById("start_date");
         const endDateInput = document.getElementById("end_date");
         const filterForm = document.getElementById("filterForm");
 
-        // Fungsi untuk mendapatkan awal dan akhir bulan
-        function getDefaultDates() {
-            const now = new Date();
-            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
-            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
-            return { startOfMonth, endOfMonth };
-        }
-
-        // Set nilai default saat halaman dimuat pertama kali
-        const { startOfMonth, endOfMonth } = getDefaultDates();
-        
-        // // Ambil parameter query dari URL untuk start_date dan end_date
-        // const urlParams = new URLSearchParams(window.location.search);
-        // const startDateFromUrl = urlParams.get("start_date");
-        // const endDateFromUrl = urlParams.get("end_date");
-
-        // Tentukan apakah start_date dan end_date harus direset atau tetap
-        startDateInput.value = startDateFromUrl || startOfMonth; // Atur ke bulan ini jika tidak ada di URL
-        endDateInput.value = endDateFromUrl || endOfMonth; // Atur ke bulan ini jika tidak ada di URL
-
-        // // Jika URL mengandung parameter (start_date atau end_date), hapus parameter tersebut dan reset halaman
-        // if (startDateFromUrl || endDateFromUrl) {
-        //     const cleanUrl = window.location.origin + window.location.pathname;
-        //     window.history.replaceState({}, document.title, cleanUrl); // Reset URL tanpa parameter
+        // // Fungsi untuk mendapatkan awal dan akhir bulan
+        // function getDefaultDates() {
+        //     const now = new Date();
+        //     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+        //     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+        //     return { startOfMonth, endOfMonth };
         // }
+
+         // Fungsi untuk mendapatkan awal dan akhir bulan
+    function getDefaultDates() {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // Tanggal 1 bulan ini
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Tanggal terakhir bulan ini
+
+        // Format tanggal sebagai yyyy-mm-dd
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        return { startOfMonth: formatDate(startOfMonth), endOfMonth: formatDate(endOfMonth) };
+    }
+
+        // Ambil parameter query dari URL untuk start_date dan end_date
+    const urlParams = new URLSearchParams(window.location.search);
+    const startDateFromUrl = urlParams.get("start_date");
+    const endDateFromUrl = urlParams.get("end_date");
+
+    // Tentukan apakah start_date dan end_date harus direset atau tetap
+    const { startOfMonth, endOfMonth } = getDefaultDates();
+
+    // Set nilai default saat halaman dimuat pertama kali
+    startDateInput.value = startDateFromUrl || startOfMonth; // Atur ke bulan ini jika tidak ada di URL
+    endDateInput.value = endDateFromUrl || endOfMonth; // Atur ke bulan ini jika tidak ada di URL
+
+    // Jika URL mengandung parameter (start_date atau end_date), hapus parameter tersebut dan reset halaman
+    if (startDateFromUrl || endDateFromUrl) {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl); // Reset URL tanpa parameter
+    }
 
         // Fungsi untuk reload halaman dengan query string
         function updateQueryString() {
