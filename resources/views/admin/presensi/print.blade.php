@@ -33,7 +33,8 @@
             <img src="{{ asset('img/logo.png') }}" alt="Logo Perusahaan" width="150" class="mb-3">
             <h4 class="font-weight-bold">LAPORAN PRESENSI KARYAWAN</h4>
             <h4 class="font-weight-bold">PT. MULTI POWER ABADI</h4>
-            <p class="font-italic">Jl.Gn.Anyar Tambak IV No.50, Gn. Anyar Tambak, Kec. Gn. Anyar, Surabaya, Jawa Timur 60294</p>
+            <p class="font-italic">Jl.Gn.Anyar Tambak IV No.50, Gn. Anyar Tambak, Kec. Gn. Anyar, Surabaya, Jawa Timur
+                60294</p>
             <p>Bulan: {{ \Carbon\Carbon::create()->month($month)->translatedFormat('F') }} {{ $year }}</p>
         </div>
 
@@ -105,11 +106,11 @@
                     @endphp --}}
                     @php
                         $checkInTime = \Carbon\Carbon::parse($item->check_in_time);
-                        
+
                         // Cek apakah check_out_time tidak null
                         if ($item->check_out_time) {
                             $checkOutTime = \Carbon\Carbon::parse($item->check_out_time);
-                            
+
                             // Menghitung durasi kerja dalam menit
                             $workDurationInMinutes = $checkOutTime->diffInMinutes($checkInTime);
 
@@ -121,7 +122,7 @@
                             $workDuration = "{$hours} jam {$minutes} menit";
                         } else {
                             // Jika check_out_time null
-                            $workDuration = "Tidak absen pulang";
+                            $workDuration = 'Tidak absen pulang';
                         }
                     @endphp
                     <tr>
@@ -155,7 +156,10 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="container-fluid d-flex justify-content-end mt-5">
 
+            <p>Bonus, total hadir tepat waktu : {{$totalHadir}} x Rp. 10.000 = Rp. {{$totalHadir * 10000}}</p>
+        </div>
         <!-- Tambahkan bagian tanda tangan di sini -->
         <div class="container-fluid d-flex justify-content-end mt-5">
 
