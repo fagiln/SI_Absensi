@@ -41,7 +41,7 @@ class CutiController extends Controller
     public function create_cuti(Request $request){
     
         $validator = Validator::make($request->all(), [
-            'filter_izin' => 'required|in:sakit,izin',
+            'filter_izin' => 'required|in:sakit,izin,cuti',
             'start_date' => 'required|date|after_or_equal:today',
             'end_date' => 'required|date|after_or_equal:start_date',
             'alasan' => 'required|string|max:255',

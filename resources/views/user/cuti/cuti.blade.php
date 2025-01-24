@@ -221,6 +221,8 @@
                                 </option>
                                 <option value="izin" {{ request('filter_izin') == 'izin' ? 'selected' : '' }}>Izin
                                 </option>
+                                <option value="cuti" {{ request('filter_izin') == 'cuti' ? 'selected' : '' }}>Cuti
+                                </option>
                             </select>
 
                             <div>
