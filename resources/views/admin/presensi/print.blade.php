@@ -149,7 +149,7 @@
                                     width="50">
                             @endif
                         </td>
-                        <td>{{ $item->status }}</td>
+                        <td>{{ $item->status === 'telat' ? 'terlambat' : 'hadir' }}</td>
                         {{-- <td>{{ $hours }} Jam {{ $minutes }} Menit</td> --}}
                         <td>{{ $workDuration }}</td>
                     </tr>
