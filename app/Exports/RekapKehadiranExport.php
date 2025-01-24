@@ -65,7 +65,7 @@ protected $perizinan;
                     $rowData["day{$day}"] = 'Libur';
                 } elseif ($isCuti) {
                     // Jika hari cuti
-                    $rowData["day{$day}"] = 'Izin Cuti';
+                    $rowData["day{$day}"] = $isCuti->reason;
                 } else {
                     // Hari kerja tanpa presensi
                     $rowData["day{$day}"] = '';

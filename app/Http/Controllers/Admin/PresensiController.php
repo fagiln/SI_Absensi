@@ -55,9 +55,14 @@ class PresensiController extends Controller
             ->whereMonth('work_date', $month)
             ->whereYear('work_date', $year)
             ->get();
+        $totalHadir = Kehadiran::where('user_id', $userId)
+            ->where('status', 'hadir')
+            ->whereMonth('work_date', $month)
+            ->whereYear('work_date', $year)
+            ->count();
 
         // Kirim data ke view print.blade.php
-        return view('admin.presensi.print', compact('presensi', 'karyawan', 'month', 'year'));
+        return view('admin.presensi.print', compact('presensi', 'karyawan', 'month', 'year','totalHadir'));
     }
 
     public function search(Request $request)

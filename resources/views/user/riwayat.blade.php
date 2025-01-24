@@ -148,65 +148,80 @@
 
 </div>
 <div style="margin-bottom: 70px"></div>
+</body>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+
+    // console.log('text')
+    document.addEventListener("DOMContentLoaded", function () {
         const startDateInput = document.getElementById("start_date");
         const endDateInput = document.getElementById("end_date");
         const filterForm = document.getElementById("filterForm");
 
-        // Mendapatkan tanggal bulan ini
-        const currentMonthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
-        const currentMonthEnd = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0];
+         // Fungsi untuk mendapatkan awal dan akhir bulan
+        function getDefaultDates() {
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // Tanggal 1 bulan ini
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Tanggal terakhir bulan ini
 
-        // Event listener untuk end_date
-        endDateInput.addEventListener("change", function() {
-            if (endDateInput.value) {
-                const startDate = startDateInput.value;
-                const endDate = endDateInput.value;
+        // Format tanggal sebagai yyyy-mm-dd
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
 
-                // Jika end_date lebih kecil dari start_date, reset end_date
-                if (new Date(endDate) < new Date(startDate)) {
-                    endDateInput.value = currentMonthEnd; // Reset ke akhir bulan ini
-                    alert("End date tidak dapat lebih kecil dari start date. Tanggal telah di-reset ke akhir bulan ini.");
-                } else {
-                    // Reload halaman dengan query string yang diperbarui
-                    const url = new URL(filterForm.action);
-                    url.searchParams.set("start_date", startDate);
-                    url.searchParams.set("end_date", endDate);
-                    url.searchParams.set("filter", document.getElementById("filter").value); // Menyimpan filter
-                    window.location.href = url;
-                }
+        return { startOfMonth: formatDate(startOfMonth), endOfMonth: formatDate(endOfMonth) };
+    }
+
+        // Ambil parameter query dari URL untuk start_date dan end_date
+    const urlParams = new URLSearchParams(window.location.search);
+    const startDateFromUrl = urlParams.get("start_date");
+    const endDateFromUrl = urlParams.get("end_date");
+
+    // Tentukan apakah start_date dan end_date harus direset atau tetap
+    const { startOfMonth, endOfMonth } = getDefaultDates();
+
+    // Set nilai default saat halaman dimuat pertama kali
+    startDateInput.value = startDateFromUrl || startOfMonth; // Atur ke bulan ini jika tidak ada di URL
+    endDateInput.value = endDateFromUrl || endOfMonth; // Atur ke bulan ini jika tidak ada di URL
+
+    // Jika URL mengandung parameter (start_date atau end_date), hapus parameter tersebut dan reset halaman
+    if (startDateFromUrl || endDateFromUrl) {
+        const cleanUrl = window.location.origin + window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl); // Reset URL tanpa parameter
+    }
+
+        // Fungsi untuk reload halaman dengan query string
+        function updateQueryString() {
+            const url = new URL(filterForm.action);
+            url.searchParams.set("start_date", startDateInput.value);
+            url.searchParams.set("end_date", endDateInput.value);
+            url.searchParams.set("filter", document.getElementById("filter").value || ""); // Pastikan filter disimpan
+            window.location.href = url.toString();
+        }
+
+        // Validasi dan event listener untuk start_date
+        startDateInput.addEventListener("change", function () {
+            if (new Date(startDateInput.value) > new Date(endDateInput.value)) {
+                alert("Tanggal awal tidak dapat lebih besar dari Tanggal akhir. Mengatur ulang ke awal bulan.");
+                startDateInput.value = startOfMonth;
             }
+            endDateInput.min = startDateInput.value; // Set batas minimum end_date
+            updateQueryString();
         });
 
-        // Event listener untuk start_date
-        startDateInput.addEventListener("change", function() {
-            const startDate = new Date(startDateInput.value);
-            endDateInput.min = startDateInput.value; // Set min date untuk end_date
-
-            // Jika start_date lebih besar dari end_date, reset start_date
-            if (endDateInput.value && new Date(startDate) > new Date(endDateInput.value)) {
-                startDateInput.value = currentMonthStart; // Reset ke awal bulan ini
-                endDateInput.value = currentMonthEnd;     // Reset end_date ke akhir bulan ini
-                alert("Start date tidak dapat lebih besar dari end date. Tanggal telah di-reset ke bulan ini.");
+        // Validasi dan event listener untuk end_date
+        endDateInput.addEventListener("change", function () {
+            if (new Date(endDateInput.value) < new Date(startDateInput.value)) {
+                alert("Tanggal akhir tidak dapat lebih kecil dari Tanggal awal. Mengatur ulang ke akhir bulan.");
+                endDateInput.value = endOfMonth;
             }
-
-            // Reset end_date jika lebih kecil dari start_date
-            if (endDateInput.value && new Date(endDateInput.value) < startDate) {
-                endDateInput.value = currentMonthEnd; // Reset ke akhir bulan ini
-                alert("End date tidak dapat lebih kecil dari start date. Tanggal telah di-reset ke akhir bulan ini.");
-            }
-
-            // Reload halaman dengan query string yang diperbarui
-            const url = new URL(filterForm.action);
-            url.searchParams.set("start_date", startDateInput.value || currentMonthStart);
-            url.searchParams.set("end_date", endDateInput.value || currentMonthEnd);
-            url.searchParams.set("filter", document.getElementById("filter").value); // Menyimpan filter
-            window.location.href = url;
+            updateQueryString();
         });
     });
+
 </script>
 
-</body>
 @endsection

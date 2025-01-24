@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->enum('reason', allowed: ['sakit', 'izin']);
+            $table->enum('reason', allowed: ['sakit', 'izin', 'cuti']);
             $table->text('keterangan');
             $table->string('bukti_path');
             $table->enum('status', allowed: ['pending', 'diterima', 'ditolak'])->default('pending');
