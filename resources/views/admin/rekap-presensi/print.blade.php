@@ -92,7 +92,7 @@
                             $currentDate = \Carbon\Carbon::create($year, $month, $day)->toDateString();
                             $presensiOnDay = $userPresensi->firstWhere('work_date', $currentDate);
                             $isWeekend = \Carbon\Carbon::create($year, $month, $day)->translatedFormat('l');
-                            $isCuti = $userCuti->contains(function ($cuti) use ($currentDate) {
+                            $isCuti = $userCuti->first(function ($cuti) use ($currentDate) {
                                 return $currentDate >= $cuti->start_date && $currentDate <= $cuti->end_date;
                             });
                         @endphp
@@ -103,7 +103,7 @@
                             @elseif ($isWeekend == 'Sabtu' || $isWeekend == 'Minggu')
                                 Libur
                             @elseif ($isCuti)
-                                Cuti
+                                {{ $isCuti->reason }}
                             @endif
                         </td>
                     @endfor
@@ -155,7 +155,7 @@
                             @elseif ($isWeekend == 'Sabtu' || $isWeekend == 'Minggu')
                                 Libur
                             @elseif ($isCuti)
-                                Cuti
+                                $isCuti
                             @endif
                         </td>
                     @endfor
